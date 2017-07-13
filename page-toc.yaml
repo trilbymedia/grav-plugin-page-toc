@@ -1,0 +1,4 @@
+enabled: true     # Plugin enabled
+active: false     # TOC processed by default for all page
+start: 1          # Start header tag level (1 = h1)
+end: 6            # End header tag level (61 = h6)
