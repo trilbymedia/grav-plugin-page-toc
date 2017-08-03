@@ -8,8 +8,8 @@ author:
   url: http://trilby.media
 homepage: http://trilby.media
 keywords: grav, plugin, toc
-bugs: https://github.com/getgrav/grav-plugin-page-toc/issues
-docs: https://github.com/getgrav/grav-plugin-page-toc/blob/develop/README.md
+bugs: https://github.com/trilbymedia/grav-plugin-page-toc/issues
+docs: https://github.com/trilbymedia/grav-plugin-page-toc/blob/develop/README.md
 license: MIT
 
 form:

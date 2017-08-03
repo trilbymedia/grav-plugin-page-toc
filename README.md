@@ -53,10 +53,13 @@ When the plugin is `active` it will add anchors to the header tags of the page c
 For example:
 
 ```twig
-% if config.get('plugins.page-toc.active') or attribute(page.header, 'page-toc').active %}
+{% if config.get('plugins.page-toc.active') or attribute(page.header, 'page-toc').active %}
 <div class="page-toc">
+    {% set table_of_contents = toc(page.content) %}
+    {% if table_of_contents is not empty %}
     <h4>Table of Contents</h4>
-    {{ toc(content) }}
+    {{ table_of_contents }}
+    {% endif %}
 </div>
 {% endif %}
 ```
