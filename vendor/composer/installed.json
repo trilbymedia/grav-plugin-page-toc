@@ -1,45 +1,38 @@
 [
     {
-        "name": "knplabs/knp-menu",
-        "version": "2.2.0",
-        "version_normalized": "2.2.0.0",
+        "name": "caseyamcl/toc",
+        "version": "v1.1",
+        "version_normalized": "1.1.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/KnpLabs/KnpMenu.git",
-            "reference": "964b5b3ca7fd23019147991f4f75f361d061eb20"
+            "url": "https://github.com/caseyamcl/toc.git",
+            "reference": "351e775a49c628d9ac236ee20c70a98e281d3945"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/964b5b3ca7fd23019147991f4f75f361d061eb20",
-            "reference": "964b5b3ca7fd23019147991f4f75f361d061eb20",
+            "url": "https://api.github.com/repos/caseyamcl/toc/zipball/351e775a49c628d9ac236ee20c70a98e281d3945",
+            "reference": "351e775a49c628d9ac236ee20c70a98e281d3945",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.0"
+            "cocur/slugify": "~1.0",
+            "knplabs/knp-menu": "~2.0",
+            "masterminds/html5": "~2.1",
+            "php": ">=5.4"
         },
         "require-dev": {
-            "pimple/pimple": "~1.0",
-            "silex/silex": "~1.0",
-            "symfony/phpunit-bridge": "~2.7|~3.0",
-            "symfony/routing": "~2.3|~3.0",
-            "twig/twig": "~1.16|~2.0"
+            "phpunit/phpunit": "~4.0",
+            "twig/twig": "~1.13"
         },
-        "suggest": {
-            "pimple/pimple": "for the built-in implementations of the menu provider and renderer provider",
-            "silex/silex": "for the integration with your silex application",
-            "twig/twig": "for the TwigRenderer and the integration with your templates"
-        },
-        "time": "2016-09-22T07:36:19+00:00",
+        "time": "2015-04-07T00:53:52+00:00",
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.2-dev"
-            }
-        },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Knp\\Menu\\": "src/Knp/Menu"
+                "TOC\\": [
+                    "src/",
+                    "tests/"
+                ]
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -48,23 +41,17 @@
         ],
         "authors": [
             {
-                "name": "Christophe Coevoet",
-                "email": "stof@notk.org"
-            },
-            {
-                "name": "KnpLabs",
-                "homepage": "http://knplabs.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://github.com/KnpLabs/KnpMenu/contributors"
+                "name": "Casey McLaughlin",
+                "email": "caseyamcl@gmail.com",
+                "homepage": "http://caseymclaughlin.com",
+                "role": "Developer"
             }
         ],
-        "description": "An object oriented menu library",
-        "homepage": "http://knplabs.com",
+        "description": "Simple Table-of-Contents Generator for PHP.  Generates TOCs based off H1...H6 tags",
+        "homepage": "http://github.com/caseyamcl/toc",
         "keywords": [
-            "menu",
-            "tree"
+            "TOC",
+            "table of contents"
         ]
     },
     {
@@ -133,18 +120,84 @@
         ]
     },
     {
-        "name": "masterminds/html5",
-        "version": "2.2.2",
-        "version_normalized": "2.2.2.0",
+        "name": "knplabs/knp-menu",
+        "version": "2.3.0",
+        "version_normalized": "2.3.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/Masterminds/html5-php.git",
-            "reference": "7866e93dcf0245de22378414e0c2c7350abc45af"
+            "url": "https://github.com/KnpLabs/KnpMenu.git",
+            "reference": "655630a1db0b72108262d1a844de3b1ba0885be5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/7866e93dcf0245de22378414e0c2c7350abc45af",
-            "reference": "7866e93dcf0245de22378414e0c2c7350abc45af",
+            "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/655630a1db0b72108262d1a844de3b1ba0885be5",
+            "reference": "655630a1db0b72108262d1a844de3b1ba0885be5",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.6.0"
+        },
+        "require-dev": {
+            "psr/container": "^1.0",
+            "symfony/http-foundation": "~2.4|~3.0|^4.0",
+            "symfony/phpunit-bridge": "~3.3|^4.0",
+            "symfony/routing": "~2.3|~3.0|^4.0",
+            "twig/twig": "~1.16|~2.0"
+        },
+        "suggest": {
+            "twig/twig": "for the TwigRenderer and the integration with your templates"
+        },
+        "time": "2017-11-18T20:49:26+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Knp\\Menu\\": "src/Knp/Menu"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Christophe Coevoet",
+                "email": "stof@notk.org"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://github.com/KnpLabs/KnpMenu/contributors"
+            },
+            {
+                "name": "KnpLabs",
+                "homepage": "https://knplabs.com"
+            }
+        ],
+        "description": "An object oriented menu library",
+        "homepage": "https://knplabs.com",
+        "keywords": [
+            "menu",
+            "tree"
+        ]
+    },
+    {
+        "name": "masterminds/html5",
+        "version": "2.3.0",
+        "version_normalized": "2.3.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Masterminds/html5-php.git",
+            "reference": "2c37c6c520b995b761674de3be8455a381679067"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/2c37c6c520b995b761674de3be8455a381679067",
+            "reference": "2c37c6c520b995b761674de3be8455a381679067",
             "shasum": ""
         },
         "require": {
@@ -156,7 +209,7 @@
             "sami/sami": "~2.0",
             "satooshi/php-coveralls": "1.0.*"
         },
-        "time": "2016-09-22T11:01:11+00:00",
+        "time": "2017-09-04T12:26:28+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -197,61 +250,6 @@
             "querypath",
             "serializer",
             "xml"
-        ]
-    },
-    {
-        "name": "caseyamcl/toc",
-        "version": "v1.1",
-        "version_normalized": "1.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/caseyamcl/toc.git",
-            "reference": "351e775a49c628d9ac236ee20c70a98e281d3945"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/caseyamcl/toc/zipball/351e775a49c628d9ac236ee20c70a98e281d3945",
-            "reference": "351e775a49c628d9ac236ee20c70a98e281d3945",
-            "shasum": ""
-        },
-        "require": {
-            "cocur/slugify": "~1.0",
-            "knplabs/knp-menu": "~2.0",
-            "masterminds/html5": "~2.1",
-            "php": ">=5.4"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.0",
-            "twig/twig": "~1.13"
-        },
-        "time": "2015-04-07T00:53:52+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "TOC\\": [
-                    "src/",
-                    "tests/"
-                ]
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Casey McLaughlin",
-                "email": "caseyamcl@gmail.com",
-                "homepage": "http://caseymclaughlin.com",
-                "role": "Developer"
-            }
-        ],
-        "description": "Simple Table-of-Contents Generator for PHP.  Generates TOCs based off H1...H6 tags",
-        "homepage": "http://github.com/caseyamcl/toc",
-        "keywords": [
-            "TOC",
-            "table of contents"
         ]
     }
 ]

@@ -34,8 +34,10 @@ Here is the default configuration and an explanation of available options:
 enabled: true     # Plugin enabled
 active: true      # TOC processed by default for all page
 start: 1          # Start header tag level (1 = h1)
-end: 6            # End header tag level (61 = h6)
+depth: 6          # Depth from start (2 = 2 levels deep)
 ```
+
+For example if you had a start of `3` and a depth of `3` you would get a TOC for `h3`, `h4`, and `h5`.
 
 By default, The plugin is 'active' and will add header id attributes anchors for each header level found in a page.  You can set `active: false` and then activate on a page basis by adding this to the page frontmatter:
 
@@ -44,7 +46,7 @@ page-toc:
   active: true
 ```
 
-You can also configure which header tags to start and end on when building the id attribute anchors by changing the `start` and `end` values. This can also be done on a per-page basis.
+You can also configure which header tags to start and depth on when building the id attribute anchors by changing the `start` and `depth` values. This can also be done on a per-page basis.
 
 ## Usage
 
@@ -53,13 +55,26 @@ When the plugin is `active` it will add anchors to the header tags of the page c
 For example:
 
 ```twig
-% if config.get('plugins.page-toc.active') or attribute(page.header, 'page-toc').active %}
+{% if config.get('plugins.page-toc.active') or attribute(page.header, 'page-toc').active %}
 <div class="page-toc">
+    {% set table_of_contents = toc(page.content) %}
+    {% if table_of_contents is not empty %}
     <h4>Table of Contents</h4>
-    {{ toc(content) }}
+    {{ table_of_contents }}
+    {% endif %}
 </div>
 {% endif %}
 ```
+
+### Limiting levels in output
+
+As well as limiting the levels that the page TOC plugin will use in the table of contents, you can also limit the levels that are actually displayed. To do this you can pass an optional `start`, and `depth` value to the `toc()` Twig function:
+
+```twig
+{% set table_of_contents = toc(page.content, 3, 3) %}
+```
+
+This will only display `H3` , and **3** levels deeper (up to `H5`) in the TOC output.
 
 ## Credits
 
