@@ -56,13 +56,13 @@ For example:
 
 ```twig
 {% if config.get('plugins.page-toc.active') or attribute(page.header, 'page-toc').active %}
-{% set table_of_contents = toc(page.content) %}
+<div class="page-toc">
+    {% set table_of_contents = toc(page.content) %}
     {% if table_of_contents is not empty %}
-    <div class="page-toc">
-        <h1><span>Contents</span></h1>
-        {{ table_of_contents }}
-    </div>
+    <h4>Table of Contents</h4>
+    {{ table_of_contents }}
     {% endif %}
+</div>
 {% endif %}
 ```
 
@@ -74,7 +74,7 @@ As well as limiting the levels that the page TOC plugin will use in the table of
 {% set table_of_contents = toc(page.content, 3, 3) %}
 ```
 
-This will only display `H3` , and 3 levels deeper (up to `H5`) in the TOC output.
+This will only display `H3` , and **3** levels deeper (up to `H5`) in the TOC output.
 
 ## Credits
 
