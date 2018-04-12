@@ -59,11 +59,11 @@ class PageTOCPlugin extends Plugin
 
         $active = $config->get('active', $config->get('process'));
         $start = $config->get('start', 1);
-        $end = $config->get('end', 6);
+        $depth = $config->get('depth', 6);
 
         if ($active) {
             $markup_fixer  = new \TOC\MarkupFixer();
-            $page->setRawContent( $markup_fixer->fix($page->getRawContent(), $start, $end));
+            $page->setRawContent( $markup_fixer->fix($page->getRawContent(), $start, $depth));
         }
     }
 
