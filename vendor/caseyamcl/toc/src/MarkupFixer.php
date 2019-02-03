@@ -61,7 +61,7 @@ class MarkupFixer
      * @return string Markup with added IDs
      * @throws RuntimeException
      */
-    public function fix($markup, $topLevel = 1, $depth = 6)
+    public function fix($markup, $topLevel, $depth)
     {
         if ( ! $this->isFullHtmlDocument($markup)) {
             $partialID = 'toc_generator_' . mt_rand(1000, 4000);
