@@ -30,14 +30,14 @@ class MarkupFixer
 {
     use HtmlHelper;
 
-    // ---------------------------------------------------------------
+
 
     /**
      * @var HTML5
      */
     private $htmlParser;
 
-    // ---------------------------------------------------------------
+
 
     /**
      * Constructor
@@ -50,7 +50,7 @@ class MarkupFixer
     }
 
 
-    // ---------------------------------------------------------------
+
 
     /**
      * Fix markup
@@ -61,7 +61,7 @@ class MarkupFixer
      * @return string Markup with added IDs
      * @throws RuntimeException
      */
-    public function fix($markup, $topLevel, $depth)
+    public function fix($markup, $topLevel = 1, $depth = 6)
     {
         if ( ! $this->isFullHtmlDocument($markup)) {
             $partialID = 'toc_generator_' . mt_rand(1000, 4000);
