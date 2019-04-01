@@ -1,8 +1,15 @@
 <?php
+
 namespace Masterminds\HTML5\Tests;
+
+use Masterminds\HTML5;
 
 class Html5Test extends TestCase
 {
+    /**
+     * @var HTML5
+     */
+    private $html5;
 
     public function setUp()
     {
@@ -28,20 +35,19 @@ class Html5Test extends TestCase
         return $out;
     }
 
-
     public function testImageTagsInSvg()
     {
-        $html = "<!DOCTYPE html>
+        $html = '<!DOCTYPE html>
                     <html>
                         <head>
                             <title>foo</title>
                         </head>
                         <body>
                             <svg>
-                                <image height=\"10\" width=\"10\"></image>
+                                <image height="10" width="10"></image>
                             </svg>
                         </body>
-                    </html>";
+                    </html>';
         $doc = $this->html5->loadHTML($html);
         $this->assertInstanceOf('DOMElement', $doc->getElementsByTagName('image')->item(0));
         $this->assertEmpty($this->html5->getErrors());
@@ -51,30 +57,57 @@ class Html5Test extends TestCase
     {
         // doc
         $dom = $this->html5->loadHTML($this->wrap('<t:tag/>'), array(
-                        'implicitNamespaces' => array('t' => 'http://example.com'),
-                        "xmlNamespaces" => true
+            'implicitNamespaces' => array('t' => 'http://example.com'),
+            'xmlNamespaces' => true,
         ));
         $this->assertInstanceOf('\DOMDocument', $dom);
         $this->assertEmpty($this->html5->getErrors());
         $this->assertFalse($this->html5->hasErrors());
 
-        $xpath = new \DOMXPath( $dom );
-        $xpath->registerNamespace( "t", "http://example.com" );
-        $this->assertEquals(1, $xpath->query( "//t:tag" )->length);
+        $xpath = new \DOMXPath($dom);
+        $xpath->registerNamespace('t', 'http://example.com');
+        $this->assertEquals(1, $xpath->query('//t:tag')->length);
 
         // doc fragment
         $frag = $this->html5->loadHTMLFragment('<t:tag/>', array(
-                        'implicitNamespaces' => array('t' => 'http://example.com'),
-                        "xmlNamespaces" => true
+            'implicitNamespaces' => array('t' => 'http://example.com'),
+            'xmlNamespaces' => true,
         ));
         $this->assertInstanceOf('\DOMDocumentFragment', $frag);
         $this->assertEmpty($this->html5->getErrors());
         $this->assertFalse($this->html5->hasErrors());
 
         $frag->ownerDocument->appendChild($frag);
-        $xpath = new \DOMXPath( $frag->ownerDocument );
-        $xpath->registerNamespace( "t", "http://example.com" );
-        $this->assertEquals(1, $xpath->query( "//t:tag" , $frag)->length);
+        $xpath = new \DOMXPath($frag->ownerDocument);
+        $xpath->registerNamespace('t', 'http://example.com');
+        $this->assertEquals(1, $xpath->query('//t:tag', $frag)->length);
+    }
+
+    public function testEncodingUtf8()
+    {
+        $dom = $this->html5->load(__DIR__ . '/Fixtures/encoding/utf-8.html');
+        $this->assertInstanceOf('\DOMDocument', $dom);
+        $this->assertEmpty($this->html5->getErrors());
+        $this->assertFalse($this->html5->hasErrors());
+
+        $this->assertContains('Žťčýů', $dom->saveHTML());
+    }
+
+    public function testEncodingWindows1252()
+    {
+        $dom = $this->html5->load(__DIR__ . '/Fixtures/encoding/windows-1252.html', array(
+            'encoding' => 'Windows-1252',
+        ));
+
+        $this->assertInstanceOf('\DOMDocument', $dom);
+        $this->assertEmpty($this->html5->getErrors());
+        $this->assertFalse($this->html5->hasErrors());
+
+        $dumpedAsUtf8 = mb_convert_encoding($dom->saveHTML(), 'UTF-8', 'Windows-1252');
+        $this->assertNotFalse(mb_strpos($dumpedAsUtf8, 'Ž'));
+        $this->assertNotFalse(mb_strpos($dumpedAsUtf8, 'è'));
+        $this->assertNotFalse(mb_strpos($dumpedAsUtf8, 'ý'));
+        $this->assertNotFalse(mb_strpos($dumpedAsUtf8, 'ù'));
     }
 
     public function testErrors()
@@ -162,11 +195,11 @@ class Html5Test extends TestCase
         // Test resource
         $file = fopen('php://temp', 'w');
         $this->html5->save($dom, $file);
-        $content = stream_get_contents($file, - 1, 0);
+        $content = stream_get_contents($file, -1, 0);
         $this->assertRegExp('|<p>This is a test.</p>|', $content);
 
         // Test file
-        $tmpfname = tempnam(sys_get_temp_dir(), "html5-php");
+        $tmpfname = tempnam(sys_get_temp_dir(), 'html5-php');
         $this->html5->save($dom, $tmpfname);
         $content = file_get_contents($tmpfname);
         $this->assertRegExp('|<p>This is a test.</p>|', $content);
@@ -197,7 +230,7 @@ class Html5Test extends TestCase
 
         $html5 = $this->getInstance(array(
             'foo' => 'bar',
-            'encode_entities' => true
+            'encode_entities' => true,
         ));
         $options = $html5->getOptions();
         $this->assertEquals('bar', $options['foo']);
@@ -233,11 +266,11 @@ class Html5Test extends TestCase
         $list = $dom->getElementsByTagName('svg');
         $this->assertNotEmpty($list->length);
         $svg = $list->item(0);
-        $this->assertEquals("0 0 3 2", $svg->getAttribute('viewBox'));
+        $this->assertEquals('0 0 3 2', $svg->getAttribute('viewBox'));
         $this->assertFalse($svg->hasAttribute('viewbox'));
 
         // Test a mixed case tag.
-        // Note: getElementsByTagName is not case sensetitive.
+        // Note: getElementsByTagName is not case sensitive.
         $list = $dom->getElementsByTagName('textPath');
         $this->assertNotEmpty($list->length);
         $textPath = $list->item(0);
@@ -292,12 +325,12 @@ class Html5Test extends TestCase
         // they are handled as normal elements. Note, to do this is really
         // an invalid example and you should not embed prefixed xml in html5.
         $dom = $this->html5->loadHTMLFragment(
-            "<f:rug>
+            '<f:rug>
       <f:name>Big rectangle thing</f:name>
       <f:width>40</f:width>
       <f:length>80</f:length>
     </f:rug>
-    <sarcasm>um, yeah</sarcasm>");
+    <sarcasm>um, yeah</sarcasm>');
 
         $this->assertEmpty($this->html5->getErrors());
         $markup = $this->html5->saveHTML($dom);
@@ -423,7 +456,7 @@ class Html5Test extends TestCase
         $dom = $this->html5->loadHTML(
             '<html><body><Button color="red">Error</Button></body></html>',
             array(
-                "xmlNamespaces" => true
+                'xmlNamespaces' => true,
             )
         );
         $out = $this->html5->saveHTML($dom);
