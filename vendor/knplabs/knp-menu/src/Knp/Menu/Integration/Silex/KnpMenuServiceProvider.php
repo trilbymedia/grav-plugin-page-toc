@@ -16,6 +16,8 @@ use Knp\Menu\Renderer\ArrayAccessProvider as PimpleRendererProvider;
 use Knp\Menu\Twig\Helper;
 use Knp\Menu\Twig\MenuExtension;
 use Knp\Menu\Util\MenuManipulator;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 class KnpMenuServiceProvider implements ServiceProviderInterface
 {
@@ -42,7 +44,7 @@ class KnpMenuServiceProvider implements ServiceProviderInterface
         });
 
         $app['knp_menu.renderer.list'] = $app->share(function () use ($app) {
-            return new ListRenderer($app['knp_menu.matcher'], array(), $app['charset']);
+            return new ListRenderer($app['knp_menu.matcher'], [], $app['charset']);
         });
 
         $app['knp_menu.menu_provider'] = $app->share(function () use ($app) {
@@ -50,14 +52,14 @@ class KnpMenuServiceProvider implements ServiceProviderInterface
         });
 
         if (!isset($app['knp_menu.menus'])) {
-            $app['knp_menu.menus'] = array();
+            $app['knp_menu.menus'] = [];
         }
 
         $app['knp_menu.renderer_provider'] = $app->share(function () use ($app) {
             $app['knp_menu.renderers'] = array_merge(
-                array('list' => 'knp_menu.renderer.list'),
-                isset($app['knp_menu.renderer.twig']) ? array('twig' => 'knp_menu.renderer.twig') : array(),
-                isset($app['knp_menu.renderers']) ? $app['knp_menu.renderers'] : array()
+                ['list' => 'knp_menu.renderer.list'],
+                isset($app['knp_menu.renderer.twig']) ? ['twig' => 'knp_menu.renderer.twig'] : [],
+                isset($app['knp_menu.renderers']) ? $app['knp_menu.renderers'] : []
             );
 
             return new PimpleRendererProvider($app, $app['knp_menu.default_renderer'], $app['knp_menu.renderers']);
@@ -88,13 +90,13 @@ class KnpMenuServiceProvider implements ServiceProviderInterface
                 $app['knp_menu.template'] = 'knp_menu.html.twig';
             }
 
-            $app['twig'] = $app->share($app->extend('twig', function (\Twig_Environment $twig) use ($app) {
+            $app['twig'] = $app->share($app->extend('twig', function (Environment $twig) use ($app) {
                 $twig->addExtension($app['knp_menu.twig_extension']);
 
                 return $twig;
             }));
 
-            $app['twig.loader.filesystem'] = $app->share($app->extend('twig.loader.filesystem', function (\Twig_Loader_Filesystem $loader) use ($app) {
+            $app['twig.loader.filesystem'] = $app->share($app->extend('twig.loader.filesystem', function (FilesystemLoader $loader) use ($app) {
                 $loader->addPath(__DIR__.'/../../Resources/views');
 
                 return $loader;

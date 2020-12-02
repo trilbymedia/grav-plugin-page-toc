@@ -3,18 +3,19 @@
 namespace Knp\Menu\Twig;
 
 use Knp\Menu\ItemInterface;
-use Knp\Menu\Util\MenuManipulator;
 use Knp\Menu\Matcher\MatcherInterface;
+use Knp\Menu\Util\MenuManipulator;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+use Twig\TwigTest;
 
-class MenuExtension extends \Twig_Extension
+class MenuExtension extends AbstractExtension
 {
     private $helper;
     private $matcher;
     private $menuManipulator;
 
-    /**
-     * @param Helper $helper
-     */
     public function __construct(Helper $helper, MatcherInterface $matcher = null, MenuManipulator $menuManipulator = null)
     {
         $this->helper = $helper;
@@ -24,29 +25,29 @@ class MenuExtension extends \Twig_Extension
 
     public function getFunctions()
     {
-        return array(
-             new \Twig_SimpleFunction('knp_menu_get', array($this, 'get')),
-             new \Twig_SimpleFunction('knp_menu_render', array($this, 'render'), array('is_safe' => array('html'))),
-             new \Twig_SimpleFunction('knp_menu_get_breadcrumbs_array', array($this, 'getBreadcrumbsArray')),
-             new \Twig_SimpleFunction('knp_menu_get_current_item', array($this, 'getCurrentItem')),
-        );
+        return [
+             new TwigFunction('knp_menu_get', [$this, 'get']),
+             new TwigFunction('knp_menu_render', [$this, 'render'], ['is_safe' => ['html']]),
+             new TwigFunction('knp_menu_get_breadcrumbs_array', [$this, 'getBreadcrumbsArray']),
+             new TwigFunction('knp_menu_get_current_item', [$this, 'getCurrentItem']),
+        ];
     }
 
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('knp_menu_as_string', array($this, 'pathAsString')),
-        );
+        return [
+            new TwigFilter('knp_menu_as_string', [$this, 'pathAsString']),
+        ];
     }
 
     public function getTests()
     {
-        return array(
-            new \Twig_SimpleTest('knp_menu_current', array($this, 'isCurrent')),
-            new \Twig_SimpleTest('knp_menu_ancestor', array($this, 'isAncestor')),
-        );
+        return [
+            new TwigTest('knp_menu_current', [$this, 'isCurrent']),
+            new TwigTest('knp_menu_ancestor', [$this, 'isAncestor']),
+        ];
     }
-    
+
     /**
      * Retrieves an item following a path in the tree.
      *
@@ -56,7 +57,7 @@ class MenuExtension extends \Twig_Extension
      *
      * @return ItemInterface
      */
-    public function get($menu, array $path = array(), array $options = array())
+    public function get($menu, array $path = [], array $options = [])
     {
         return $this->helper->get($menu, $path, $options);
     }
@@ -70,7 +71,7 @@ class MenuExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function render($menu, array $options = array(), $renderer = null)
+    public function render($menu, array $options = [], $renderer = null)
     {
         return $this->helper->render($menu, $options, $renderer);
     }
@@ -78,7 +79,7 @@ class MenuExtension extends \Twig_Extension
     /**
      * Returns an array ready to be used for breadcrumbs.
      *
-     * @param ItemInterface|array|string $item
+     * @param ItemInterface|array|string $menu
      * @param string|array|null          $subItem
      *
      * @return array
@@ -113,7 +114,7 @@ class MenuExtension extends \Twig_Extension
      *
      * e.g. Top Level > Second Level > This menu
      *
-     * @param ItemInterface $item
+     * @param ItemInterface $menu
      * @param string        $separator
      *
      * @return string
@@ -132,7 +133,7 @@ class MenuExtension extends \Twig_Extension
      *
      * @param ItemInterface $item
      *
-     * @return boolean
+     * @return bool
      */
     public function isCurrent(ItemInterface $item)
     {
@@ -147,9 +148,9 @@ class MenuExtension extends \Twig_Extension
      * Checks whether an item is the ancestor of a current item.
      *
      * @param ItemInterface $item
-     * @param integer       $depth The max depth to look for the item
+     * @param int|null      $depth The max depth to look for the item
      *
-     * @return boolean
+     * @return bool
      */
     public function isAncestor(ItemInterface $item, $depth = null)
     {

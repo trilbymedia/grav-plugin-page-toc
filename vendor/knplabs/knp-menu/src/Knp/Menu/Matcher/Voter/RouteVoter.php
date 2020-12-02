@@ -26,7 +26,7 @@ class RouteVoter implements VoterInterface
         if ($requestStack instanceof RequestStack) {
             $this->requestStack = $requestStack;
         } elseif ($requestStack instanceof Request) {
-            @trigger_error(sprintf('Passing a Request as the first argument for "%s" constructor is deprecated since version 2.3 and wwon\'t be possible in 3.0. Pass a RequestStack instead.', __CLASS__), E_USER_DEPRECATED);
+            @trigger_error(sprintf('Passing a Request as the first argument for "%s" constructor is deprecated since version 2.3 and won\'t be possible in 3.0. Pass a RequestStack instead.', __CLASS__), E_USER_DEPRECATED);
 
             // BC layer for the old API of the class
             $this->request = $requestStack;
@@ -48,7 +48,7 @@ class RouteVoter implements VoterInterface
      */
     public function setRequest(Request $request)
     {
-        @trigger_error(sprintf('The %s() method is deprecated since version 2.3 and will be removed in 3.0. Pass a RequestStack in the constructor instead.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(\sprintf('The %s() method is deprecated since version 2.3 and will be removed in 3.0. Pass a RequestStack in the constructor instead.', __METHOD__), E_USER_DEPRECATED);
 
         $this->request = $request;
     }
@@ -70,14 +70,14 @@ class RouteVoter implements VoterInterface
             return null;
         }
 
-        $routes = (array) $item->getExtra('routes', array());
+        $routes = (array) $item->getExtra('routes', []);
 
         foreach ($routes as $testedRoute) {
-            if (is_string($testedRoute)) {
-                $testedRoute = array('route' => $testedRoute);
+            if (\is_string($testedRoute)) {
+                $testedRoute = ['route' => $testedRoute];
             }
 
-            if (!is_array($testedRoute)) {
+            if (!\is_array($testedRoute)) {
                 throw new \InvalidArgumentException('Routes extra items must be strings or arrays.');
             }
 
@@ -98,7 +98,7 @@ class RouteVoter implements VoterInterface
                 return false;
             }
         } elseif (!empty($testedRoute['pattern'])) {
-            if (!preg_match($testedRoute['pattern'], $route)) {
+            if (!\preg_match($testedRoute['pattern'], $route)) {
                 return false;
             }
         } else {
@@ -109,7 +109,7 @@ class RouteVoter implements VoterInterface
             return true;
         }
 
-        $routeParameters = $request->attributes->get('_route_params', array());
+        $routeParameters = $request->attributes->get('_route_params', []);
 
         foreach ($testedRoute['parameters'] as $name => $value) {
             // cast both to string so that we handle integer and other non-string parameters, but don't stumble on 0 == 'abc'.

@@ -4,27 +4,28 @@ namespace Knp\Menu\Renderer;
 
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\MatcherInterface;
+use Twig\Environment;
 
 class TwigRenderer implements RendererInterface
 {
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     private $environment;
     private $matcher;
     private $defaultOptions;
 
     /**
-     * @param \Twig_Environment $environment
-     * @param string            $template
-     * @param MatcherInterface  $matcher
-     * @param array             $defaultOptions
+     * @param Environment      $environment
+     * @param string           $template
+     * @param MatcherInterface $matcher
+     * @param array            $defaultOptions
      */
-    public function __construct(\Twig_Environment $environment, $template, MatcherInterface $matcher, array $defaultOptions = array())
+    public function __construct(Environment $environment, $template, MatcherInterface $matcher, array $defaultOptions = [])
     {
         $this->environment = $environment;
         $this->matcher = $matcher;
-        $this->defaultOptions = array_merge(array(
+        $this->defaultOptions = \array_merge([
             'depth' => null,
             'matchingDepth' => null,
             'currentAsLink' => true,
@@ -38,14 +39,14 @@ class TwigRenderer implements RendererInterface
             'clear_matcher' => true,
             'leaf_class' => null,
             'branch_class' => null,
-        ), $defaultOptions);
+        ], $defaultOptions);
     }
 
-    public function render(ItemInterface $item, array $options = array())
+    public function render(ItemInterface $item, array $options = [])
     {
-        $options = array_merge($this->defaultOptions, $options);
+        $options = \array_merge($this->defaultOptions, $options);
 
-        $html = $this->environment->render($options['template'], array('item' => $item, 'options' => $options, 'matcher' => $this->matcher));
+        $html = $this->environment->render($options['template'], ['item' => $item, 'options' => $options, 'matcher' => $this->matcher]);
 
         if ($options['clear_matcher']) {
             $this->matcher->clear();

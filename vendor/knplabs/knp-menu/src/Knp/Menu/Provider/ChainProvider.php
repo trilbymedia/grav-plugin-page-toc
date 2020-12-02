@@ -14,7 +14,7 @@ class ChainProvider implements MenuProviderInterface
         $this->providers = $providers;
     }
 
-    public function get($name, array $options = array())
+    public function get($name, array $options = [])
     {
         foreach ($this->providers as $provider) {
             if ($provider->has($name, $options)) {
@@ -22,10 +22,10 @@ class ChainProvider implements MenuProviderInterface
             }
         }
 
-        throw new \InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
+        throw new \InvalidArgumentException(\sprintf('The menu "%s" is not defined.', $name));
     }
 
-    public function has($name, array $options = array())
+    public function has($name, array $options = [])
     {
         foreach ($this->providers as $provider) {
             if ($provider->has($name, $options)) {

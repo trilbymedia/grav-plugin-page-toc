@@ -1,5 +1,7 @@
 name: Page Toc
-version: 1.1.0
+type: plugin
+slug: page-toc
+version: 1.1.1
 description: Generate a table of contents from a page
 icon: list
 author:
