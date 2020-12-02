@@ -18,28 +18,28 @@ class ArrayAccessProvider implements MenuProviderInterface
      * @param \ArrayAccess $registry
      * @param array        $menuIds  The map between menu identifiers and registry keys
      */
-    public function __construct(\ArrayAccess $registry, array $menuIds = array())
+    public function __construct(\ArrayAccess $registry, array $menuIds = [])
     {
         $this->registry = $registry;
         $this->menuIds = $menuIds;
     }
 
-    public function get($name, array $options = array())
+    public function get($name, array $options = [])
     {
         if (!isset($this->menuIds[$name])) {
-            throw new \InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
+            throw new \InvalidArgumentException(\sprintf('The menu "%s" is not defined.', $name));
         }
 
         $menu = $this->registry[$this->menuIds[$name]];
 
-        if (is_callable($menu)) {
-            $menu = call_user_func($menu, $options, $this->registry);
+        if (\is_callable($menu)) {
+            $menu = \call_user_func($menu, $options, $this->registry);
         }
 
         return $menu;
     }
 
-    public function has($name, array $options = array())
+    public function has($name, array $options = [])
     {
         return isset($this->menuIds[$name]);
     }

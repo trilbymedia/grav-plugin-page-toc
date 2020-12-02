@@ -1,3 +1,9 @@
+# v1.2.0
+## 12/02/2020
+
+1. [](#improved)
+    * Updated to latest `masterminds/html5` and `knplabs/knp-menu` libraries
+
 # v1.1.0
 ## 04/01/2019
 

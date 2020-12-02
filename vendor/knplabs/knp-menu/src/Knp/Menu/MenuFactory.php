@@ -13,10 +13,10 @@ class MenuFactory implements FactoryInterface
     /**
      * @var array[]
      */
-    private $extensions = array();
+    private $extensions = [];
 
     /**
-     * @var ExtensionInterface[]
+     * @var ExtensionInterface[]|null
      */
     private $sorted;
 
@@ -25,7 +25,7 @@ class MenuFactory implements FactoryInterface
         $this->addExtension(new CoreExtension(), -10);
     }
 
-    public function createItem($name, array $options = array())
+    public function createItem($name, array $options = [])
     {
         foreach ($this->getExtensions() as $extension) {
             $options = $extension->buildOptions($options);
@@ -44,7 +44,7 @@ class MenuFactory implements FactoryInterface
      * Adds a factory extension
      *
      * @param ExtensionInterface $extension
-     * @param integer            $priority
+     * @param int                $priority
      */
     public function addExtension(ExtensionInterface $extension, $priority = 0)
     {
@@ -55,13 +55,13 @@ class MenuFactory implements FactoryInterface
     /**
      * Sorts the internal list of extensions by priority.
      *
-     * @return ExtensionInterface[]
+     * @return ExtensionInterface[]|null
      */
     private function getExtensions()
     {
         if (null === $this->sorted) {
-            krsort($this->extensions);
-            $this->sorted = !empty($this->extensions) ? call_user_func_array('array_merge', $this->extensions) : array();
+            \krsort($this->extensions);
+            $this->sorted = !empty($this->extensions) ? \call_user_func_array('array_merge', $this->extensions) : [];
         }
 
         return $this->sorted;

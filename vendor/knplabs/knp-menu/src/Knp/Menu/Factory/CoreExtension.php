@@ -18,19 +18,19 @@ class CoreExtension implements ExtensionInterface
      */
     public function buildOptions(array $options)
     {
-        return array_merge(
-            array(
+        return \array_merge(
+            [
                 'uri' => null,
                 'label' => null,
-                'attributes' => array(),
-                'linkAttributes' => array(),
-                'childrenAttributes' => array(),
-                'labelAttributes' => array(),
-                'extras' => array(),
+                'attributes' => [],
+                'linkAttributes' => [],
+                'childrenAttributes' => [],
+                'labelAttributes' => [],
+                'extras' => [],
                 'current' => null,
                 'display' => true,
                 'displayChildren' => true,
-            ),
+            ],
             $options
         );
     }
