@@ -124,17 +124,17 @@
         },
         {
             "name": "knplabs/knp-menu",
-            "version": "2.6.0",
-            "version_normalized": "2.6.0.0",
+            "version": "2.6.1",
+            "version_normalized": "2.6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-                "reference": "b6aade272c345b6fbd07fce5929a761cba0909b8"
+                "reference": "56ffccc3ed8f7b69ec6e6d587e9f840c0a270739"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/b6aade272c345b6fbd07fce5929a761cba0909b8",
-                "reference": "b6aade272c345b6fbd07fce5929a761cba0909b8",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/56ffccc3ed8f7b69ec6e6d587e9f840c0a270739",
+                "reference": "56ffccc3ed8f7b69ec6e6d587e9f840c0a270739",
                 "shasum": ""
             },
             "require": {
@@ -153,14 +153,14 @@
             "suggest": {
                 "twig/twig": "for the TwigRenderer and the integration with your templates"
             },
-            "time": "2019-09-02T10:16:14+00:00",
+            "time": "2021-02-19T07:45:31+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "3.0-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Knp\\Menu\\": "src/Knp/Menu"
@@ -192,7 +192,7 @@
             ],
             "support": {
                 "issues": "https://github.com/KnpLabs/KnpMenu/issues",
-                "source": "https://github.com/KnpLabs/KnpMenu/tree/v2"
+                "source": "https://github.com/KnpLabs/KnpMenu/tree/2.6.1"
             },
             "install-path": "../knplabs/knp-menu"
         },

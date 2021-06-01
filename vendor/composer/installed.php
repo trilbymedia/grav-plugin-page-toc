@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '058245711b1d9c0a73b02d7c20541ed9460876b0',
+    'reference' => 'ce40874dbc56d618187df5991909fcfbdfd640ba',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '058245711b1d9c0a73b02d7c20541ed9460876b0',
+      'reference' => 'ce40874dbc56d618187df5991909fcfbdfd640ba',
     ),
     'caseyamcl/toc' => 
     array (
@@ -40,12 +40,12 @@
     ),
     'knplabs/knp-menu' => 
     array (
-      'pretty_version' => '2.6.0',
-      'version' => '2.6.0.0',
+      'pretty_version' => '2.6.1',
+      'version' => '2.6.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'b6aade272c345b6fbd07fce5929a761cba0909b8',
+      'reference' => '56ffccc3ed8f7b69ec6e6d587e9f840c0a270739',
     ),
     'masterminds/html5' => 
     array (

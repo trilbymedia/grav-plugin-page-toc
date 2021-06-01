@@ -1,3 +1,13 @@
+# v1.1.2
+## 06/01/2021
+
+1. [](#new)
+    * Added page-toc blueprints under "Advanced" tab for admin
+1. [](#improved)
+    * Updated to latest `knplabs/knp-menu` library
+1. [](#bugfix)
+    * Added `|raw` filter to twig output in README.md
+
 # v1.1.1
 ## 12/02/2020
 

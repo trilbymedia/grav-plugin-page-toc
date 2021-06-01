@@ -1,0 +1,44 @@
+form:
+  fields:
+    tabs:
+      fields:
+        advanced:
+          type: tab
+
+          fields:
+            header.page-toc-section:
+              type: section
+              title: Page Table-of-Contents
+              underline: true
+
+            header.page-toc.active:
+              toggleable: true
+              type: toggle
+              label: Enable Page Table-of-Contents
+              help: If the default setting is disabled, you can enable on this page, or vice versa
+              highlight: 1
+              options:
+                1: PLUGIN_ADMIN.YES
+                0: PLUGIN_ADMIN.NO
+              validate:
+                type: bool
+
+            header.page-toc.start:
+              toggleable: true
+              type: range
+              label: Start Level
+              help: The Header Level to start the TOC from
+              config-default@: plugins.page-toc.start
+              validate:
+                min: 1
+                max: 6
+
+            header.page-toc.depth:
+              toggleable: true
+              type: range
+              label: Header Depth
+              help: The number of headers levels from the 'start' to include in the TOC
+              config-default@: plugins.page-toc.depth
+              validate:
+                min: 1
+                max: 6

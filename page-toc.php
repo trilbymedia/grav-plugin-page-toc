@@ -1,6 +1,7 @@
 <?php
 namespace Grav\Plugin;
 
+use Grav\Common\Data;
 use Grav\Common\Plugin;
 use RocketTheme\Toolbox\Event\Event;
 
@@ -37,6 +38,9 @@ class PageTOCPlugin extends Plugin
     {
         // Don't proceed if we are in the admin plugin
         if ($this->isAdmin()) {
+            $this->enable([
+                'onBlueprintCreated' => ['onBlueprintCreated', 0],
+            ]);
             return;
         }
 
@@ -70,5 +74,29 @@ class PageTOCPlugin extends Plugin
     public function onTwigExtensions()
     {
         $this->grav['twig']->twig->addExtension(new \TOC\TocTwigExtension());
+    }
+
+    /**
+     * Extend page blueprints with TOC options.
+     *
+     * @param Event $event
+     */
+    public function onBlueprintCreated(Event $event)
+    {
+        static $inEvent = false;
+
+        /** @var Data\Blueprint $blueprint */
+        $blueprint = $event['blueprint'];
+        $form = $blueprint->form();
+
+        $advanced_tab_exists = isset($form['fields']['tabs']['fields']['advanced']);
+
+        if (!$inEvent && $advanced_tab_exists) {
+            $inEvent = true;
+            $blueprints = new Data\Blueprints(__DIR__ . '/blueprints/');
+            $extends = $blueprints->get('page-toc');
+            $blueprint->extend($extends, true);
+            $inEvent = false;
+        }
     }
 }
