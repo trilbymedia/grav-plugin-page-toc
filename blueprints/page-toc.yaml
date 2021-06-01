@@ -28,7 +28,7 @@ form:
               type: range
               label: Start Level
               help: The Header Level to start the TOC from
-              default: 2
+              config-default@: plugins.page-toc.start
               validate:
                 min: 1
                 max: 6
@@ -38,7 +38,7 @@ form:
               type: range
               label: Header Depth
               help: The number of headers levels from the 'start' to include in the TOC
-              default: 3
+              config-default@: plugins.page-toc.depth
               validate:
                 min: 1
                 max: 6
