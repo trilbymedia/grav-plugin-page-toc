@@ -1,5 +1,5 @@
 # v1.1.2
-## mm/dd/2021
+## 06/01/2021
 
 1. [](#new)
     * Added page-toc blueprints under "Advanced" tab for admin
