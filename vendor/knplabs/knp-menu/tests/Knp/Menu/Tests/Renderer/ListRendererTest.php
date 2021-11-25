@@ -4,17 +4,16 @@ namespace Knp\Menu\Tests\Renderer;
 
 use Knp\Menu\Matcher\MatcherInterface;
 use Knp\Menu\Renderer\ListRenderer;
+use Knp\Menu\Renderer\RendererInterface;
 
 final class ListRendererTest extends AbstractRendererTest
 {
-    protected function createRenderer(MatcherInterface $matcher)
+    protected function createRenderer(MatcherInterface $matcher): RendererInterface
     {
-        $renderer = new ListRenderer($matcher, ['compressed' => true]);
-
-        return $renderer;
+        return new ListRenderer($matcher, ['compressed' => true]);
     }
 
-    public function testPrettyRendering()
+    public function testPrettyRendering(): void
     {
         $rendered = <<<HTML
 <ul class="root">

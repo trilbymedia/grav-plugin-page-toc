@@ -4,30 +4,30 @@ namespace Knp\Menu\Renderer;
 
 abstract class Renderer
 {
+    /**
+     * @var string
+     */
     protected $charset = 'UTF-8';
 
-    /**
-     * @param string|null $charset
-     */
-    public function __construct($charset = null)
+    public function __construct(?string $charset = null)
     {
         if (null !== $charset) {
-            $this->charset = (string) $charset;
+            $this->charset = $charset;
         }
     }
 
     /**
      * Renders a HTML attribute
      *
-     * @param string      $name
      * @param string|bool $value
-     *
-     * @return string
      */
-    protected function renderHtmlAttribute($name, $value)
+    protected function renderHtmlAttribute(string $name, $value): string
     {
         if (true === $value) {
             return \sprintf('%s="%s"', $name, $this->escape($name));
+        }
+        if (false === $value) {
+            throw new \InvalidArgumentException('Value cannot be false.');
         }
 
         return \sprintf('%s="%s"', $name, $this->escape($value));
@@ -36,11 +36,9 @@ abstract class Renderer
     /**
      * Renders HTML attributes
      *
-     * @param array $attributes
-     *
-     * @return string
+     * @param array<string, string|bool|null> $attributes
      */
-    protected function renderHtmlAttributes(array $attributes)
+    protected function renderHtmlAttributes(array $attributes): string
     {
         return \implode('', \array_map([$this, 'htmlAttributesCallback'], \array_keys($attributes), \array_values($attributes)));
     }
@@ -53,9 +51,9 @@ abstract class Renderer
      * @param string           $name  The attribute name
      * @param string|bool|null $value The attribute value
      *
-     * @return string The HTML representation of the HTML key attribute pair.
+     * @return string the HTML representation of the HTML key attribute pair
      */
-    private function htmlAttributesCallback($name, $value)
+    private function htmlAttributesCallback(string $name, $value): string
     {
         if (false === $value || null === $value) {
             return '';
@@ -66,14 +64,10 @@ abstract class Renderer
 
     /**
      * Escapes an HTML value
-     *
-     * @param string $value
-     *
-     * @return string
      */
-    protected function escape($value)
+    protected function escape(string $value): string
     {
-        return $this->fixDoubleEscape(\htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, $this->charset));
+        return $this->fixDoubleEscape(\htmlspecialchars($value, \ENT_QUOTES | \ENT_SUBSTITUTE, $this->charset));
     }
 
     /**
@@ -83,28 +77,24 @@ abstract class Renderer
      *
      * @return string A single escaped string
      */
-    protected function fixDoubleEscape($escaped)
+    protected function fixDoubleEscape(string $escaped): string
     {
-        return \preg_replace('/&amp;([a-z]+|(#\d+)|(#x[\da-f]+));/i', '&$1;', $escaped);
+        return (string) \preg_replace('/&amp;([a-z]+|(#\d+)|(#x[\da-f]+));/i', '&$1;', $escaped);
     }
 
     /**
      * Get the HTML charset
-     *
-     * @return string
      */
-    public function getCharset()
+    public function getCharset(): string
     {
         return $this->charset;
     }
 
     /**
      * Set the HTML charset
-     *
-     * @param string $charset
      */
-    public function setCharset($charset)
+    public function setCharset(string $charset): void
     {
-        $this->charset = (string) $charset;
+        $this->charset = $charset;
     }
 }

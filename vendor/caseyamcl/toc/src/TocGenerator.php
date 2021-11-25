@@ -5,21 +5,24 @@
  *
  * @license http://opensource.org/licenses/MIT
  * @link https://github.com/caseyamcl/toc
- * @version 1.0
+ * @version 3
  * @package caseyamcl/toc
  * @author Casey McLaughlin <caseyamcl@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  *
  * ------------------------------------------------------------------
  */
+
+declare(strict_types=1);
 
 namespace TOC;
 
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Matcher;
 use Knp\Menu\MenuFactory;
+use Knp\Menu\MenuItem;
 use Knp\Menu\Renderer\ListRenderer;
 use Knp\Menu\Renderer\RendererInterface;
 use Masterminds\HTML5;
@@ -33,7 +36,7 @@ class TocGenerator
 {
     use HtmlHelper;
 
-
+    private const DEFAULT_NAME = 'TOC';
 
     /**
      * @var HTML5
@@ -45,21 +48,17 @@ class TocGenerator
      */
     private $menuFactory;
 
-
-
     /**
      * Constructor
      *
-     * @param MenuFactory $menuFactory
-     * @param HTML5       $htmlParser
+     * @param MenuFactory|null $menuFactory
+     * @param HTML5|null $htmlParser
      */
-    public function __construct(MenuFactory $menuFactory = null, HTML5 $htmlParser = null)
+    public function __construct(?MenuFactory $menuFactory = null, ?HTML5 $htmlParser = null)
     {
         $this->domParser   = $htmlParser  ?: new HTML5();
         $this->menuFactory = $menuFactory ?: new MenuFactory();
     }
-
-
 
     /**
      * Get Menu
@@ -71,29 +70,27 @@ class TocGenerator
      * @param int     $depth     Depth (1 through 6)
      * @return ItemInterface     KNP Menu
      */
-    public function getMenu($markup, $topLevel = 1, $depth = 6)
+    public function getMenu(string $markup, int $topLevel = 1, int $depth = 6): ItemInterface
     {
         // Setup an empty menu object
-        $menu = $this->menuFactory->createItem('TOC');
+        $menu = $this->menuFactory->createItem(static::DEFAULT_NAME);
 
-        // Empty?  Do nothing.
+        // Empty?  Return empty menu item
         if (trim($markup) == '') {
-            return [];
+            return $menu;
         }
 
         // Parse HTML
         $tagsToMatch = $this->determineHeaderTags($topLevel, $depth);
-
 
         // Initial settings
         $lastElem = $menu;
 
         // Do it...
         $domDocument = $this->domParser->loadHTML($markup);
-        foreach ($this->traverseHeaderTags($domDocument, $topLevel, $depth) as $node) {
-
+        foreach ($this->traverseHeaderTags($domDocument, $topLevel, $depth) as $i => $node) {
             // Skip items without IDs
-            if ( ! $node->hasAttribute('id')) {
+            if (! $node->hasAttribute('id')) {
                 continue;
             }
 
@@ -102,19 +99,17 @@ class TocGenerator
             $level   = array_search(strtolower($tagName), $tagsToMatch) + 1;
 
             // Determine parent item which to add child
+            /** @var MenuItem $parent */
             if ($level == 1) {
                 $parent = $menu;
-            }
-            elseif ($level == $lastElem->getLevel()) {
+            } elseif ($level == $lastElem->getLevel()) {
                 $parent = $lastElem->getParent();
-            }
-            elseif ($level > $lastElem->getLevel()) {
+            } elseif ($level > $lastElem->getLevel()) {
                 $parent = $lastElem;
                 for ($i = $lastElem->getLevel(); $i < ($level - 1); $i++) {
                     $parent = $parent->addChild('');
                 }
-            }
-            else { //if ($level < $lastElem->getLevel())
+            } else { //if ($level < $lastElem->getLevel())
                 $parent = $lastElem->getParent();
                 while ($parent->getLevel() > $level - 1) {
                     $parent = $parent->getParent();
@@ -122,36 +117,85 @@ class TocGenerator
             }
 
             $lastElem = $parent->addChild(
-                $node->getAttribute('title') ?: $node->textContent,
-                ['uri' => '#' . $node->getAttribute('id')]
+                $node->getAttribute('id'),
+                [
+                    'label' => $node->getAttribute('title') ?: $node->textContent,
+                    'uri' => '#' . $node->getAttribute('id')
+                ]
             );
         }
 
-        return $menu;
+        return $this->trimMenu($menu);
     }
-
-
 
     /**
-     * Get HTML Links in list form
+     * Trim empty items from the menu
      *
-     * @param string            $markup   Content to get items from
-     * @param int               $topLevel Top Header (1 through 6)
-     * @param int               $depth    Depth (1 through 6)
-     * @param RendererInterface $renderer
-     * @return string HTML <LI> items
+     * @param ItemInterface $menuItem
+     * @return ItemInterface
      */
-    public function getHtmlMenu($markup, $topLevel = 1, $depth = 6, RendererInterface $renderer = null)
+    protected function trimMenu(ItemInterface $menuItem): ItemInterface
     {
-        if ( ! $renderer) {
-            $renderer = new ListRenderer(new Matcher(), [
-                'currentClass'  => 'active',
-                'ancestorClass' => 'active_ancestor'
-            ]);
+        // if any of these circumstances are true, then just bail and return the menu item
+        if (
+            count($menuItem->getChildren()) === 0
+            or count($menuItem->getChildren()) > 1
+            or ! empty($menuItem->getFirstChild()->getLabel())
+        ) {
+            return $menuItem;
         }
 
-        return $renderer->render($this->getMenu($markup, $topLevel, $depth));
+        // otherwise, find the first level where there is actual content and use that.
+        while (count($menuItem->getChildren()) == 1 && empty($menuItem->getFirstChild()->getLabel())) {
+            $menuItem = $menuItem->getFirstChild();
+        }
+
+        return $menuItem;
+    }
+
+    /**
+     * Get HTML menu in unordered list form
+     *
+     * @param string $markup Content to get items from
+     * @param int $topLevel Top Header (1 through 6)
+     * @param int $depth Depth (1 through 6)
+     * @param RendererInterface|null $renderer
+     * @param bool $ordered
+     * @return string HTML <li> items
+     */
+    public function getHtmlMenu(
+        string $markup,
+        int $topLevel = 1,
+        int $depth = 6,
+        ?RendererInterface $renderer = null,
+        bool $ordered = false
+    ): string {
+        if (! $renderer) {
+            $options = ['currentClass'  => 'active', 'ancestorClass' => 'active_ancestor'];
+            $renderer = $ordered
+                ? new OrderedListRenderer(new Matcher(), $options)
+                : new ListRenderer(new Matcher(), $options);
+        }
+
+        $menu = $this->getMenu($markup, $topLevel, $depth);
+        return $renderer->render($menu);
+    }
+
+    /**
+     * Get HTML menu in ordered list form
+     *
+     * @param string $markup Content to get items from
+     * @param int $topLevel Top Header (1 through 6)
+     * @param int $depth Depth (1 through 6)
+     * @param RendererInterface|null $renderer
+     * @return string HTML <li> items
+     */
+    public function getOrderedHtmlMenu(
+        string $markup,
+        int $topLevel = 1,
+        int $depth = 6,
+        RendererInterface $renderer = null
+    ): string {
+        return $this->getHtmlMenu($markup, $topLevel, $depth, $renderer, true);
     }
 }
-
-/* EOF: TocGenerator.php */

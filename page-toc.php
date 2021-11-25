@@ -1,9 +1,12 @@
 <?php
 namespace Grav\Plugin;
 
+use Composer\Autoload\ClassLoader;
 use Grav\Common\Data;
+use Grav\Common\Page\Interfaces\PageInterface;
 use Grav\Common\Plugin;
 use RocketTheme\Toolbox\Event\Event;
+use TOC\MarkupFixer;
 
 /**
  * Class PageTOCPlugin
@@ -13,6 +16,7 @@ class PageTOCPlugin extends Plugin
 {
     protected $start;
     protected $end;
+    protected $toc_regex = '#\[TOC\s*\/?\]#i';
 
     /**
      * @return array
@@ -32,6 +36,16 @@ class PageTOCPlugin extends Plugin
     }
 
     /**
+     * Composer autoload
+     *
+     * @return ClassLoader
+     */
+    public function autoload(): ClassLoader
+    {
+        return require __DIR__ . '/vendor/autoload.php';
+    }
+
+    /**
      * Initialize the plugin
      */
     public function onPluginsInitialized()
@@ -44,36 +58,50 @@ class PageTOCPlugin extends Plugin
             return;
         }
 
-        // Autoload classes
-        require_once __DIR__ . '/vendor/autoload.php';
-
         // Enable the main event we are interested in
         $this->enable([
-            'onTwigExtensions' => ['onTwigExtensions', 0],
-            'onPageContentProcessed' => ['onPageContentProcessed', 0]
+            'onTwigExtensions'          => ['onTwigExtensions', 0],
+            'onTwigTemplatePaths'       => ['onTwigTemplatePaths', 0],
+            'onPageContentProcessed'    => ['onPageContentProcessed', 0],
         ]);
     }
 
     public function onPageContentProcessed(Event $event)
     {
-        /** @var Page $page */
+        /** @var PageInterface $page */
         $page = $event['page'];
 
-        $config = $this->mergeConfig($page);
+        $content = $page->getRawContent();
+        $shortcode_exists = preg_match($this->toc_regex, $content);
 
+        $config = $this->mergeConfig($page);
         $active = $config->get('active', $config->get('process'));
         $start = $config->get('start', 1);
         $depth = $config->get('depth', 6);
 
-        if ($active) {
-            $markup_fixer  = new \TOC\MarkupFixer();
-            $page->setRawContent( $markup_fixer->fix($page->getRawContent(), $start, $depth));
+        if ($active || $shortcode_exists ) {
+            // set the IDs
+            $markup_fixer  = new MarkupFixer();
+            $content = $markup_fixer->fix($content, $start, $depth);
+            $page->setRawContent($content);
+
+            // replace shortcode if necessary
+            if ($shortcode_exists) {
+                $toc = $this->grav['twig']->processTemplate('components/page-toc.html.twig', ['page' => $page, 'active' => true]);
+                $content = preg_replace($this->toc_regex, $toc, $content);
+                $page->setRawContent($content);
+            }
         }
     }
 
     public function onTwigExtensions()
     {
         $this->grav['twig']->twig->addExtension(new \TOC\TocTwigExtension());
+    }
+
+    public function onTwigTemplatePaths()
+    {
+        $this->grav['twig']->twig_paths[] = __DIR__ . '/templates';
     }
 
     /**

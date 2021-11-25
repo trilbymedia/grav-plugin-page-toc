@@ -20,10 +20,8 @@ interface RendererInterface
      *      - firstClass: class added to the first child
      *      - lastClass: class added to the last child
      *
-     * @param ItemInterface $item    Menu item
-     * @param array         $options some rendering options
-     *
-     * @return string
+     * @param ItemInterface        $item    Menu item
+     * @param array<string, mixed> $options some rendering options
      */
-    public function render(ItemInterface $item, array $options = []);
+    public function render(ItemInterface $item, array $options = []): string;
 }

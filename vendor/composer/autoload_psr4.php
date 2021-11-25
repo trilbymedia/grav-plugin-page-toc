@@ -9,5 +9,6 @@ return array(
     'TOC\\' => array($vendorDir . '/caseyamcl/toc/src', $vendorDir . '/caseyamcl/toc/tests'),
     'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
     'Knp\\Menu\\' => array($vendorDir . '/knplabs/knp-menu/src/Knp/Menu'),
+    'Grav\\Plugin\\PageToc\\' => array($baseDir . '/classes'),
     'Cocur\\Slugify\\' => array($vendorDir . '/cocur/slugify/src'),
 );

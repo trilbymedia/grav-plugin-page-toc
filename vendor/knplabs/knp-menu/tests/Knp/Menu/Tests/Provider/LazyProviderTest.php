@@ -8,26 +8,26 @@ use PHPUnit\Framework\TestCase;
 
 final class LazyProviderTest extends TestCase
 {
-    public function testHas()
+    public function testHas(): void
     {
-        $provider = new LazyProvider(['first' => function () {}, 'second' => function () {}]);
+        $provider = new LazyProvider(['first' => static function (): void {}, 'second' => static function (): void {}]);
         $this->assertTrue($provider->has('first'));
         $this->assertTrue($provider->has('second'));
         $this->assertFalse($provider->has('third'));
     }
 
-    public function testGetExistentMenu()
+    public function testGetExistentMenu(): void
     {
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
         $provider = new LazyProvider(['default' => function () use ($menu) {
             return $menu;
         }]);
         $this->assertSame($menu, $provider->get('default'));
     }
 
-    public function testGetMenuAsClosure()
+    public function testGetMenuAsClosure(): void
     {
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
         $provider = new LazyProvider(['default' => [function () use ($menu) {
             return new FakeBuilder($menu);
         }, 'build']]);
@@ -35,36 +35,36 @@ final class LazyProviderTest extends TestCase
         $this->assertSame($menu, $provider->get('default', ['foo' => 'bar']));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testGetNonExistentMenu()
+    public function testGetNonExistentMenu(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $provider = new LazyProvider([]);
         $provider->get('non-existent');
     }
 
-    /**
-     * @expectedException \LogicException
-     */
-    public function testGetWithBrokenBuilder()
+    public function testGetWithBrokenBuilder(): void
     {
+        $this->expectException(\LogicException::class);
+
         $provider = new LazyProvider(['broken' => new \stdClass()]);
         $provider->get('broken');
     }
 
-    /**
-     * @expectedException \LogicException
-     */
-    public function testGetWithBrokenLazyBuilder()
+    public function testGetWithBrokenLazyBuilder(): void
     {
-        $provider = new LazyProvider(['broken' => [function () {return new \stdClass();}, 'nonExistentMethod']]);
+        $this->expectException(\LogicException::class);
+
+        $provider = new LazyProvider(['broken' => [function () {return new \stdClass(); }, 'nonExistentMethod']]);
         $provider->get('broken');
     }
 }
 
 final class FakeBuilder
 {
+    /**
+     * @var ItemInterface
+     */
     private $menu;
 
     public function __construct(ItemInterface $menu)
@@ -72,7 +72,10 @@ final class FakeBuilder
         $this->menu = $menu;
     }
 
-    public function build(array $options)
+    /**
+     * @param array<string, mixed> $options
+     */
+    public function build(array $options): ItemInterface
     {
         return $this->menu;
     }

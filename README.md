@@ -50,7 +50,27 @@ You can also configure which header tags to start and depth on when building the
 
 ## Usage
 
-When the plugin is `active` it will add anchors to the header tags of the page content as configured.  Then all you need to do is to add your **table of contents** list in your Twig template with the provided `toc()` Twig function:
+### Shortcode-like syntax in your content
+
+You can use the following shortcode-like syntax in your content:
+
+```md
+[TOC] or [TOC/] or [toc] or [toc /]
+```
+
+This will replace the shortcode syntax with the Table of Contents with the `components/page-toc.html.twig` Twig template. Either the default one included in the `page-toc` plugin or an overridden version from your theme.
+
+NOTE: It's not required to set the TOC plugin `active` if you use the shortcode syntax in your content.  That is a good enough indication that you want the plugin to be active.
+
+### Twig Templating
+
+When the plugin is `active` it will add anchors to the header tags of the page content as configured. You can simply include the provided Twig template:
+
+```twig
+{% include 'components/page-toc.html.twig' %}
+```
+
+You can also add your **table of contents** HTML in your Twig template directly with the provided `toc()` Twig function:
 
 For example:
 
@@ -61,6 +81,37 @@ For example:
     {% if table_of_contents is not empty %}
     <h4>Table of Contents</h4>
     {{ table_of_contents|raw }}
+    {% endif %}
+</div>
+{% endif %}
+```
+
+or via the `toc_items()` function which rather than returning HTML directly returns objects and you can manipulate the output as needed:
+
+```twig
+{% macro toc_loop(items) %}
+    {% import _self as self %}
+    {% for item in items %}
+        {% set class = loop.first ? 'first' : loop.last ? 'last' : null %}
+        <li {% if class %}class="{{ class }}"{% endif %}>
+            <a href="{{ item.uri }}">{{ item.label }}</a>
+            {% if item.children|length > 0 %}
+                <ul>
+                    {{ _self.toc_loop(item.children) }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endmacro %}
+
+{% if config.get('plugins.page-toc.active') or attribute(page.header, 'page-toc').active %}
+<div class="page-toc">
+    {% set table_of_contents = toc_items(page.content) %}
+    {% if table_of_contents is not empty %}
+        <h4>Table of Contents</h4>
+        <ul class="page-toc">
+            {{ _self.toc_loop(table_of_contents.children) }}
+        </ul>
     {% endif %}
 </div>
 {% endif %}

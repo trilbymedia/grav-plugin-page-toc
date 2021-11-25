@@ -2,6 +2,8 @@
 
 namespace Knp\Menu\Provider;
 
+use Knp\Menu\ItemInterface;
+
 /**
  * A menu provider getting the menus from a class implementing ArrayAccess.
  *
@@ -11,12 +13,19 @@ namespace Knp\Menu\Provider;
  */
 class ArrayAccessProvider implements MenuProviderInterface
 {
+    /**
+     * @var \ArrayAccess<string, ItemInterface|callable>
+     */
     private $registry;
+
+    /**
+     * @var array<string, string>
+     */
     private $menuIds;
 
     /**
-     * @param \ArrayAccess $registry
-     * @param array        $menuIds  The map between menu identifiers and registry keys
+     * @param \ArrayAccess<string, ItemInterface|callable> $registry
+     * @param array<string, string>                        $menuIds  The map between menu identifiers and registry keys
      */
     public function __construct(\ArrayAccess $registry, array $menuIds = [])
     {
@@ -24,7 +33,7 @@ class ArrayAccessProvider implements MenuProviderInterface
         $this->menuIds = $menuIds;
     }
 
-    public function get($name, array $options = [])
+    public function get(string $name, array $options = []): ItemInterface
     {
         if (!isset($this->menuIds[$name])) {
             throw new \InvalidArgumentException(\sprintf('The menu "%s" is not defined.', $name));
@@ -33,13 +42,13 @@ class ArrayAccessProvider implements MenuProviderInterface
         $menu = $this->registry[$this->menuIds[$name]];
 
         if (\is_callable($menu)) {
-            $menu = \call_user_func($menu, $options, $this->registry);
+            $menu = $menu($options, $this->registry);
         }
 
         return $menu;
     }
 
-    public function has($name, array $options = [])
+    public function has(string $name, array $options = []): bool
     {
         return isset($this->menuIds[$name]);
     }

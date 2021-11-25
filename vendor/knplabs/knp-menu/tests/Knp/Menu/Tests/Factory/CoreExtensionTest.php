@@ -9,10 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 final class CoreExtensionTest extends TestCase
 {
-    public function testBuildOptions()
+    public function testBuildOptions(): void
     {
         $extension = $this->getExtension();
-        $item = $this->createItem('test');
 
         $options = $extension->buildOptions([]);
 
@@ -28,7 +27,7 @@ final class CoreExtensionTest extends TestCase
         $this->assertArrayHasKey('displayChildren', $options);
     }
 
-    public function testBuildItemsSetsExtras()
+    public function testBuildItemsSetsExtras(): void
     {
         $item = $this->createItem('test');
         $item->setExtra('test1', 'original value');
@@ -55,7 +54,7 @@ final class CoreExtensionTest extends TestCase
         $this->assertEquals('options value 2', $item->getExtra('test2'));
     }
 
-    public function testBuildItemDoesNotOverrideExistingExtras()
+    public function testBuildItemDoesNotOverrideExistingExtras(): void
     {
         $item = $this->createItem('test');
         $item->setExtra('test1', 'original value');
@@ -74,16 +73,15 @@ final class CoreExtensionTest extends TestCase
         $this->assertEquals('original value', $item->getExtra('test1'));
     }
 
-    private function getExtension()
+    private function getExtension(): CoreExtension
     {
         return new CoreExtension();
     }
 
-    private function createItem($name)
+    private function createItem(string $name): MenuItem
     {
         $factory = new MenuFactory();
-        $item = new MenuItem($name, $factory);
 
-        return $item;
+        return new MenuItem($name, $factory);
     }
 }

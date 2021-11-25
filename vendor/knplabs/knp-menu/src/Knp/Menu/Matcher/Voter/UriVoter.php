@@ -9,14 +9,17 @@ use Knp\Menu\ItemInterface;
  */
 class UriVoter implements VoterInterface
 {
+    /**
+     * @var string|null
+     */
     private $uri;
 
-    public function __construct($uri = null)
+    public function __construct(?string $uri = null)
     {
         $this->uri = $uri;
     }
 
-    public function matchItem(ItemInterface $item)
+    public function matchItem(ItemInterface $item): ?bool
     {
         if (null === $this->uri || null === $item->getUri()) {
             return null;

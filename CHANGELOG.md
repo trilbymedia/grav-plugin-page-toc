@@ -1,3 +1,13 @@
+# v2.0.0
+## 11/24/2021
+
+1. [](#new)
+   * Added new `components/page-toc.html.twig` that can be extended and the HTML output modified
+   * Updated core TOC library to latest `3.0.2` version
+   * Requires PHP `7.3.6`
+   * Requires Grav `1.7+`
+   * Added Shortcode-like in-page syntax support. e.g. `[toc]`
+
 # v1.1.2
 ## 06/01/2021
 

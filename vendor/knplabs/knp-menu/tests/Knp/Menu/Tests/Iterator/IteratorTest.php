@@ -2,12 +2,13 @@
 
 namespace Knp\Menu\Tests\Iterator;
 
+use Knp\Menu\ItemInterface;
 use Knp\Menu\Iterator\RecursiveItemIterator;
 use Knp\Menu\Tests\MenuTestCase;
 
 final class IteratorTest extends MenuTestCase
 {
-    public function testIterator()
+    public function testIterator(): void
     {
         $count = 0;
         foreach ($this->pt1 as $key => $value) {
@@ -17,16 +18,16 @@ final class IteratorTest extends MenuTestCase
         }
     }
 
-    public function testRecursiveIterator()
+    public function testRecursiveIterator(): void
     {
         // Adding an item which does not provide a RecursiveIterator to be sure it works properly.
-        $child = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        $child = $this->getMockBuilder(ItemInterface::class)->getMock();
         $child->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('Foo'));
+            ->willReturn('Foo');
         $child->expects($this->any())
             ->method('getIterator')
-            ->will($this->returnValue(new \EmptyIterator()));
+            ->willReturn(new \EmptyIterator());
         $this->menu->addChild($child);
 
         $names = [];
@@ -37,7 +38,7 @@ final class IteratorTest extends MenuTestCase
         $this->assertEquals(['Parent 1', 'Child 1', 'Child 2', 'Child 3', 'Parent 2', 'Child 4', 'Grandchild 1', 'Foo'], $names);
     }
 
-    public function testRecursiveIteratorLeavesOnly()
+    public function testRecursiveIteratorLeavesOnly(): void
     {
         $names = [];
         foreach (new \RecursiveIteratorIterator(new RecursiveItemIterator($this->menu), \RecursiveIteratorIterator::LEAVES_ONLY) as $value) {
@@ -47,7 +48,7 @@ final class IteratorTest extends MenuTestCase
         $this->assertEquals(['Child 1', 'Child 2', 'Child 3', 'Grandchild 1'], $names);
     }
 
-    public function testFullTreeIterator()
+    public function testFullTreeIterator(): void
     {
         $fullTreeIterator = new \RecursiveIteratorIterator(
             new RecursiveItemIterator(new \ArrayIterator([$this->menu])), // recursive iterator containing the root item

@@ -12,17 +12,26 @@ class TwigRenderer implements RendererInterface
      * @var Environment
      */
     private $environment;
+
+    /**
+     * @var MatcherInterface
+     */
     private $matcher;
+
+    /**
+     * @var array<string, mixed>
+     */
     private $defaultOptions;
 
     /**
-     * @param Environment      $environment
-     * @param string           $template
-     * @param MatcherInterface $matcher
-     * @param array            $defaultOptions
+     * @param array<string, mixed> $defaultOptions
      */
-    public function __construct(Environment $environment, $template, MatcherInterface $matcher, array $defaultOptions = [])
-    {
+    public function __construct(
+        Environment $environment,
+        string $template,
+        MatcherInterface $matcher,
+        array $defaultOptions = []
+    ) {
         $this->environment = $environment;
         $this->matcher = $matcher;
         $this->defaultOptions = \array_merge([
@@ -42,7 +51,7 @@ class TwigRenderer implements RendererInterface
         ], $defaultOptions);
     }
 
-    public function render(ItemInterface $item, array $options = [])
+    public function render(ItemInterface $item, array $options = []): string
     {
         $options = \array_merge($this->defaultOptions, $options);
 

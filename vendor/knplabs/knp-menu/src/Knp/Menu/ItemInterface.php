@@ -9,21 +9,14 @@ namespace Knp\Menu;
  * most of the time by default.
  * Originally taken from ioMenuPlugin (http://github.com/weaverryan/ioMenuPlugin)
  *
+ * @extends \ArrayAccess<string, self|null>
  * @extends \IteratorAggregate<string, self>
  */
 interface ItemInterface extends \ArrayAccess, \Countable, \IteratorAggregate
 {
-    /**
-     * @param FactoryInterface $factory
-     *
-     * @return ItemInterface
-     */
-    public function setFactory(FactoryInterface $factory);
+    public function setFactory(FactoryInterface $factory): self;
 
-    /**
-     * @return string
-     */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Renames the item.
@@ -32,191 +25,139 @@ interface ItemInterface extends \ArrayAccess, \Countable, \IteratorAggregate
      *
      * Provides a fluent interface
      *
-     * @param string $name
-     *
-     * @return ItemInterface
-     *
      * @throws \InvalidArgumentException if the name is already used by a sibling
      */
-    public function setName($name);
+    public function setName(string $name): self;
 
     /**
      * Get the uri for a menu item
-     *
-     * @return string
      */
-    public function getUri();
+    public function getUri(): ?string;
 
     /**
      * Set the uri for a menu item
      *
      * Provides a fluent interface
      *
-     * @param string $uri The uri to set on this menu item
-     *
-     * @return ItemInterface
+     * @param string|null $uri The uri to set on this menu item
      */
-    public function setUri($uri);
+    public function setUri(?string $uri): self;
 
     /**
      * Returns the label that will be used to render this menu item
      *
      * Defaults to the name of no label was specified
-     *
-     * @return string|null
      */
-    public function getLabel();
+    public function getLabel(): string;
 
     /**
      * Provides a fluent interface
      *
      * @param string|null $label The text to use when rendering this menu item
-     *
-     * @return ItemInterface
      */
-    public function setLabel($label);
+    public function setLabel(?string $label): self;
 
     /**
-     * @return array
+     * @return array<string, string|bool|null>
      */
-    public function getAttributes();
+    public function getAttributes(): array;
 
     /**
-     * Provides a fluent interface
-     *
-     * @param array $attributes
-     *
-     * @return ItemInterface
+     * @param array<string, string|bool|null> $attributes
      */
-    public function setAttributes(array $attributes);
+    public function setAttributes(array $attributes): self;
 
     /**
-     * @param string $name    The name of the attribute to return
-     * @param mixed  $default The value to return if the attribute doesn't exist
+     * @param string           $name    The name of the attribute to return
+     * @param string|bool|null $default The value to return if the attribute doesn't exist
      *
-     * @return mixed
+     * @return string|bool|null
      */
-    public function getAttribute($name, $default = null);
+    public function getAttribute(string $name, $default = null);
 
     /**
-     * Provides a fluent interface
-     *
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return ItemInterface
+     * @param string|bool|null $value
      */
-    public function setAttribute($name, $value);
+    public function setAttribute(string $name, $value): self;
 
     /**
-     * @return array
+     * @return array<string, string|bool|null>
      */
-    public function getLinkAttributes();
+    public function getLinkAttributes(): array;
 
     /**
-     * Provides a fluent interface
-     *
-     * @param array $linkAttributes
-     *
-     * @return ItemInterface
+     * @param array<string, string|bool|null> $linkAttributes
      */
-    public function setLinkAttributes(array $linkAttributes);
+    public function setLinkAttributes(array $linkAttributes): self;
 
     /**
-     * @param string $name    The name of the attribute to return
-     * @param mixed  $default The value to return if the attribute doesn't exist
+     * @param string           $name    The name of the attribute to return
+     * @param string|bool|null $default The value to return if the attribute doesn't exist
      *
-     * @return mixed
+     * @return string|bool|null
      */
-    public function getLinkAttribute($name, $default = null);
+    public function getLinkAttribute(string $name, $default = null);
 
     /**
-     * Provides a fluent interface
-     *
-     * @param string $name
-     * @param string $value
-     *
-     * @return ItemInterface
+     * @param string|bool|null $value
      */
-    public function setLinkAttribute($name, $value);
+    public function setLinkAttribute(string $name, $value): self;
 
     /**
-     * @return array
+     * @return array<string, string|bool|null>
      */
-    public function getChildrenAttributes();
+    public function getChildrenAttributes(): array;
 
     /**
-     * Provides a fluent interface
-     *
-     * @param array $childrenAttributes
-     *
-     * @return ItemInterface
+     * @param array<string, string|bool|null> $childrenAttributes
      */
-    public function setChildrenAttributes(array $childrenAttributes);
+    public function setChildrenAttributes(array $childrenAttributes): self;
 
     /**
-     * @param string $name    The name of the attribute to return
-     * @param mixed  $default The value to return if the attribute doesn't exist
+     * @param string           $name    The name of the attribute to return
+     * @param string|bool|null $default The value to return if the attribute doesn't exist
      *
-     * @return mixed
+     * @return string|bool|null
      */
-    public function getChildrenAttribute($name, $default = null);
+    public function getChildrenAttribute(string $name, $default = null);
 
     /**
-     * Provides a fluent interface
-     *
-     * @param string $name
-     * @param string $value
-     *
-     * @return ItemInterface
+     * @param string|bool|null $value
      */
-    public function setChildrenAttribute($name, $value);
+    public function setChildrenAttribute(string $name, $value): self;
 
     /**
-     * @return array
+     * @return array<string, string|bool|null>
      */
-    public function getLabelAttributes();
+    public function getLabelAttributes(): array;
 
     /**
-     * Provides a fluent interface
-     *
-     * @param array $labelAttributes
-     *
-     * @return ItemInterface
+     * @param array<string, string|bool|null> $labelAttributes
      */
-    public function setLabelAttributes(array $labelAttributes);
+    public function setLabelAttributes(array $labelAttributes): self;
 
     /**
-     * @param string $name    The name of the attribute to return
-     * @param mixed  $default The value to return if the attribute doesn't exist
+     * @param string           $name    The name of the attribute to return
+     * @param string|bool|null $default The value to return if the attribute doesn't exist
      *
-     * @return mixed
+     * @return string|bool|null
      */
-    public function getLabelAttribute($name, $default = null);
+    public function getLabelAttribute(string $name, $default = null);
 
     /**
-     * Provides a fluent interface
-     *
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return ItemInterface
+     * @param string|bool|null $value
      */
-    public function setLabelAttribute($name, $value);
+    public function setLabelAttribute(string $name, $value): self;
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
-    public function getExtras();
+    public function getExtras(): array;
 
     /**
-     * Provides a fluent interface
-     *
-     * @param array $extras
-     *
-     * @return ItemInterface
+     * @param array<string, mixed> $extras
      */
-    public function setExtras(array $extras);
+    public function setExtras(array $extras): self;
 
     /**
      * @param string $name    The name of the extra to return
@@ -224,53 +165,33 @@ interface ItemInterface extends \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return mixed
      */
-    public function getExtra($name, $default = null);
+    public function getExtra(string $name, $default = null);
 
     /**
-     * Provides a fluent interface
-     *
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return ItemInterface
+     * @param mixed $value
      */
-    public function setExtra($name, $value);
+    public function setExtra(string $name, $value): self;
 
-    /**
-     * Whether or not this menu item should show its children.
-     *
-     * @return boolean
-     */
-    public function getDisplayChildren();
+    public function getDisplayChildren(): bool;
 
     /**
      * Set whether or not this menu item should show its children
      *
      * Provides a fluent interface
-     *
-     * @param bool $bool
-     *
-     * @return ItemInterface
      */
-    public function setDisplayChildren($bool);
+    public function setDisplayChildren(bool $bool): self;
 
     /**
      * Whether or not to display this menu item
-     *
-     * @return bool
      */
-    public function isDisplayed();
+    public function isDisplayed(): bool;
 
     /**
      * Set whether or not this menu should be displayed
      *
      * Provides a fluent interface
-     *
-     * @param bool $bool
-     *
-     * @return ItemInterface
      */
-    public function setDisplay($bool);
+    public function setDisplay(bool $bool): self;
 
     /**
      * Add a child menu item to this menu
@@ -278,95 +199,72 @@ interface ItemInterface extends \ArrayAccess, \Countable, \IteratorAggregate
      * Returns the child item
      *
      * @param ItemInterface|string $child   An ItemInterface instance or the name of a new item to create
-     * @param array                $options If creating a new item, the options passed to the factory for the item
-     *
-     * @return ItemInterface
+     * @param array<string, mixed> $options If creating a new item, the options passed to the factory for the item
      *
      * @throws \InvalidArgumentException if the item is already in a tree
      */
-    public function addChild($child, array $options = []);
+    public function addChild($child, array $options = []): self;
 
     /**
      * Returns the child menu identified by the given name
      *
      * @param string $name Then name of the child menu to return
-     *
-     * @return ItemInterface|null
      */
-    public function getChild($name);
+    public function getChild(string $name): ?self;
 
     /**
      * Reorder children.
      *
      * Provides a fluent interface
      *
-     * @param array $order New order of children.
-     *
-     * @return ItemInterface
+     * @param array<int|string, string> $order new order of children
      */
-    public function reorderChildren($order);
+    public function reorderChildren(array $order): self;
 
     /**
      * Makes a deep copy of menu tree. Every item is copied as another object.
-     *
-     * @return ItemInterface
      */
-    public function copy();
+    public function copy(): self;
 
     /**
      * Returns the level of this menu item
      *
      * The root menu item is 0, followed by 1, 2, etc
-     *
-     * @return int
      */
-    public function getLevel();
+    public function getLevel(): int;
 
     /**
      * Returns the root ItemInterface of this menu tree
-     *
-     * @return ItemInterface
      */
-    public function getRoot();
+    public function getRoot(): self;
 
     /**
      * Returns whether or not this menu item is the root menu item
-     *
-     * @return bool
      */
-    public function isRoot();
+    public function isRoot(): bool;
 
-    /**
-     * @return ItemInterface|null
-     */
-    public function getParent();
+    public function getParent(): ?self;
 
     /**
      * Used internally when adding and removing children
      *
      * Provides a fluent interface
-     *
-     * @param ItemInterface|null $parent
-     *
-     * @return ItemInterface
      */
-    public function setParent(ItemInterface $parent = null);
+    public function setParent(?self $parent = null): self;
 
     /**
      * Return the children as an array of ItemInterface objects
      *
-     * @return ItemInterface[]
+     * @return array<string, self>
      */
-    public function getChildren();
+    public function getChildren(): array;
 
     /**
      * Provides a fluent interface
      *
-     * @param array $children An array of ItemInterface objects
-     *
-     * @return ItemInterface
+     * @param array<string, self> $children An array of ItemInterface objects
      */
-    public function setChildren(array $children);
+    public function setChildren(array $children): self;
 
     /**
      * Removes a child from this menu item
@@ -374,30 +272,20 @@ interface ItemInterface extends \ArrayAccess, \Countable, \IteratorAggregate
      * Provides a fluent interface
      *
      * @param ItemInterface|string $name The name of ItemInterface instance or the ItemInterface to remove
-     *
-     * @return ItemInterface
      */
-    public function removeChild($name);
+    public function removeChild($name): self;
 
-    /**
-     * @return ItemInterface
-     */
-    public function getFirstChild();
+    public function getFirstChild(): self;
 
-    /**
-     * @return ItemInterface
-     */
-    public function getLastChild();
+    public function getLastChild(): self;
 
     /**
      * Returns whether or not this menu items has viewable children
      *
      * This menu MAY have children, but this will return false if the current
      * user does not have access to view any of those items
-     *
-     * @return bool
      */
-    public function hasChildren();
+    public function hasChildren(): bool;
 
     /**
      * Sets whether or not this menu item is "current".
@@ -407,31 +295,23 @@ interface ItemInterface extends \ArrayAccess, \Countable, \IteratorAggregate
      * Provides a fluent interface
      *
      * @param bool|null $bool Specify that this menu item is current
-     *
-     * @return ItemInterface
      */
-    public function setCurrent($bool);
+    public function setCurrent(?bool $bool): self;
 
     /**
      * Gets whether or not this menu item is "current".
-     *
-     * @return bool|null
      */
-    public function isCurrent();
+    public function isCurrent(): ?bool;
 
     /**
      * Whether this menu item is last in its parent
-     *
-     * @return bool
      */
-    public function isLast();
+    public function isLast(): bool;
 
     /**
      * Whether this menu item is first in its parent
-     *
-     * @return bool
      */
-    public function isFirst();
+    public function isFirst(): bool;
 
     /**
      * Whereas isFirst() returns if this is the first child of the parent
@@ -439,10 +319,8 @@ interface ItemInterface extends \ArrayAccess, \Countable, \IteratorAggregate
      *
      * This returns true if this is the first child that would be rendered
      * for the current user
-     *
-     * @return bool
      */
-    public function actsLikeFirst();
+    public function actsLikeFirst(): bool;
 
     /**
      * Whereas isLast() returns if this is the last child of the parent
@@ -450,8 +328,6 @@ interface ItemInterface extends \ArrayAccess, \Countable, \IteratorAggregate
      *
      * This returns true if this is the last child that would be rendered
      * for the current user
-     *
-     * @return bool
      */
-    public function actsLikeLast();
+    public function actsLikeLast(): bool;
 }

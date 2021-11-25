@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 final class MenuItemReorderTest extends TestCase
 {
-    public function testReordering()
+    public function testReordering(): void
     {
         $factory = new MenuFactory();
         $menu = new MenuItem('root', $factory);
@@ -22,22 +22,20 @@ final class MenuItemReorderTest extends TestCase
         $this->assertEquals(['c4', 'c3', 'c2', 'c1'], $arr);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testReorderingWithTooManyItemNames()
+    public function testReorderingWithTooManyItemNames(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $factory = new MenuFactory();
         $menu = new MenuItem('root', $factory);
         $menu->addChild('c1');
         $menu->reorderChildren(['c1', 'c3']);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testReorderingWithWrongItemNames()
+    public function testReorderingWithWrongItemNames(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $factory = new MenuFactory();
         $menu = new MenuItem('root', $factory);
         $menu->addChild('c1');

@@ -2,6 +2,7 @@
 
 namespace Knp\Menu\Tests\Util;
 
+use Knp\Menu\ItemInterface;
 use Knp\Menu\MenuFactory;
 use Knp\Menu\MenuItem;
 use Knp\Menu\Tests\MenuTestCase;
@@ -9,7 +10,7 @@ use Knp\Menu\Util\MenuManipulator;
 
 final class MenuManipulatorTest extends MenuTestCase
 {
-    public function testMoveToFirstPosition()
+    public function testMoveToFirstPosition(): void
     {
         $menu = new MenuItem('root', new MenuFactory());
         $menu->addChild('c1');
@@ -22,7 +23,7 @@ final class MenuManipulatorTest extends MenuTestCase
         $this->assertEquals(['c3', 'c1', 'c2', 'c4'], \array_keys($menu->getChildren()));
     }
 
-    public function testMoveToLastPosition()
+    public function testMoveToLastPosition(): void
     {
         $menu = new MenuItem('root', new MenuFactory());
         $menu->addChild('c1');
@@ -35,7 +36,7 @@ final class MenuManipulatorTest extends MenuTestCase
         $this->assertEquals(['c1', 'c3', 'c4', 'c2'], \array_keys($menu->getChildren()));
     }
 
-    public function testMoveToPosition()
+    public function testMoveToPosition(): void
     {
         $menu = new MenuItem('root', new MenuFactory());
         $menu->addChild('c1');
@@ -49,9 +50,13 @@ final class MenuManipulatorTest extends MenuTestCase
     }
 
     /**
+     * @param int|string           $offset
+     * @param int|string|null      $length
+     * @param array<string, mixed> $keys
+     *
      * @dataProvider getSliceData
      */
-    public function testSlice($offset, $length, $count, $keys)
+    public function testSlice($offset, $length, int $count, array $keys): void
     {
         $manipulator = new MenuManipulator();
         $sliced = $manipulator->slice($this->pt1, $offset, $length);
@@ -59,7 +64,10 @@ final class MenuManipulatorTest extends MenuTestCase
         $this->assertEquals($keys, \array_keys($sliced->getChildren()));
     }
 
-    public function getSliceData()
+    /**
+     * @return array<string, array<int, mixed>>
+     */
+    public function getSliceData(): array
     {
         $this->setUp();
 
@@ -74,20 +82,26 @@ final class MenuManipulatorTest extends MenuTestCase
     }
 
     /**
+     * @param int|string           $length
+     * @param array<string, mixed> $keys
+     *
      * @dataProvider getSplitData
      */
-    public function testSplit($length, $count, $keys)
+    public function testSplit($length, int $count, array $keys): void
     {
         $manipulator = new MenuManipulator();
-        $splitted = $manipulator->split($this->pt1, $length);
-        $this->assertArrayHasKey('primary', $splitted);
-        $this->assertArrayHasKey('secondary', $splitted);
-        $this->assertCount($count, $splitted['primary']);
-        $this->assertCount(3 - $count, $splitted['secondary']);
-        $this->assertEquals($keys, \array_keys($splitted['primary']->getChildren()));
+        $split = $manipulator->split($this->pt1, $length);
+        $this->assertArrayHasKey('primary', $split);
+        $this->assertArrayHasKey('secondary', $split);
+        $this->assertCount($count, $split['primary']);
+        $this->assertCount(3 - $count, $split['secondary']);
+        $this->assertEquals($keys, \array_keys($split['primary']->getChildren()));
     }
 
-    public function getSplitData()
+    /**
+     * @return array<string, array<int, mixed>>
+     */
+    public function getSplitData(): array
     {
         $this->setUp();
 
@@ -98,14 +112,14 @@ final class MenuManipulatorTest extends MenuTestCase
         ];
     }
 
-    public function testPathAsString()
+    public function testPathAsString(): void
     {
         $manipulator = new MenuManipulator();
         $this->assertEquals('Root li > Parent 2 > Child 4', $manipulator->getPathAsString($this->ch4), 'Path with default separator');
         $this->assertEquals('Root li / Parent 1 / Child 2', $manipulator->getPathAsString($this->ch2, ' / '), 'Path with custom separator');
     }
 
-    public function testBreadcrumbsArray()
+    public function testBreadcrumbsArray(): void
     {
         $manipulator = new MenuManipulator();
         $this->menu->addChild('child', ['uri' => 'http://www.symfony-reloaded.org']);
@@ -128,13 +142,9 @@ final class MenuManipulatorTest extends MenuTestCase
             $manipulator->getBreadcrumbsArray($this->menu['child'], 'subitem1')
         );
 
-        $item = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
-        $item->expects($this->any())
-            ->method('getLabel')
-            ->will($this->returnValue('mock'));
-        $item->expects($this->any())
-            ->method('getUri')
-            ->will($this->returnValue('foo'));
+        $item = $this->getMockBuilder(ItemInterface::class)->getMock();
+        $item->method('getLabel')->willReturn('mock');
+        $item->method('getUri')->willReturn('foo');
 
         $this->assertEquals(
             [
@@ -170,26 +180,25 @@ final class MenuManipulatorTest extends MenuTestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testBreadcrumbsArrayInvalidData()
+    public function testBreadcrumbsArrayInvalidData(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $manipulator = new MenuManipulator();
         $manipulator->getBreadcrumbsArray($this->pt1, [new \stdClass()]);
     }
 
-    public function testCallRecursively()
+    public function testCallRecursively(): void
     {
         $factory = new MenuFactory();
 
         $menu = $factory->createItem('test_menu');
 
-        foreach (range(1, 2) as $i) {
-            $child = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        foreach (\range(1, 2) as $i) {
+            $child = $this->getMockBuilder(ItemInterface::class)->getMock();
             $child->expects($this->any())
                 ->method('getName')
-                ->will($this->returnValue('Child '.$i))
+                ->willReturn('Child '.$i)
             ;
             $child->expects($this->once())
                 ->method('setDisplay')
@@ -197,7 +206,7 @@ final class MenuManipulatorTest extends MenuTestCase
             ;
             $child->expects($this->once())
                 ->method('getChildren')
-                ->will($this->returnValue([]))
+                ->willReturn([])
             ;
             $menu->addChild($child);
         }
@@ -208,7 +217,7 @@ final class MenuManipulatorTest extends MenuTestCase
         $this->assertFalse($menu->isDisplayed());
     }
 
-    public function testToArrayWithChildren()
+    public function testToArrayWithChildren(): void
     {
         $menu = $this->createMenu();
         $menu->addChild('jack', ['uri' => 'http://php.net', 'linkAttributes' => ['title' => 'php'], 'display' => false])
@@ -286,7 +295,7 @@ final class MenuManipulatorTest extends MenuTestCase
         );
     }
 
-    public function testToArrayWithLimitedChildren()
+    public function testToArrayWithLimitedChildren(): void
     {
         $menu = $this->createMenu();
         $menu->addChild('jack', ['uri' => 'http://php.net', 'linkAttributes' => ['title' => 'php'], 'display' => false])
@@ -342,7 +351,7 @@ final class MenuManipulatorTest extends MenuTestCase
         );
     }
 
-    public function testToArrayWithoutChildren()
+    public function testToArrayWithoutChildren(): void
     {
         $menu = $this->createMenu();
         $menu->addChild('jack', ['uri' => 'http://php.net', 'linkAttributes' => ['title' => 'php'], 'display' => false]);
@@ -369,15 +378,11 @@ final class MenuManipulatorTest extends MenuTestCase
     }
 
     /**
-     * Create a new MenuItem
+     * Create a new MenuItem.
      *
-     * @param string $name
-     * @param string $uri
-     * @param array  $attributes
-     *
-     * @return \Knp\Menu\MenuItem
+     * @param array<string, mixed> $attributes
      */
-    private function createMenu($name = 'test_menu', $uri = 'homepage', array $attributes = [])
+    private function createMenu(string $name = 'test_menu', string $uri = 'homepage', array $attributes = []): ItemInterface
     {
         $factory = new MenuFactory();
 

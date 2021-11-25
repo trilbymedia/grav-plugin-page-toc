@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\Menu\Tests\Silex;
+namespace Knp\Menu\Tests\Integration\Symfony;
 
 use Knp\Menu\Integration\Symfony\RoutingExtension;
 use PHPUnit\Framework\TestCase;
@@ -8,20 +8,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class RoutingExtensionTest extends TestCase
 {
-    protected function setUp()
+    public function testCreateItemWithRoute(): void
     {
-        if (!\interface_exists('Symfony\Component\Routing\Generator\UrlGeneratorInterface')) {
-            $this->markTestSkipped('The Symfony Routing component is not available');
-        }
-    }
-
-    public function testCreateItemWithRoute()
-    {
-        $generator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')->getMock();
+        $generator = $this->getMockBuilder(UrlGeneratorInterface::class)->getMock();
         $generator->expects($this->once())
             ->method('generate')
             ->with('homepage', [], UrlGeneratorInterface::ABSOLUTE_PATH)
-            ->will($this->returnValue('/foobar'))
+            ->willReturn('/foobar')
         ;
 
         $extension = new RoutingExtension($generator);
@@ -32,13 +25,13 @@ final class RoutingExtensionTest extends TestCase
         $this->assertEquals('foo', $processedOptions['label']);
     }
 
-    public function testCreateItemWithRouteAndParameters()
+    public function testCreateItemWithRouteAndParameters(): void
     {
-        $generator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')->getMock();
+        $generator = $this->getMockBuilder(UrlGeneratorInterface::class)->getMock();
         $generator->expects($this->once())
             ->method('generate')
             ->with('homepage', ['id' => 12], UrlGeneratorInterface::ABSOLUTE_PATH)
-            ->will($this->returnValue('/foobar'))
+            ->willReturn('/foobar')
         ;
 
         $extension = new RoutingExtension($generator);
@@ -48,13 +41,13 @@ final class RoutingExtensionTest extends TestCase
         $this->assertEquals('/foobar', $processedOptions['uri']);
     }
 
-    public function testCreateItemWithAbsoluteRoute()
+    public function testCreateItemWithAbsoluteRoute(): void
     {
-        $generator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')->getMock();
+        $generator = $this->getMockBuilder(UrlGeneratorInterface::class)->getMock();
         $generator->expects($this->once())
             ->method('generate')
             ->with('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL)
-            ->will($this->returnValue('http://php.net'))
+            ->willReturn('http://php.net')
         ;
 
         $extension = new RoutingExtension($generator);
@@ -64,9 +57,9 @@ final class RoutingExtensionTest extends TestCase
         $this->assertEquals('http://php.net', $processedOptions['uri']);
     }
 
-    public function testCreateItemAppendsRouteUnderExtras()
+    public function testCreateItemAppendsRouteUnderExtras(): void
     {
-        $generator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')->getMock();
+        $generator = $this->getMockBuilder(UrlGeneratorInterface::class)->getMock();
 
         $extension = new RoutingExtension($generator);
 
