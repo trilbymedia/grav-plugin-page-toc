@@ -1,5 +1,5 @@
 # v2.0.0
-## mm/dd/2021
+## 11/24/2021
 
 1. [](#new)
    * Added new `components/page-toc.html.twig` that can be extended and the HTML output modified
