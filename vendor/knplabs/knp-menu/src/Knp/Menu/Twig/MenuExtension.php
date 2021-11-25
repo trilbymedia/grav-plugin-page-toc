@@ -12,18 +12,32 @@ use Twig\TwigTest;
 
 class MenuExtension extends AbstractExtension
 {
+    /**
+     * @var Helper
+     */
     private $helper;
+
+    /**
+     * @var MatcherInterface|null
+     */
     private $matcher;
+
+    /**
+     * @var MenuManipulator|null
+     */
     private $menuManipulator;
 
-    public function __construct(Helper $helper, MatcherInterface $matcher = null, MenuManipulator $menuManipulator = null)
+    public function __construct(Helper $helper, ?MatcherInterface $matcher = null, ?MenuManipulator $menuManipulator = null)
     {
         $this->helper = $helper;
         $this->matcher = $matcher;
         $this->menuManipulator = $menuManipulator;
     }
 
-    public function getFunctions()
+    /**
+     * @return array<int, TwigFunction>
+     */
+    public function getFunctions(): array
     {
         return [
              new TwigFunction('knp_menu_get', [$this, 'get']),
@@ -33,14 +47,20 @@ class MenuExtension extends AbstractExtension
         ];
     }
 
-    public function getFilters()
+    /**
+     * @return array<int, TwigFilter>
+     */
+    public function getFilters(): array
     {
         return [
             new TwigFilter('knp_menu_as_string', [$this, 'pathAsString']),
         ];
     }
 
-    public function getTests()
+    /**
+     * @return array<int, TwigTest>
+     */
+    public function getTests(): array
     {
         return [
             new TwigTest('knp_menu_current', [$this, 'isCurrent']),
@@ -52,12 +72,10 @@ class MenuExtension extends AbstractExtension
      * Retrieves an item following a path in the tree.
      *
      * @param ItemInterface|string $menu
-     * @param array                $path
-     * @param array                $options
-     *
-     * @return ItemInterface
+     * @param array<int, string>   $path
+     * @param array<string, mixed> $options
      */
-    public function get($menu, array $path = [], array $options = [])
+    public function get($menu, array $path = [], array $options = []): ItemInterface
     {
         return $this->helper->get($menu, $path, $options);
     }
@@ -65,13 +83,10 @@ class MenuExtension extends AbstractExtension
     /**
      * Renders a menu with the specified renderer.
      *
-     * @param ItemInterface|string|array $menu
-     * @param array                      $options
-     * @param string                     $renderer
-     *
-     * @return string
+     * @param ItemInterface|string|array<ItemInterface|string> $menu
+     * @param array<string, mixed>                             $options
      */
-    public function render($menu, array $options = [], $renderer = null)
+    public function render($menu, array $options = [], ?string $renderer = null): string
     {
         return $this->helper->render($menu, $options, $renderer);
     }
@@ -79,12 +94,14 @@ class MenuExtension extends AbstractExtension
     /**
      * Returns an array ready to be used for breadcrumbs.
      *
-     * @param ItemInterface|array|string $menu
-     * @param string|array|null          $subItem
+     * @param ItemInterface|string|array<ItemInterface|string> $menu
+     * @param string|array<string|null>|null                   $subItem
+     * @phpstan-param string|ItemInterface|array<int|string, string|int|float|null|array{label: string, url: string|null, item: ItemInterface|null}|ItemInterface>|\Traversable<string|int|float|null|array{label: string, url: string|null, item: ItemInterface|null}|ItemInterface> $subItem
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
+     * @phpstan-return list<array{label: string, uri: string|null, item: ItemInterface|null}>
      */
-    public function getBreadcrumbsArray($menu, $subItem = null)
+    public function getBreadcrumbsArray($menu, $subItem = null): array
     {
         return $this->helper->getBreadcrumbsArray($menu, $subItem);
     }
@@ -93,10 +110,8 @@ class MenuExtension extends AbstractExtension
      * Returns the current item of a menu.
      *
      * @param ItemInterface|string $menu
-     *
-     * @return ItemInterface
      */
-    public function getCurrentItem($menu)
+    public function getCurrentItem($menu): ItemInterface
     {
         $rootItem = $this->get($menu);
 
@@ -113,13 +128,8 @@ class MenuExtension extends AbstractExtension
      * A string representation of this menu item
      *
      * e.g. Top Level > Second Level > This menu
-     *
-     * @param ItemInterface $menu
-     * @param string        $separator
-     *
-     * @return string
      */
-    public function pathAsString(ItemInterface $menu, $separator = ' > ')
+    public function pathAsString(ItemInterface $menu, string $separator = ' > '): string
     {
         if (null === $this->menuManipulator) {
             throw new \BadMethodCallException('The menu manipulator must be set to get the breadcrumbs array');
@@ -130,12 +140,8 @@ class MenuExtension extends AbstractExtension
 
     /**
      * Checks whether an item is current.
-     *
-     * @param ItemInterface $item
-     *
-     * @return bool
      */
-    public function isCurrent(ItemInterface $item)
+    public function isCurrent(ItemInterface $item): bool
     {
         if (null === $this->matcher) {
             throw new \BadMethodCallException('The matcher must be set to get the breadcrumbs array');
@@ -147,25 +153,14 @@ class MenuExtension extends AbstractExtension
     /**
      * Checks whether an item is the ancestor of a current item.
      *
-     * @param ItemInterface $item
-     * @param int|null      $depth The max depth to look for the item
-     *
-     * @return bool
+     * @param int|null $depth The max depth to look for the item
      */
-    public function isAncestor(ItemInterface $item, $depth = null)
+    public function isAncestor(ItemInterface $item, ?int $depth = null): bool
     {
         if (null === $this->matcher) {
             throw new \BadMethodCallException('The matcher must be set to get the breadcrumbs array');
         }
 
         return $this->matcher->isAncestor($item, $depth);
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'knp_menu';
     }
 }

@@ -2,29 +2,34 @@
 
 namespace Knp\Menu\Tests\Twig;
 
+use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Matcher;
 use Knp\Menu\MenuFactory;
 use Knp\Menu\MenuItem;
+use Knp\Menu\Provider\MenuProviderInterface;
+use Knp\Menu\Renderer\RendererInterface;
+use Knp\Menu\Renderer\RendererProviderInterface;
 use Knp\Menu\Twig\Helper;
+use Knp\Menu\Util\MenuManipulator;
 use PHPUnit\Framework\TestCase;
 
 final class HelperTest extends TestCase
 {
-    public function testRenderMenu()
+    public function testRenderMenu(): void
     {
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
-        $renderer = $this->getMockBuilder('Knp\Menu\Renderer\RendererInterface')->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
+        $renderer = $this->getMockBuilder(RendererInterface::class)->getMock();
         $renderer->expects($this->once())
             ->method('render')
             ->with($menu, [])
-            ->will($this->returnValue('<p>foobar</p>'))
+            ->willReturn('<p>foobar</p>')
         ;
 
-        $rendererProvider = $this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock();
+        $rendererProvider = $this->getMockBuilder(RendererProviderInterface::class)->getMock();
         $rendererProvider->expects($this->once())
             ->method('get')
             ->with(null)
-            ->will($this->returnValue($renderer))
+            ->willReturn($renderer)
         ;
 
         $helper = new Helper($rendererProvider);
@@ -32,21 +37,21 @@ final class HelperTest extends TestCase
         $this->assertEquals('<p>foobar</p>', $helper->render($menu));
     }
 
-    public function testRenderMenuWithOptions()
+    public function testRenderMenuWithOptions(): void
     {
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
-        $renderer = $this->getMockBuilder('Knp\Menu\Renderer\RendererInterface')->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
+        $renderer = $this->getMockBuilder(RendererInterface::class)->getMock();
         $renderer->expects($this->once())
             ->method('render')
             ->with($menu, ['firstClass' => 'test'])
-            ->will($this->returnValue('<p>foobar</p>'))
+            ->willReturn('<p>foobar</p>')
         ;
 
-        $rendererProvider = $this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock();
+        $rendererProvider = $this->getMockBuilder(RendererProviderInterface::class)->getMock();
         $rendererProvider->expects($this->once())
             ->method('get')
             ->with(null)
-            ->will($this->returnValue($renderer))
+            ->willReturn($renderer)
         ;
 
         $helper = new Helper($rendererProvider);
@@ -54,21 +59,21 @@ final class HelperTest extends TestCase
         $this->assertEquals('<p>foobar</p>', $helper->render($menu, ['firstClass' => 'test']));
     }
 
-    public function testRenderMenuWithRenderer()
+    public function testRenderMenuWithRenderer(): void
     {
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
-        $renderer = $this->getMockBuilder('Knp\Menu\Renderer\RendererInterface')->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
+        $renderer = $this->getMockBuilder(RendererInterface::class)->getMock();
         $renderer->expects($this->once())
             ->method('render')
             ->with($menu, [])
-            ->will($this->returnValue('<p>foobar</p>'))
+            ->willReturn('<p>foobar</p>')
         ;
 
-        $rendererProvider = $this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock();
+        $rendererProvider = $this->getMockBuilder(RendererProviderInterface::class)->getMock();
         $rendererProvider->expects($this->once())
             ->method('get')
             ->with('custom')
-            ->will($this->returnValue($renderer))
+            ->willReturn($renderer)
         ;
 
         $helper = new Helper($rendererProvider);
@@ -76,28 +81,28 @@ final class HelperTest extends TestCase
         $this->assertEquals('<p>foobar</p>', $helper->render($menu, [], 'custom'));
     }
 
-    public function testRenderMenuByName()
+    public function testRenderMenuByName(): void
     {
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
-        $menuProvider = $this->getMockBuilder('Knp\Menu\Provider\MenuProviderInterface')->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
+        $menuProvider = $this->getMockBuilder(MenuProviderInterface::class)->getMock();
         $menuProvider->expects($this->once())
             ->method('get')
             ->with('default')
-            ->will($this->returnValue($menu))
+            ->willReturn($menu)
         ;
 
-        $renderer = $this->getMockBuilder('Knp\Menu\Renderer\RendererInterface')->getMock();
+        $renderer = $this->getMockBuilder(RendererInterface::class)->getMock();
         $renderer->expects($this->once())
             ->method('render')
             ->with($menu, [])
-            ->will($this->returnValue('<p>foobar</p>'))
+            ->willReturn('<p>foobar</p>')
         ;
 
-        $rendererProvider = $this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock();
+        $rendererProvider = $this->getMockBuilder(RendererProviderInterface::class)->getMock();
         $rendererProvider->expects($this->once())
             ->method('get')
             ->with(null)
-            ->will($this->returnValue($renderer))
+            ->willReturn($renderer)
         ;
 
         $helper = new Helper($rendererProvider, $menuProvider);
@@ -105,15 +110,15 @@ final class HelperTest extends TestCase
         $this->assertEquals('<p>foobar</p>', $helper->render('default'));
     }
 
-    public function testGetMenu()
+    public function testGetMenu(): void
     {
-        $rendererProvider = $this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock();
-        $menuProvider = $this->getMockBuilder('Knp\Menu\Provider\MenuProviderInterface')->getMock();
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        $rendererProvider = $this->getMockBuilder(RendererProviderInterface::class)->getMock();
+        $menuProvider = $this->getMockBuilder(MenuProviderInterface::class)->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
         $menuProvider->expects($this->once())
             ->method('get')
             ->with('default')
-            ->will($this->returnValue($menu))
+            ->willReturn($menu)
         ;
 
         $helper = new Helper($rendererProvider, $menuProvider);
@@ -121,42 +126,24 @@ final class HelperTest extends TestCase
         $this->assertSame($menu, $helper->get('default'));
     }
 
-    /**
-     * @expectedException \LogicException
-     */
-    public function testGetMenuWithBadReturnValue()
+    public function testGetMenuWithoutProvider(): void
     {
-        $rendererProvider = $this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock();
-        $menuProvider = $this->getMockBuilder('Knp\Menu\Provider\MenuProviderInterface')->getMock();
-        $menuProvider->expects($this->once())
-            ->method('get')
-            ->with('default')
-            ->will($this->returnValue(new \stdClass()))
-        ;
+        $this->expectException(\BadMethodCallException::class);
 
-        $helper = new Helper($rendererProvider, $menuProvider);
-        $helper->get('default');
-    }
-
-    /**
-     * @expectedException \BadMethodCallException
-     */
-    public function testGetMenuWithoutProvider()
-    {
-        $rendererProvider = $this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock();
+        $rendererProvider = $this->getMockBuilder(RendererProviderInterface::class)->getMock();
         $helper = new Helper($rendererProvider);
         $helper->get('default');
     }
 
-    public function testGetMenuWithOptions()
+    public function testGetMenuWithOptions(): void
     {
-        $rendererProvider = $this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock();
-        $menuProvider = $this->getMockBuilder('Knp\Menu\Provider\MenuProviderInterface')->getMock();
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        $rendererProvider = $this->getMockBuilder(RendererProviderInterface::class)->getMock();
+        $menuProvider = $this->getMockBuilder(MenuProviderInterface::class)->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
         $menuProvider->expects($this->once())
             ->method('get')
             ->with('default', ['foo' => 'bar'])
-            ->will($this->returnValue($menu))
+            ->willReturn($menu)
         ;
 
         $helper = new Helper($rendererProvider, $menuProvider);
@@ -164,21 +151,21 @@ final class HelperTest extends TestCase
         $this->assertSame($menu, $helper->get('default', [], ['foo' => 'bar']));
     }
 
-    public function testGetMenuByPath()
+    public function testGetMenuByPath(): void
     {
-        $rendererProvider = $this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock();
-        $menuProvider = $this->getMockBuilder('Knp\Menu\Provider\MenuProviderInterface')->getMock();
-        $child = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        $rendererProvider = $this->getMockBuilder(RendererProviderInterface::class)->getMock();
+        $menuProvider = $this->getMockBuilder(MenuProviderInterface::class)->getMock();
+        $child = $this->getMockBuilder(ItemInterface::class)->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
         $menu->expects($this->any())
             ->method('getChild')
             ->with('child')
-            ->will($this->returnValue($child))
+            ->willReturn($child)
         ;
         $menuProvider->expects($this->once())
             ->method('get')
             ->with('default')
-            ->will($this->returnValue($menu))
+            ->willReturn($menu)
         ;
 
         $helper = new Helper($rendererProvider, $menuProvider);
@@ -186,28 +173,27 @@ final class HelperTest extends TestCase
         $this->assertSame($child, $helper->get('default', ['child']));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testGetMenuByInvalidPath()
+    public function testGetMenuByInvalidPath(): void
     {
-        $rendererProvider = $this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock();
-        $menuProvider = $this->getMockBuilder('Knp\Menu\Provider\MenuProviderInterface')->getMock();
-        $child = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        $this->expectException(\InvalidArgumentException::class);
+
+        $rendererProvider = $this->getMockBuilder(RendererProviderInterface::class)->getMock();
+        $menuProvider = $this->getMockBuilder(MenuProviderInterface::class)->getMock();
+        $child = $this->getMockBuilder(ItemInterface::class)->getMock();
         $child->expects($this->any())
             ->method('getChild')
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
         $menu->expects($this->any())
             ->method('getChild')
             ->with('child')
-            ->will($this->returnValue($child))
+            ->willReturn($child)
         ;
         $menuProvider->expects($this->once())
             ->method('get')
             ->with('default')
-            ->will($this->returnValue($menu))
+            ->willReturn($menu)
         ;
 
         $helper = new Helper($rendererProvider, $menuProvider);
@@ -215,28 +201,28 @@ final class HelperTest extends TestCase
         $this->assertSame($child, $helper->get('default', ['child', 'invalid']));
     }
 
-    public function testRenderMenuByPath()
+    public function testRenderMenuByPath(): void
     {
-        $child = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        $child = $this->getMockBuilder(ItemInterface::class)->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
         $menu->expects($this->any())
             ->method('getChild')
             ->with('child')
-            ->will($this->returnValue($child))
+            ->willReturn($child)
         ;
 
-        $renderer = $this->getMockBuilder('Knp\Menu\Renderer\RendererInterface')->getMock();
+        $renderer = $this->getMockBuilder(RendererInterface::class)->getMock();
         $renderer->expects($this->once())
             ->method('render')
             ->with($child, [])
-            ->will($this->returnValue('<p>foobar</p>'))
+            ->willReturn('<p>foobar</p>')
         ;
 
-        $rendererProvider = $this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock();
+        $rendererProvider = $this->getMockBuilder(RendererProviderInterface::class)->getMock();
         $rendererProvider->expects($this->once())
             ->method('get')
             ->with(null)
-            ->will($this->returnValue($renderer))
+            ->willReturn($renderer)
         ;
 
         $helper = new Helper($rendererProvider);
@@ -244,41 +230,39 @@ final class HelperTest extends TestCase
         $this->assertEquals('<p>foobar</p>', $helper->render([$menu, 'child']));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The array cannot be empty
-     */
-    public function testRenderByEmptyPath()
+    public function testRenderByEmptyPath(): void
     {
-        $helper = new Helper($this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The array cannot be empty');
+
+        $helper = new Helper($this->getMockBuilder(RendererProviderInterface::class)->getMock());
         $helper->render([]);
     }
 
-    public function testBreadcrumbsArray()
+    public function testBreadcrumbsArray(): void
     {
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        $menu = $this->getMockBuilder(ItemInterface::class)->getMock();
 
-        $manipulator = $this->getMockBuilder('Knp\Menu\Util\MenuManipulator')->getMock();
+        $manipulator = $this->getMockBuilder(MenuManipulator::class)->getMock();
         $manipulator->expects($this->any())
             ->method('getBreadcrumbsArray')
             ->with($menu)
-            ->will($this->returnValue(['A', 'B']));
+            ->willReturn(['A', 'B']);
 
-        $helper = new Helper($this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock(), null, $manipulator);
+        $helper = new Helper($this->getMockBuilder(RendererProviderInterface::class)->getMock(), null, $manipulator);
 
         $this->assertEquals(['A', 'B'], $helper->getBreadcrumbsArray($menu));
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
-    public function testCurrentItemWithoutMatcher()
+    public function testCurrentItemWithoutMatcher(): void
     {
-        $helper = new Helper($this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock());
+        $this->expectException(\BadMethodCallException::class);
+
+        $helper = new Helper($this->getMockBuilder(RendererProviderInterface::class)->getMock());
         $helper->getCurrentItem('default');
     }
 
-    public function testCurrentItem()
+    public function testCurrentItem(): void
     {
         $matcher = new Matcher();
 
@@ -292,7 +276,7 @@ final class HelperTest extends TestCase
         $menu['c2']['c2_2']->addChild('c2_2_2')->setCurrent(true);
         $menu['c2']['c2_2']->addChild('c2_2_3');
 
-        $helper = new Helper($this->getMockBuilder('Knp\Menu\Renderer\RendererProviderInterface')->getMock(), null, null, $matcher);
+        $helper = new Helper($this->getMockBuilder(RendererProviderInterface::class)->getMock(), null, null, $matcher);
 
         $this->assertSame('c2_2_2', $helper->getCurrentItem($menu)->getName());
     }

@@ -10,15 +10,20 @@ use Knp\Menu\Matcher\MatcherInterface;
  */
 class ListRenderer extends Renderer implements RendererInterface
 {
+    /**
+     * @var MatcherInterface
+     */
     protected $matcher;
+
+    /**
+     * @var array<string, mixed>
+     */
     protected $defaultOptions;
 
     /**
-     * @param MatcherInterface $matcher
-     * @param array            $defaultOptions
-     * @param string|null      $charset
+     * @param array<string, mixed> $defaultOptions
      */
-    public function __construct(MatcherInterface $matcher, array $defaultOptions = [], $charset = null)
+    public function __construct(MatcherInterface $matcher, array $defaultOptions = [], ?string $charset = null)
     {
         $this->matcher = $matcher;
         $this->defaultOptions = \array_merge([
@@ -39,7 +44,7 @@ class ListRenderer extends Renderer implements RendererInterface
         parent::__construct($charset);
     }
 
-    public function render(ItemInterface $item, array $options = [])
+    public function render(ItemInterface $item, array $options = []): string
     {
         $options = \array_merge($this->defaultOptions, $options);
 
@@ -52,15 +57,19 @@ class ListRenderer extends Renderer implements RendererInterface
         return $html;
     }
 
-    protected function renderList(ItemInterface $item, array $attributes, array $options)
+    /**
+     * @param array<string, string|bool|null> $attributes
+     * @param array<string, mixed>            $options
+     */
+    protected function renderList(ItemInterface $item, array $attributes, array $options): string
     {
-        /**
+        /*
          * Return an empty string if any of the following are true:
          *   a) The menu has no children eligible to be displayed
          *   b) The depth is 0
          *   c) This menu item has been explicitly set to hide its children
          */
-        if (!$item->hasChildren() || 0 === $options['depth'] || !$item->getDisplayChildren()) {
+        if (0 === $options['depth'] || !$item->hasChildren() || !$item->getDisplayChildren()) {
             return '';
         }
 
@@ -79,20 +88,17 @@ class ListRenderer extends Renderer implements RendererInterface
      * has children).
      * This method updates the depth for the children.
      *
-     * @param ItemInterface $item
-     * @param array         $options The options to render the item.
-     *
-     * @return string
+     * @param array<string, mixed> $options the options to render the item
      */
-    protected function renderChildren(ItemInterface $item, array $options)
+    protected function renderChildren(ItemInterface $item, array $options): string
     {
         // render children with a depth - 1
         if (null !== $options['depth']) {
-            $options['depth'] = $options['depth'] - 1;
+            --$options['depth'];
         }
 
         if (null !== $options['matchingDepth'] && $options['matchingDepth'] > 0) {
-            $options['matchingDepth'] = $options['matchingDepth'] - 1;
+            --$options['matchingDepth'];
         }
 
         $html = '';
@@ -109,12 +115,9 @@ class ListRenderer extends Renderer implements RendererInterface
      * This renders the li tag to fit into the parent ul as well as its
      * own nested ul tag if this menu item has children
      *
-     * @param ItemInterface $item
-     * @param array         $options The options to render the item
-     *
-     * @return string
+     * @param array<string, mixed> $options The options to render the item
      */
-    protected function renderItem(ItemInterface $item, array $options)
+    protected function renderItem(ItemInterface $item, array $options): string
     {
         // if we don't have access or this item is marked to not be shown
         if (!$item->isDisplayed()) {
@@ -137,7 +140,7 @@ class ListRenderer extends Renderer implements RendererInterface
             $class[] = $options['lastClass'];
         }
 
-        if ($item->hasChildren() && 0 !== $options['depth']) {
+        if (0 !== $options['depth'] && $item->hasChildren()) {
             if (null !== $options['branch_class'] && $item->getDisplayChildren()) {
                 $class[] = $options['branch_class'];
             }
@@ -181,14 +184,12 @@ class ListRenderer extends Renderer implements RendererInterface
      * the current item and if the text has to be rendered
      * as a link or not.
      *
-     * @param ItemInterface $item    The item to render the link or label for
-     * @param array         $options The options to render the item
-     *
-     * @return string
+     * @param ItemInterface        $item    The item to render the link or label for
+     * @param array<string, mixed> $options The options to render the item
      */
-    protected function renderLink(ItemInterface $item, array $options = [])
+    protected function renderLink(ItemInterface $item, array $options = []): string
     {
-        if ($item->getUri() && (!$item->isCurrent() || $options['currentAsLink'])) {
+        if (null !== $item->getUri() && (!$this->matcher->isCurrent($item) || $options['currentAsLink'])) {
             $text = $this->renderLinkElement($item, $options);
         } else {
             $text = $this->renderSpanElement($item, $options);
@@ -197,17 +198,28 @@ class ListRenderer extends Renderer implements RendererInterface
         return $this->format($text, 'link', $item->getLevel(), $options);
     }
 
-    protected function renderLinkElement(ItemInterface $item, array $options)
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function renderLinkElement(ItemInterface $item, array $options): string
     {
+        \assert(null !== $item->getUri());
+
         return \sprintf('<a href="%s"%s>%s</a>', $this->escape($item->getUri()), $this->renderHtmlAttributes($item->getLinkAttributes()), $this->renderLabel($item, $options));
     }
 
-    protected function renderSpanElement(ItemInterface $item, array $options)
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function renderSpanElement(ItemInterface $item, array $options): string
     {
         return \sprintf('<span%s>%s</span>', $this->renderHtmlAttributes($item->getLabelAttributes()), $this->renderLabel($item, $options));
     }
 
-    protected function renderLabel(ItemInterface $item, array $options)
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function renderLabel(ItemInterface $item, array $options): string
     {
         if ($options['allow_safe_labels'] && $item->getExtra('safe_label', false)) {
             return $item->getLabel();
@@ -221,18 +233,17 @@ class ListRenderer extends Renderer implements RendererInterface
      * spacing and line-breaking so that the particular thing being rendered
      * makes up its part in a fully-rendered and spaced menu.
      *
-     * @param string $html    The html to render in an (un)formatted way
-     * @param string $type    The type [ul,link,li] of thing being rendered
-     * @param int    $level
-     * @param array  $options
-     *
-     * @return string
+     * @param string               $html    The html to render in an (un)formatted way
+     * @param string               $type    The type [ul,link,li] of thing being rendered
+     * @param array<string, mixed> $options
      */
-    protected function format($html, $type, $level, array $options)
+    protected function format(string $html, string $type, int $level, array $options): string
     {
         if ($options['compressed']) {
             return $html;
         }
+
+        $spacing = 0;
 
         switch ($type) {
             case 'ul':
@@ -242,7 +253,6 @@ class ListRenderer extends Renderer implements RendererInterface
 
             case 'li':
                 $spacing = $level * 4 - 2;
-                break;
         }
 
         return \str_repeat(' ', $spacing).$html."\n";

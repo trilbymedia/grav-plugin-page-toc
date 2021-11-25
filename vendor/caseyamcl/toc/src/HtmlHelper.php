@@ -5,17 +5,24 @@
  *
  * @license http://opensource.org/licenses/MIT
  * @link https://github.com/caseyamcl/toc
- * @version 1.0
+ * @version 3
  * @package caseyamcl/toc
  * @author Casey McLaughlin <caseyamcl@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  *
  * ------------------------------------------------------------------
  */
 
+declare(strict_types=1);
+
 namespace TOC;
+
+use ArrayIterator;
+use DOMDocument;
+use DomElement;
+use DOMXPath;
 
 /**
  * Trait that helps with HTML-related operations
@@ -31,12 +38,14 @@ trait HtmlHelper
      * @param int $depth
      * @return array|string[]  Array of header tags; ex: ['h1', 'h2', 'h3']
      */
-    protected function determineHeaderTags($topLevel, $depth)
+    protected function determineHeaderTags(int $topLevel, int $depth): array
     {
         $desired = range((int) $topLevel, (int) $topLevel + ((int) $depth - 1));
         $allowed = [1, 2, 3, 4, 5, 6];
 
-        return array_map(function($val) { return 'h'.$val; }, array_intersect($desired, $allowed));
+        return array_map(function ($val) {
+            return 'h' . $val;
+        }, array_intersect($desired, $allowed));
     }
 
 
@@ -44,32 +53,34 @@ trait HtmlHelper
     /**
      * Traverse Header Tags in DOM Document
      *
-     * @param \DOMDocument $domDocument
+     * @param DOMDocument $domDocument
      * @param int          $topLevel
      * @param int          $depth
-     * @return \ArrayIterator|\DomElement[]
+     * @return ArrayIterator<int,DomElement>
      */
-    protected function traverseHeaderTags(\DOMDocument $domDocument, $topLevel, $depth)
+    protected function traverseHeaderTags(DOMDocument $domDocument, int $topLevel, int $depth): ArrayIterator
     {
-        $xpath = new \DOMXPath($domDocument);
+        $xQueryResults = new DOMXPath($domDocument);
 
         $xpathQuery = sprintf(
             "//*[%s]",
-            implode(' or ', array_map(function($v) {
+            implode(' or ', array_map(function ($v) {
                 return sprintf('local-name() = "%s"', $v);
             }, $this->determineHeaderTags($topLevel, $depth)))
         );
 
         $nodes = [];
-        foreach ($xpath->query($xpathQuery) as $node) {
-            $nodes[] = $node;
+        $xQueryResults = $xQueryResults->query($xpathQuery);
+
+        if ($xQueryResults) {
+            foreach ($xQueryResults as $node) {
+                $nodes[] = $node;
+            }
+            return new ArrayIterator($nodes);
+        } else {
+            return new ArrayIterator([]);
         }
-
-        return new \ArrayIterator($nodes);
     }
-
-
-
 
     /**
      * Is this a full HTML document
@@ -79,7 +90,7 @@ trait HtmlHelper
      * @param string $markup
      * @return bool
      */
-    protected function isFullHtmlDocument($markup)
+    protected function isFullHtmlDocument(string $markup): bool
     {
         return (strpos($markup, "<body") !== false && strpos($markup, "</body>") !== false);
     }

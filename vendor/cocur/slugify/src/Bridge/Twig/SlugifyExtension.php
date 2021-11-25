@@ -12,6 +12,8 @@
 namespace Cocur\Slugify\Bridge\Twig;
 
 use Cocur\Slugify\SlugifyInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 /**
  * SlugifyExtension
@@ -19,12 +21,14 @@ use Cocur\Slugify\SlugifyInterface;
  * @package    cocur/slugify
  * @subpackage bridge
  * @author     Florian Eckerstorfer <florian@eckerstorfer.co>
- * @copyright  2012-2014 Florian Eckerstorfer
+ * @copyright  2012-2015 Florian Eckerstorfer
  * @license    http://www.opensource.org/licenses/MIT The MIT License
  */
-class SlugifyExtension extends \Twig_Extension
+class SlugifyExtension extends AbstractExtension
 {
-    /** @var SlugifyInterface */
+    /**
+     * @var SlugifyInterface
+     */
     private $slugify;
 
     /**
@@ -42,33 +46,35 @@ class SlugifyExtension extends \Twig_Extension
     /**
      * Returns the Twig functions of this extension.
      *
-     * @return \Twig_SimpleFilter[]
+     * @return TwigFilter[]
      */
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('slugify', array($this, 'slugifyFilter')),
-        );
+        return [
+            new TwigFilter('slugify', [$this, 'slugifyFilter']),
+        ];
     }
 
     /**
      * Slugify filter.
      *
-     * @param string $string
-     * @param string $separator
+     * @param string      $string
+     * @param string|null $separator
      *
      * @return string
      */
-    public function slugifyFilter($string, $separator = '-')
+    public function slugifyFilter($string, $separator = null)
     {
         return $this->slugify->slugify($string, $separator);
     }
 
     /**
-     * {@inheritDoc}
+     * get Name
+     *
+     * @return string
      */
     public function getName()
     {
-        return 'slugify_extension';
+        return "SlugifyExtension";
     }
 }

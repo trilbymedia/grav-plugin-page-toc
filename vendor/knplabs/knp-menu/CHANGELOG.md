@@ -1,3 +1,25 @@
+## 3.2 (2021-05-28)
+
+* Remove Symfony 6 deprecations
+* Enforce phpstan rules (max level)
+
+## 3.1 (2019-12-01)
+
+* Allowed Symfony 5 components
+* Removed support for unsupported Symfony versions (4.0 and 4.1)
+* Allowed Twig 3
+
+## 3.0 (2019-09-02)
+
+* Raised PHP requirements
+* [BC break] Enforced strong types on all interfaces and classes
+* [BC break] Removed deprecated features. Specifically, MenuFactory and MenuItem are not accepting a `null` name anymore
+
+## 2.4 (2019-07-29)
+
+* Fixed Twig deprecations
+* Switched to namespaced Twig
+* Fixed sprintf use
 
 ## 2.3 (2017-11-18)
 

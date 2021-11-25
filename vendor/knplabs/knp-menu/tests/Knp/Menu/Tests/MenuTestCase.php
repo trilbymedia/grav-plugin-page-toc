@@ -2,6 +2,7 @@
 
 namespace Knp\Menu\Tests;
 
+use Knp\Menu\ItemInterface;
 use Knp\Menu\MenuFactory;
 use Knp\Menu\MenuItem;
 use PHPUnit\Framework\TestCase;
@@ -9,46 +10,46 @@ use PHPUnit\Framework\TestCase;
 abstract class MenuTestCase extends TestCase
 {
     /**
-     * @var \Knp\Menu\MenuItem
+     * @var ItemInterface|null
      */
     protected $menu;
 
     /**
-     * @var \Knp\Menu\MenuItem
+     * @var ItemInterface|null
      */
     protected $pt1;
 
     /**
-     * @var \Knp\Menu\MenuItem
+     * @var ItemInterface|null
      */
     protected $ch1;
 
     /**
-     * @var \Knp\Menu\MenuItem
+     * @var ItemInterface|null
      */
     protected $ch2;
 
     /**
-     * @var \Knp\Menu\MenuItem
+     * @var ItemInterface|null
      */
     protected $ch3;
 
     /**
-     * @var \Knp\Menu\MenuItem
+     * @var ItemInterface|null
      */
     protected $pt2;
 
     /**
-     * @var \Knp\Menu\MenuItem
+     * @var ItemInterface|null
      */
     protected $ch4;
 
     /**
-     * @var \Knp\Menu\MenuItem
+     * @var ItemInterface|null
      */
     protected $gc1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factory = new MenuFactory();
         $this->menu = $factory->createItem('Root li', ['childrenAttributes' => ['class' => 'root']]);
@@ -65,7 +66,7 @@ abstract class MenuTestCase extends TestCase
         $this->gc1 = $this->ch4->addChild('Grandchild 1');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->menu = null;
         $this->pt1 = null;
@@ -78,7 +79,7 @@ abstract class MenuTestCase extends TestCase
     }
 
     // prints a visual representation of our basic testing tree
-    protected function printTestTree()
+    protected function printTestTree(): void
     {
         echo '      Menu Structure   '."\n";
         echo '               rt      '."\n";

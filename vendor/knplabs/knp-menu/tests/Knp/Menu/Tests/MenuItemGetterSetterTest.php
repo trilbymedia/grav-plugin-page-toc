@@ -2,47 +2,49 @@
 
 namespace Knp\Menu\Tests;
 
+use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
 use Knp\Menu\MenuFactory;
 use Knp\Menu\MenuItem;
 use PHPUnit\Framework\TestCase;
 
 final class MenuItemGetterSetterTest extends TestCase
 {
-    public function testCreateMenuItemWithEmptyParameter()
+    public function testCreateMenuItemWithEmptyParameter(): void
     {
         $menu = $this->createMenu();
-        $this->assertTrue($menu instanceof MenuItem);
+        self::assertInstanceOf(MenuItem::class, $menu);
     }
 
-    public function testCreateMenuWithNameAndUri()
+    public function testCreateMenuWithNameAndUri(): void
     {
         $menu = $this->createMenu('test1', 'other_uri');
         $this->assertEquals('test1', $menu->getName());
         $this->assertEquals('other_uri', $menu->getUri());
     }
 
-    public function testCreateMenuWithTitle()
+    public function testCreateMenuWithTitle(): void
     {
         $title = 'This is a test item title';
         $menu = $this->createMenu('', null, ['title' => $title]);
         $this->assertEquals($title, $menu->getAttribute('title'));
     }
 
-    public function testName()
+    public function testName(): void
     {
         $menu = $this->createMenu();
         $menu->setName('menu name');
         $this->assertEquals('menu name', $menu->getName());
     }
 
-    public function testLabel()
+    public function testLabel(): void
     {
         $menu = $this->createMenu();
         $menu->setLabel('menu label');
         $this->assertEquals('menu label', $menu->getLabel());
     }
 
-    public function testNameIsUsedAsDefaultLabel()
+    public function testNameIsUsedAsDefaultLabel(): void
     {
         $menu = $this->createMenu('My Label');
         $this->assertEquals('My Label', $menu->getLabel());
@@ -50,14 +52,14 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals('Other Label', $menu->getLabel());
     }
 
-    public function testUri()
+    public function testUri(): void
     {
         $menu = $this->createMenu();
         $menu->setUri('menu_uri');
         $this->assertEquals('menu_uri', $menu->getUri());
     }
 
-    public function testAttributes()
+    public function testAttributes(): void
     {
         $attributes = ['class' => 'test_class', 'title' => 'Test title'];
         $menu = $this->createMenu();
@@ -65,14 +67,14 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals($attributes, $menu->getAttributes());
     }
 
-    public function testDefaultAttribute()
+    public function testDefaultAttribute(): void
     {
         $menu = $this->createMenu('', null, ['id' => 'test_id']);
         $this->assertEquals('test_id', $menu->getAttribute('id'));
         $this->assertEquals('default_value', $menu->getAttribute('unknown_attribute', 'default_value'));
     }
 
-    public function testLinkAttributes()
+    public function testLinkAttributes(): void
     {
         $attributes = ['class' => 'test_class', 'title' => 'Test title'];
         $menu = $this->createMenu();
@@ -80,7 +82,7 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals($attributes, $menu->getLinkAttributes());
     }
 
-    public function testDefaultLinkAttribute()
+    public function testDefaultLinkAttribute(): void
     {
         $menu = $this->createMenu();
         $menu->setLinkAttribute('class', 'test_class');
@@ -89,7 +91,7 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals('foobar', $menu->getLinkAttribute('title', 'foobar'));
     }
 
-    public function testChildrenAttributes()
+    public function testChildrenAttributes(): void
     {
         $attributes = ['class' => 'test_class', 'title' => 'Test title'];
         $menu = $this->createMenu();
@@ -97,7 +99,7 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals($attributes, $menu->getChildrenAttributes());
     }
 
-    public function testDefaultChildrenAttribute()
+    public function testDefaultChildrenAttribute(): void
     {
         $menu = $this->createMenu();
         $menu->setChildrenAttribute('class', 'test_class');
@@ -106,7 +108,7 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals('foobar', $menu->getChildrenAttribute('title', 'foobar'));
     }
 
-    public function testLabelAttributes()
+    public function testLabelAttributes(): void
     {
         $attributes = ['class' => 'test_class', 'title' => 'Test title'];
         $menu = $this->createMenu();
@@ -114,7 +116,7 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals($attributes, $menu->getLabelAttributes());
     }
 
-    public function testDefaultLabelAttribute()
+    public function testDefaultLabelAttribute(): void
     {
         $menu = $this->createMenu();
         $menu->setLabelAttribute('class', 'test_class');
@@ -123,7 +125,7 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals('foobar', $menu->getLabelAttribute('title', 'foobar'));
     }
 
-    public function testExtras()
+    public function testExtras(): void
     {
         $extras = ['class' => 'test_class', 'title' => 'Test title'];
         $menu = $this->createMenu();
@@ -131,7 +133,7 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals($extras, $menu->getExtras());
     }
 
-    public function testDefaultExtras()
+    public function testDefaultExtras(): void
     {
         $menu = $this->createMenu();
         $menu->setExtra('class', 'test_class');
@@ -140,15 +142,15 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals('foobar', $menu->getExtra('title', 'foobar'));
     }
 
-    public function testDisplay()
+    public function testDisplay(): void
     {
         $menu = $this->createMenu();
-        $this->assertEquals(true, $menu->isDisplayed());
+        $this->assertTrue($menu->isDisplayed());
         $menu->setDisplay(false);
-        $this->assertEquals(false, $menu->isDisplayed());
+        $this->assertFalse($menu->isDisplayed());
     }
 
-    public function testShowChildren()
+    public function testShowChildren(): void
     {
         $menu = $this->createMenu();
         $this->assertTrue($menu->getDisplayChildren());
@@ -156,7 +158,7 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertFalse($menu->getDisplayChildren());
     }
 
-    public function testParent()
+    public function testParent(): void
     {
         $menu = $this->createMenu();
         $child = $this->createMenu('child_menu');
@@ -165,7 +167,7 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals($menu, $child->getParent());
     }
 
-    public function testChildren()
+    public function testChildren(): void
     {
         $menu = $this->createMenu();
         $child = $this->createMenu('child_menu');
@@ -173,20 +175,19 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals([$child], $menu->getChildren());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testSetExistingNameThrowsAnException()
+    public function testSetExistingNameThrowsAnException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $menu = $this->createMenu();
         $menu->addChild('jack');
         $menu->addChild('joe');
         $menu->getChild('joe')->setName('jack');
     }
 
-    public function testSetSameName()
+    public function testSetSameName(): void
     {
-        $parent = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+        $parent = $this->getMockBuilder(ItemInterface::class)->getMock();
         $parent->expects($this->never())
             ->method('offsetExists');
 
@@ -196,13 +197,13 @@ final class MenuItemGetterSetterTest extends TestCase
         $this->assertEquals('my_name', $menu->getName());
     }
 
-    public function testFactory()
+    public function testFactory(): void
     {
-        $child1 = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
-        $factory = $this->getMockBuilder('Knp\Menu\FactoryInterface')->getMock();
+        $child1 = $this->getMockBuilder(ItemInterface::class)->getMock();
+        $factory = $this->getMockBuilder(FactoryInterface::class)->getMock();
         $factory->expects($this->once())
             ->method('createItem')
-            ->will($this->returnValue($child1));
+            ->willReturn($child1);
 
         $menu = $this->createMenu();
         $menu->setFactory($factory);
@@ -213,13 +214,9 @@ final class MenuItemGetterSetterTest extends TestCase
     /**
      * Create a new MenuItem
      *
-     * @param string|null $name
-     * @param string|null $uri
-     * @param array       $attributes
-     *
-     * @return \Knp\Menu\MenuItem
+     * @param array<string, mixed> $attributes
      */
-    protected function createMenu($name = 'test_menu', $uri = 'homepage', array $attributes = [])
+    protected function createMenu(string $name = 'test_menu', ?string $uri = 'homepage', array $attributes = []): ItemInterface
     {
         $factory = new MenuFactory();
 

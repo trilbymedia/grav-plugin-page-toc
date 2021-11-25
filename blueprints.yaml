@@ -14,6 +14,9 @@ bugs: https://github.com/trilbymedia/grav-plugin-page-toc/issues
 docs: https://github.com/trilbymedia/grav-plugin-page-toc/blob/develop/README.md
 license: MIT
 
+dependencies:
+    - { name: grav, version: '>=1.7.10' }
+
 form:
   validation: strict
   fields:

@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 final class ArrayLoaderTest extends TestCase
 {
-    public function testLoadWithoutChildren()
+    public function testLoadWithoutChildren(): void
     {
         $array = [
             'name' => 'joe',
@@ -26,7 +26,7 @@ final class ArrayLoaderTest extends TestCase
         $this->assertEmpty($item->getChildren());
     }
 
-    public function testLoadWithChildren()
+    public function testLoadWithChildren(): void
     {
         $array = [
             'name' => 'joe',
@@ -50,7 +50,7 @@ final class ArrayLoaderTest extends TestCase
         $this->assertTrue(isset($item['john']));
     }
 
-    public function testLoadWithChildrenOmittingName()
+    public function testLoadWithChildrenOmittingName(): void
     {
         $array = [
             'name' => 'joe',
@@ -74,27 +74,31 @@ final class ArrayLoaderTest extends TestCase
         $this->assertTrue(isset($item['jack']));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testLoadInvalidData()
+    public function testLoadInvalidData(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $loader = new ArrayLoader(new MenuFactory());
 
         $loader->load(new \stdClass());
     }
 
     /**
+     * @param mixed $data
+     *
      * @dataProvider provideSupportingData
      */
-    public function testSupports($data, $expected)
+    public function testSupports($data, bool $expected): void
     {
         $loader = new ArrayLoader(new MenuFactory());
 
         $this->assertSame($expected, $loader->supports($data));
     }
 
-    public function provideSupportingData()
+    /**
+     * @return array<int, array<int, mixed>>
+     */
+    public function provideSupportingData(): array
     {
         return [
             [[], true],
