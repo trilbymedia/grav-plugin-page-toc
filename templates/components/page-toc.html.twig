@@ -13,6 +13,7 @@
     {% endfor %}
 {% endmacro %}
 
+{# Should use new upstreamConfigVar() #}
 {% if active or config.get('plugins.page-toc.active') or attribute(page.header, 'page-toc').active %}
 <div class="page-toc">
     {% set table_of_contents = toc_items(page.content) %}

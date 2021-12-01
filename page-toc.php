@@ -3,6 +3,7 @@ namespace Grav\Plugin;
 
 use Composer\Autoload\ClassLoader;
 use Grav\Common\Data;
+use Grav\Common\Grav;
 use Grav\Common\Page\Interfaces\PageInterface;
 use Grav\Common\Plugin;
 use RocketTheme\Toolbox\Event\Event;
@@ -60,10 +61,16 @@ class PageTOCPlugin extends Plugin
 
         // Enable the main event we are interested in
         $this->enable([
+            'onShortcodeHandlers'       => ['onShortcodeHandlers', 0],
             'onTwigExtensions'          => ['onTwigExtensions', 0],
             'onTwigTemplatePaths'       => ['onTwigTemplatePaths', 0],
             'onPageContentProcessed'    => ['onPageContentProcessed', 0],
         ]);
+    }
+
+    public function onShortcodeHandlers()
+    {
+        $this->grav['shortcode']->registerAllShortcodes(__DIR__ . '/classes/shortcodes');
     }
 
     public function onPageContentProcessed(Event $event)
@@ -74,24 +81,24 @@ class PageTOCPlugin extends Plugin
         $content = $page->getRawContent();
         $shortcode_exists = preg_match($this->toc_regex, $content);
 
-        $config = $this->mergeConfig($page);
-        $active = $config->get('active', $config->get('process'));
-        $start = $config->get('start', 1);
-        $depth = $config->get('depth', 6);
+        $active = $this->upstreamConfigVar('active', $page, false);
+        $start = $this->upstreamConfigVar('start', $page,1);
+        $depth = $this->upstreamConfigVar('depth', $page,6);
 
-        if ($active || $shortcode_exists ) {
-            // set the IDs
+        // Set ID anchors if needed
+        if ($active || $shortcode_exists) {
             $markup_fixer  = new MarkupFixer();
             $content = $markup_fixer->fix($content, $start, $depth);
             $page->setRawContent($content);
-
-            // replace shortcode if necessary
-            if ($shortcode_exists) {
-                $toc = $this->grav['twig']->processTemplate('components/page-toc.html.twig', ['page' => $page, 'active' => true]);
-                $content = preg_replace($this->toc_regex, $toc, $content);
-                $page->setRawContent($content);
-            }
         }
+
+        // Replace shortcode if found
+        if ($shortcode_exists) {
+            $toc = $this->grav['twig']->processTemplate('components/page-toc.html.twig', ['page' => $page, 'active' => true]);
+            $content = preg_replace($this->toc_regex, $toc, $content);
+            $page->setRawContent($content);
+        }
+
     }
 
     public function onTwigExtensions()
@@ -126,5 +133,27 @@ class PageTOCPlugin extends Plugin
             $blueprint->extend($extends, true);
             $inEvent = false;
         }
+    }
+
+    protected function upstreamConfigVar($var, $page = null, $default = null)
+    {
+        $page = $page ?? $this->grav['page'] ?? null;
+
+        // Try to find var in the page headers
+        if ($page instanceof PageInterface && $page->exists()) {
+            // Loop over pages and look for header vars
+            while ($page && !$page->root()) {
+                $header = new \Grav\Common\Data\Data((array)$page->header());
+                $value = $header->get("page-toc.".$var);
+                if (isset($value)) {
+                    return $value;
+                }
+                $page = $page->parent();
+            }
+        }
+
+        $prefix = "plugins.{$this->name}." ;
+
+        return $this->grav['config']->get($prefix . $var, $default);
     }
 }

@@ -1,3 +1,11 @@
+# v2.1.0
+## mm/dd/2021
+
+1. [](#new)
+   * Added a new `[frag]` shortcode for manual fragments
+2. [](#improved)
+   * `page-toc:` configuration can be set in parent pages
+
 # v2.0.0
 ## 11/24/2021
 

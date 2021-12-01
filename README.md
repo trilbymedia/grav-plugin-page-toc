@@ -31,13 +31,15 @@ Before configuring this plugin, you should copy the `user/plugins/page-toc/page-
 Here is the default configuration and an explanation of available options:
 
 ```yaml
-enabled: true     # Plugin enabled
-active: true      # TOC processed by default for all page
-start: 1          # Start header tag level (1 = h1)
-depth: 6          # Depth from start (2 = 2 levels deep)
+enabled: true           # Plugin enabled
+active: false           # Anchor IDs processed and generated for all pages
+start: 1                # Start header tag level (1 = h1)
+depth: 6                # Depth from start (2 = 2 levels deep)
+anchor_class: 'anchor'  # Anchor class for manual or shortcode generated anchors
 ```
 
-For example if you had a start of `3` and a depth of `3` you would get a TOC for `h3`, `h4`, and `h5`.
+You can now have `page-toc` automatically add anchors without there being a table of contents being used
+
 
 By default, The plugin is 'active' and will add header id attributes anchors for each header level found in a page.  You can set `active: false` and then activate on a page basis by adding this to the page frontmatter:
 
@@ -47,6 +49,10 @@ page-toc:
 ```
 
 You can also configure which header tags to start and depth on when building the id attribute anchors by changing the `start` and `depth` values. This can also be done on a per-page basis.
+
+For example if you had a start of `3` and a depth of `3` you would get a TOC for `h3`, `h4`, and `h5`.
+
+The `anchor_class` is used by shortcodes and any manually generated elements to be automatically styled as anchor links.
 
 ## Usage
 
@@ -62,6 +68,26 @@ This will replace the shortcode syntax with the Table of Contents with the `comp
 
 NOTE: It's not required to set the TOC plugin `active` if you use the shortcode syntax in your content.  That is a good enough indication that you want the plugin to be active.
 
+### Frag Shortcode
+
+Page TOC now includes a `frag` shortcode that allows you to manually add linkable fragments in your content.  
+The shortcode will automatically generate the link if no options are provided. Alternatively you can use the bbode syntax of `frag="some-custom-id"` or you can explicity set it.  You can also set a `prefix` and let the shortcode autogenerate the rest.
+
+For example:
+
+```markdown
+
+Ut sed nisl suscipit metus sollicitudin [frag]<span>ornare</span>[/frag] nec vitae nulla. In pretium massa ex, in [frag="vulputate"]vulputate tellus[/frag] accumsan vel. 
+
+Nullam [frag id="tempor"]tempor quis lorem[/frag] venenatis finibus. Curabitur dapibus nulla sed tristique pretium. Nullam tempor quis [frag prefix="sec2.2-"]lorem venenatis finibus[/frag].
+```
+
+An example of the resulting HTML link looks like:
+
+```html
+<a class="anchor " href="#tempor" id="tempor">tempor quis lorem</a>
+```
+ 
 ### Twig Templating
 
 When the plugin is `active` it will add anchors to the header tags of the page content as configured. You can simply include the provided Twig template:

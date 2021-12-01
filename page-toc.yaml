@@ -1,4 +1,5 @@
-enabled: true     # Plugin enabled
-active: false     # TOC processed by default for all page
-start: 1          # Start header tag level (1 = h1)
-depth: 6          # Depth from start (2 = 2 levels deep)
+enabled: true           # Plugin enabled
+active: false           # Anchor IDs processed and generated for all pages
+start: 1                # Start header tag level (1 = h1)
+depth: 6                # Depth from start (2 = 2 levels deep)
+anchor_class: 'anchor'  # Anchor class for manual or shortcode generated anchors
