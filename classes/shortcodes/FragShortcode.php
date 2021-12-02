@@ -10,7 +10,7 @@ class FragShortcode extends Shortcode
   public function init()
   {
     $this->shortcode->getHandlers()->add('frag', function(ProcessedShortcode $sc) {
-      $anchor_class = $this->grav['config']->get('plugins.page-toc.anchors_class', 'anchor');
+      $anchor_class = $this->grav['config']->get('plugins.page-toc.anchors.class', 'anchor');
       $id = $sc->getParameter('id', $sc->getBbCode());
       $prefix = $sc->getParameter('prefix');
       $class = $sc->getParameter('class');

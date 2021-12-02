@@ -33,18 +33,21 @@ class MarkupFixer
      * Fix markup
      *
      * @param string $markup
-     * @param int    $topLevel
+     * @param int    $start
      * @param int    $depth
      * @param array  $options
      * @return string Markup with added IDs
      * @throws RuntimeException
      */
-    public function fix(string $markup, int $topLevel = 1, int $depth = 6, array $options = []): string
+    public function fix(string $markup, array $options = []): string
     {
         if (! $this->isFullHtmlDocument($markup)) {
             $partialID = uniqid('toc_generator_');
             $markup = sprintf("<body id='%s'>%s</body>", $partialID, $markup);
         }
+
+        $start = $options['top_level'] ?? 1;
+        $depth = $options['depth'] ?? 6;
 
         $domDocument = new \DOMDocument();
         $domDocument->loadHTML(mb_convert_encoding($markup, 'HTML-ENTITIES', 'UTF-8'));
@@ -53,12 +56,27 @@ class MarkupFixer
         $slugger = new UniqueSlugify();
 
         /** @var DOMElement $node */
-        foreach ($this->traverseHeaderTags($domDocument, $topLevel, $depth) as $node) {
+        foreach ($this->traverseHeaderTags($domDocument, $start, $depth) as $node) {
             if ($node->getAttribute('id')) {
                 continue;
             }
+            $slug = $slugger->slugify($node->getAttribute('title') ?: $node->textContent, $options);
 
-            $node->setAttribute('id', $slugger->slugify($node->getAttribute('title') ?: $node->textContent, $options));
+            $node->setAttribute('id', $slug);
+
+            if ($options['link']) {
+                $link = $domDocument->createElement("a");
+                $class = isset($options['class']) ? " {$options['class']}" : "";
+                $link->setAttribute('href', "#$slug");
+                $link->setAttribute('class', "toc-anchor {$options['position']}$class");
+                $link->setAttribute('data-anchor-icon', $options['icon']);
+                $link->setAttribute('aria-label', $options['aria']);
+                if ($options['position'] == 'after') {
+                    $node->appendChild($link);
+                } else {
+                    $node->insertBefore($link, $node->firstChild);
+                }
+            }
         }
 
         return $domDocument->saveHTML(

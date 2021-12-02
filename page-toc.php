@@ -69,6 +69,7 @@ class PageTOCPlugin extends Plugin
             'onShortcodeHandlers'       => ['onShortcodeHandlers', 0],
             'onTwigInitialized'         => ['onTwigInitialized', 0],
             'onTwigTemplatePaths'       => ['onTwigTemplatePaths', 0],
+            'onTwigSiteVariables'       => ['onTwigSiteVariables', 0],
             'onPageContentProcessed'    => ['onPageContentProcessed', 0],
         ]);
     }
@@ -89,14 +90,9 @@ class PageTOCPlugin extends Plugin
 
         // Set ID anchors if needed
         if ($active || $shortcode_exists) {
-            $start = $this->upstreamConfigVar('start', $page,1);
-            $depth = $this->upstreamConfigVar('depth', $page,6);
-
-            $options = $this->getSlugifyOptions($page);
             $this->registerTwigFunctions();
-
             $markup_fixer = new MarkupFixer();
-            $content = $markup_fixer->fix($content, $start, $depth, $options);
+            $content = $markup_fixer->fix($content, $this->getSlugifyOptions($page));
             $page->setRawContent($content);
         }
 
@@ -112,14 +108,29 @@ class PageTOCPlugin extends Plugin
     protected function getSlugifyOptions(PageInterface $page = null): array
     {
         $page = $page ?? $this->grav['page'];
-        $maxlen = $this->upstreamConfigVar('slugify.maxlen', $page,null);
-        $prefix = $this->upstreamConfigVar('slugify.prefix', $page,null);
-        return ['maxlen' => $maxlen, 'prefix' => $prefix];
+        return [
+            'start'     => $this->upstreamConfigVar('anchors.start', $page,1),
+            'depth'     => $this->upstreamConfigVar('anchors.depth', $page,6),
+            'link'      => $this->upstreamConfigVar('anchors.link', $page,true),
+            'position'  => $this->upstreamConfigVar('anchors.position', $page,'before'),
+            'aria'      => $this->upstreamConfigVar('anchors.aria', $page,'Anchor'),
+            'icon'      => $this->upstreamConfigVar('anchors.icon', $page,'#'),
+            'class'     => $this->upstreamConfigVar('anchors.class', $page,null),
+            'maxlen'    => $this->upstreamConfigVar('slugs.maxlen', $page,null),
+            'prefix'    => $this->upstreamConfigVar('slugs.prefix', $page,null),
+        ];
     }
 
     public function onTwigInitialized()
     {
         $this->registerTwigFunctions();
+    }
+
+    public function onTwigSiteVariables()
+    {
+        if ($this->grav['config']->get('plugins.page-toc.include_css')) {
+            $this->grav['assets']->addCss('plugin://page-toc/assets/page-toc-anchors.css');
+        }
     }
 
     public function registerTwigFunctions()
@@ -134,21 +145,27 @@ class PageTOCPlugin extends Plugin
         $this->fixer     = new MarkupFixer();
         $twig = $this->grav['twig']->twig();
 
-        $twig->addFunction(new TwigFunction('toc', function ($markup, $top = 1, $depth = 6) {
-            return $this->generator->getHtmlMenu($markup, $top, $depth);
+        $twig->addFunction(new TwigFunction('toc', function ($markup, $start = 1, $depth = 6) {
+            return $this->generator->getHtmlMenu($markup, $start, $depth);
         }, ['is_safe' => ['html']]));
 
-        $twig->addFunction(new TwigFunction('toc_ordered', function ($markup, $top = 1, $depth = 6) {
-            return $this->generator->getHtmlMenu($markup, $top, $depth, null, true);
+        $twig->addFunction(new TwigFunction('toc_ordered', function ($markup, $start = 1, $depth = 6) {
+            return $this->generator->getHtmlMenu($markup, $start, $depth, null, true);
         }, ['is_safe' => ['html']]));
 
-        $twig->addFunction(new TwigFunction('toc_items', function ($markup, $top = 1, $depth = 6) {
-            return $this->generator->getMenu($markup, $top, $depth);
+        $twig->addFunction(new TwigFunction('toc_items', function ($markup, $start = 1, $depth = 6) {
+            return $this->generator->getMenu($markup, $start, $depth);
         }));
 
-        $twig->addFunction(new TwigFunction('add_anchors', function ($markup, $top = 1, $depth = 6) {
+        $twig->addFunction(new TwigFunction('add_anchors', function ($markup, $start = null, $depth = null) {
             $options = $this->getSlugifyOptions();
-            return $this->fixer->fix($markup, $top, $depth, $options);
+            if ($start && is_int($start)) {
+                $options['start'] = $start;
+            }
+            if ($depth && is_int($depth)) {
+                $options['depth'] = $depth;
+            }
+            return $this->fixer->fix($markup, $options);
         }, ['is_safe' => ['html']]));
         $functions_registered = true;
     }

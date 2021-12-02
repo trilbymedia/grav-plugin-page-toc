@@ -1,8 +1,18 @@
 enabled: true           # Plugin enabled
+include_css: true
 active: false           # Anchor IDs processed and generated for all pages
 start: 1                # Start header tag level (1 = h1)
 depth: 6                # Depth from start (2 = 2 levels deep)
-anchor_class: 'anchor'  # Anchor class for manual or shortcode generated anchors
-slugify:
-  maxlen: 10
+hclass:
+anchors:
+  start: 1
+  depth: 6
+  link: true
+  aria: Anchor
+  class:
+  icon: '#'
+  position: before
+  copy_to_clipboard: true
+slugs:
+  maxlen: 20
   prefix:
