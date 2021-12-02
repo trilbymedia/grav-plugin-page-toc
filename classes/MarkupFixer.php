@@ -31,28 +31,6 @@ class MarkupFixer
     use HtmlHelper;
 
     /**
-     * @var HTML5
-     */
-    private $htmlParser;
-
-    /**
-     * @var SlugifyInterface
-     */
-    private $sluggifier;
-
-    /**
-     * Constructor
-     *
-     * @param HTML5|null $htmlParser
-     * @param SlugifyInterface|null $slugify
-     */
-    public function __construct(?HTML5 $htmlParser = null, ?SlugifyInterface $slugify = null)
-    {
-        $this->htmlParser = $htmlParser ?? new HTML5();
-        $this->sluggifier = $slugify ?? new UniqueSlugify();
-    }
-
-    /**
      * Fix markup
      *
      * @param string $markup
@@ -69,11 +47,11 @@ class MarkupFixer
             $markup = sprintf("<body id='%s'>%s</body>", $partialID, $markup);
         }
 
-        $domDocument = $this->htmlParser->loadHTML($markup);
+        $domDocument = new \DOMDocument();
+        $domDocument->loadHTML($markup);
         $domDocument->preserveWhiteSpace = true; // do not clobber whitespace
 
-        // If using the default slugifier, ensure that a unique instance of the class
-        $slugger = $this->sluggifier instanceof UniqueSlugify ? new UniqueSlugify() : $this->sluggifier;
+        $slugger = new UniqueSlugify();
 
         /** @var DOMElement $node */
         foreach ($this->traverseHeaderTags($domDocument, $topLevel, $depth) as $node) {
@@ -84,8 +62,8 @@ class MarkupFixer
             $node->setAttribute('id', $slugger->slugify($node->getAttribute('title') ?: $node->textContent, $options));
         }
 
-        return $this->htmlParser->saveHTML(
-            (isset($partialID)) ? $domDocument->getElementById($partialID)->childNodes : $domDocument
+        return $domDocument->saveHTML(
+            (isset($partialID)) ? $domDocument->getElementById($partialID) : $domDocument
         );
     }
 }

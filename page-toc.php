@@ -69,9 +69,9 @@ class PageTOCPlugin extends Plugin
         // Enable the main event we are interested in
         $this->enable([
             'onShortcodeHandlers'       => ['onShortcodeHandlers', 0],
+            'onTwigInitialized'         => ['onTwigInitialized', 0],
             'onTwigTemplatePaths'       => ['onTwigTemplatePaths', 0],
             'onPageContentProcessed'    => ['onPageContentProcessed', 0],
-            'onPageInitialized'         => ['onPageInitialized', 0],
         ]);
     }
 
@@ -119,15 +119,12 @@ class PageTOCPlugin extends Plugin
         return ['maxlen' => $maxlen, 'prefix' => $prefix];
     }
 
-    public function onPageInitialized($event)
+    public function onTwigInitialized()
     {
-        /** @var PageInterface $page */
-        $page = $event['page'];
-
-        $this->registerTwigFunctions($page);
+        $this->registerTwigFunctions();
     }
 
-    public function registerTwigFunctions($page = null)
+    public function registerTwigFunctions()
     {
         static $functions_registered;
 
