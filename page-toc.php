@@ -6,9 +6,11 @@ use Grav\Common\Data;
 use Grav\Common\Page\Interfaces\PageInterface;
 use Grav\Common\Plugin;
 use Grav\Plugin\PageToc\MarkupFixer;
+use Grav\Plugin\PageToc\TocGenerator;
 use Grav\Plugin\PageToc\TocTwigExtension;
 use Grav\Plugin\PageToc\UniqueSlugify;
 use RocketTheme\Toolbox\Event\Event;
+use Twig\TwigFunction;
 
 
 /**
@@ -20,6 +22,9 @@ class PageTOCPlugin extends Plugin
     protected $start;
     protected $end;
     protected $toc_regex = '#\[TOC\s*\/?\]#i';
+
+    protected $fixer;
+    protected $generator;
 
     /**
      * @return array
@@ -64,9 +69,9 @@ class PageTOCPlugin extends Plugin
         // Enable the main event we are interested in
         $this->enable([
             'onShortcodeHandlers'       => ['onShortcodeHandlers', 0],
-            'onTwigExtensions'          => ['onTwigExtensions', 0],
             'onTwigTemplatePaths'       => ['onTwigTemplatePaths', 0],
             'onPageContentProcessed'    => ['onPageContentProcessed', 0],
+            'onPageInitialized'         => ['onPageInitialized', 0],
         ]);
     }
 
@@ -89,12 +94,10 @@ class PageTOCPlugin extends Plugin
             $start = $this->upstreamConfigVar('start', $page,1);
             $depth = $this->upstreamConfigVar('depth', $page,6);
 
-            $maxlen = $this->upstreamConfigVar('slugify.maxlen', $page,null);
-            $prefix = $this->upstreamConfigVar('slugify.prefix', $page,null);
-            $options = ['maxlen' => $maxlen, 'prefix' => $prefix];
-            $slugger = new UniqueSlugify();
+            $options = $this->getSlugifyOptions($page);
+            $this->registerTwigFunctions();
 
-            $markup_fixer  = new MarkupFixer(null, $slugger );
+            $markup_fixer = new MarkupFixer();
             $content = $markup_fixer->fix($content, $start, $depth, $options);
             $page->setRawContent($content);
         }
@@ -108,9 +111,51 @@ class PageTOCPlugin extends Plugin
 
     }
 
-    public function onTwigExtensions()
+    protected function getSlugifyOptions(PageInterface $page = null): array
     {
-        $this->grav['twig']->twig->addExtension(new TocTwigExtension());
+        $page = $page ?? $this->grav['page'];
+        $maxlen = $this->upstreamConfigVar('slugify.maxlen', $page,null);
+        $prefix = $this->upstreamConfigVar('slugify.prefix', $page,null);
+        return ['maxlen' => $maxlen, 'prefix' => $prefix];
+    }
+
+    public function onPageInitialized($event)
+    {
+        /** @var PageInterface $page */
+        $page = $event['page'];
+
+        $this->registerTwigFunctions($page);
+    }
+
+    public function registerTwigFunctions($page = null)
+    {
+        static $functions_registered;
+
+        if ($functions_registered) {
+            return;
+        }
+
+        $this->generator = new TocGenerator();
+        $this->fixer     = new MarkupFixer();
+        $twig = $this->grav['twig']->twig();
+
+        $twig->addFunction(new TwigFunction('toc', function ($markup, $top = 1, $depth = 6) {
+            return $this->generator->getHtmlMenu($markup, $top, $depth);
+        }, ['is_safe' => ['html']]));
+
+        $twig->addFunction(new TwigFunction('toc_ordered', function ($markup, $top = 1, $depth = 6) {
+            return $this->generator->getHtmlMenu($markup, $top, $depth, null, true);
+        }, ['is_safe' => ['html']]));
+
+        $twig->addFunction(new TwigFunction('toc_items', function ($markup, $top = 1, $depth = 6) {
+            return $this->generator->getMenu($markup, $top, $depth);
+        }));
+
+        $twig->addFunction(new TwigFunction('add_anchors', function ($markup, $top = 1, $depth = 6) {
+            $options = $this->getSlugifyOptions();
+            return $this->fixer->fix($markup, $top, $depth, $options);
+        }, ['is_safe' => ['html']]));
+        $functions_registered = true;
     }
 
     public function onTwigTemplatePaths()
