@@ -34,11 +34,6 @@ class TocGenerator
     private const DEFAULT_NAME = 'TOC';
 
     /**
-     * @var HTML5
-     */
-    private $domParser;
-
-    /**
      * @var MenuFactory
      */
     private $menuFactory;
@@ -48,7 +43,6 @@ class TocGenerator
      */
     public function __construct()
     {
-        $this->domParser   = new \DomDocument();
         $this->menuFactory = new MenuFactory();
     }
 
@@ -79,7 +73,9 @@ class TocGenerator
         $lastElem = $menu;
 
         // Do it...
-        $domDocument = $this->domParser->loadHTML($markup);
+        $domDocument = new \DOMDocument();
+        $domDocument->loadHTML($markup);
+
         foreach ($this->traverseHeaderTags($domDocument, $topLevel, $depth) as $i => $node) {
             // Skip items without IDs
             if (! $node->hasAttribute('id')) {

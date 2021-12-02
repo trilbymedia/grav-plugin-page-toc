@@ -7,8 +7,6 @@ use Grav\Common\Page\Interfaces\PageInterface;
 use Grav\Common\Plugin;
 use Grav\Plugin\PageToc\MarkupFixer;
 use Grav\Plugin\PageToc\TocGenerator;
-use Grav\Plugin\PageToc\TocTwigExtension;
-use Grav\Plugin\PageToc\UniqueSlugify;
 use RocketTheme\Toolbox\Event\Event;
 use Twig\TwigFunction;
 
