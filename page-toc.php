@@ -3,11 +3,13 @@ namespace Grav\Plugin;
 
 use Composer\Autoload\ClassLoader;
 use Grav\Common\Data;
-use Grav\Common\Grav;
 use Grav\Common\Page\Interfaces\PageInterface;
 use Grav\Common\Plugin;
+use Grav\Plugin\PageToc\MarkupFixer;
+use Grav\Plugin\PageToc\TocTwigExtension;
+use Grav\Plugin\PageToc\UniqueSlugify;
 use RocketTheme\Toolbox\Event\Event;
-use TOC\MarkupFixer;
+
 
 /**
  * Class PageTOCPlugin
@@ -80,15 +82,20 @@ class PageTOCPlugin extends Plugin
 
         $content = $page->getRawContent();
         $shortcode_exists = preg_match($this->toc_regex, $content);
-
         $active = $this->upstreamConfigVar('active', $page, false);
-        $start = $this->upstreamConfigVar('start', $page,1);
-        $depth = $this->upstreamConfigVar('depth', $page,6);
 
         // Set ID anchors if needed
         if ($active || $shortcode_exists) {
-            $markup_fixer  = new MarkupFixer();
-            $content = $markup_fixer->fix($content, $start, $depth);
+            $start = $this->upstreamConfigVar('start', $page,1);
+            $depth = $this->upstreamConfigVar('depth', $page,6);
+
+            $maxlen = $this->upstreamConfigVar('slugify.maxlen', $page,null);
+            $prefix = $this->upstreamConfigVar('slugify.prefix', $page,null);
+            $options = ['maxlen' => $maxlen, 'prefix' => $prefix];
+            $slugger = new UniqueSlugify();
+
+            $markup_fixer  = new MarkupFixer(null, $slugger );
+            $content = $markup_fixer->fix($content, $start, $depth, $options);
             $page->setRawContent($content);
         }
 
@@ -103,7 +110,7 @@ class PageTOCPlugin extends Plugin
 
     public function onTwigExtensions()
     {
-        $this->grav['twig']->twig->addExtension(new \TOC\TocTwigExtension());
+        $this->grav['twig']->twig->addExtension(new TocTwigExtension());
     }
 
     public function onTwigTemplatePaths()

@@ -1,23 +1,19 @@
 <?php
 
 /**
- * PHP TableOfContents Library
+ * PageTOC
  *
- * @license http://opensource.org/licenses/MIT
- * @link https://github.com/caseyamcl/toc
- * @version 3
- * @package caseyamcl/toc
- * @author Casey McLaughlin <caseyamcl@gmail.com>
+ * This plugin allows creation of Table of Contents + Link Anchors
  *
- * For the full copyright and license information, please view the LICENSE.md
- * file that was distributed with this source code.
+ * Based on the original version https://github.com/caseyamcl/toc
+ * by Casey McLaughlin <caseyamcl@gmail.com>
  *
- * ------------------------------------------------------------------
+ * Licensed under MIT, see LICENSE.
  */
 
 declare(strict_types=1);
 
-namespace TOC;
+namespace Grav\Plugin\PageToc;
 
 use DOMElement;
 use Masterminds\HTML5;
@@ -62,10 +58,11 @@ class MarkupFixer
      * @param string $markup
      * @param int    $topLevel
      * @param int    $depth
+     * @param array  $options
      * @return string Markup with added IDs
      * @throws RuntimeException
      */
-    public function fix(string $markup, int $topLevel = 1, int $depth = 6): string
+    public function fix(string $markup, int $topLevel = 1, int $depth = 6, array $options = []): string
     {
         if (! $this->isFullHtmlDocument($markup)) {
             $partialID = uniqid('toc_generator_');
@@ -84,7 +81,7 @@ class MarkupFixer
                 continue;
             }
 
-            $node->setAttribute('id', $slugger->slugify($node->getAttribute('title') ?: $node->textContent));
+            $node->setAttribute('id', $slugger->slugify($node->getAttribute('title') ?: $node->textContent, $options));
         }
 
         return $this->htmlParser->saveHTML(

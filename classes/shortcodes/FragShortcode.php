@@ -2,6 +2,7 @@
 namespace Grav\Plugin\Shortcodes;
 
 use Grav\Common\Inflector;
+use Grav\Plugin\PageToc\UniqueSlugify;
 use Thunder\Shortcode\Shortcode\ProcessedShortcode;
 
 class FragShortcode extends Shortcode
@@ -15,8 +16,10 @@ class FragShortcode extends Shortcode
       $class = $sc->getParameter('class');
       $content = $sc->getContent();
 
+      $slugger = new UniqueSlugify();
+
       if (is_null($id)) {
-          $id = Inflector::hyphenize(strip_tags($content));
+          $id = $slugger->slugify(strip_tags($content));
       }
 
       if (isset($prefix)) {

@@ -1,24 +1,19 @@
 <?php
 
 /**
+ * PageTOC
  *
- * PHP TableOfContents Library
+ * This plugin allows creation of Table of Contents + Link Anchors
  *
- * @license http://opensource.org/licenses/MIT
- * @link https://github.com/caseyamcl/toc
- * @version 3
- * @package caseyamcl/toc
- * @author Casey McLaughlin <caseyamcl@gmail.com>
+ * Based on the original version https://github.com/caseyamcl/toc
+ * by Casey McLaughlin <caseyamcl@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE.md
- * file that was distributed with this source code.
- *
- * ------------------------------------------------------------------
+ * Licensed under MIT, see LICENSE.
  */
 
 declare(strict_types=1);
 
-namespace TOC;
+namespace Grav\Plugin\PageToc;
 
 use Cocur\Slugify\Slugify;
 use Cocur\Slugify\SlugifyInterface;
@@ -30,37 +25,43 @@ use Cocur\Slugify\SlugifyInterface;
  */
 class UniqueSlugify implements SlugifyInterface
 {
-    /**
-     * @var SlugifyInterface
-     */
-    private $slugify;
+    protected $slugify;
+    protected $used;
 
-    /**
-     * @var array
-     */
-    private $used;
+    protected $options;
 
     /**
      * Constructor
      *
      * @param SlugifyInterface|null $slugify
      */
-    public function __construct(?SlugifyInterface $slugify = null)
+    public function __construct()
     {
         $this->used = array();
-        $this->slugify = $slugify ?: new Slugify();
+        $this->slugify = new Slugify();
     }
 
     /**
      * Slugify
      *
      * @param string $text
-     * @param null $options
+     * @param array|null $options
      * @return string
      */
     public function slugify($text, $options = null): string
     {
         $slugged = $this->slugify->slugify($text, $options);
+
+        $maxlen = $options['maxlen'] ?? null;
+        $prefix = $options['prefix'] ?? null;
+
+        if (is_int($maxlen) && strlen($slugged) > $maxlen) {
+            $slugged = substr($slugged, 0, $maxlen);
+        }
+
+        if (isset($prefix)) {
+            $slugged = $prefix . $slugged;
+        }
 
         $count = 1;
         $orig = $slugged;

@@ -1,23 +1,19 @@
 <?php
 
 /**
- * PHP TableOfContents Library
+ * PageTOC
  *
- * @license http://opensource.org/licenses/MIT
- * @link https://github.com/caseyamcl/toc
- * @version 3
- * @package caseyamcl/toc
- * @author Casey McLaughlin <caseyamcl@gmail.com>
+ * This plugin allows creation of Table of Contents + Link Anchors
  *
- * For the full copyright and license information, please view the LICENSE.md
- * file that was distributed with this source code.
+ * Based on the original version https://github.com/caseyamcl/toc
+ * by Casey McLaughlin <caseyamcl@gmail.com>
  *
- * ------------------------------------------------------------------
+ * Licensed under MIT, see LICENSE.
  */
 
 declare(strict_types=1);
 
-namespace TOC;
+namespace Grav\Plugin\PageToc;
 
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Matcher;
