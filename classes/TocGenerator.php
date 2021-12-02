@@ -74,7 +74,8 @@ class TocGenerator
 
         // Do it...
         $domDocument = new \DOMDocument();
-        $domDocument->loadHTML($markup);
+        $domDocument->loadHTML(mb_convert_encoding($markup, 'HTML-ENTITIES', 'UTF-8'));
+        $domDocument->preserveWhiteSpace = true;
 
         foreach ($this->traverseHeaderTags($domDocument, $topLevel, $depth) as $i => $node) {
             // Skip items without IDs

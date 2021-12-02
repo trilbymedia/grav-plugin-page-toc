@@ -47,7 +47,7 @@ class MarkupFixer
         }
 
         $domDocument = new \DOMDocument();
-        $domDocument->loadHTML($markup);
+        $domDocument->loadHTML(mb_convert_encoding($markup, 'HTML-ENTITIES', 'UTF-8'));
         $domDocument->preserveWhiteSpace = true; // do not clobber whitespace
 
         $slugger = new UniqueSlugify();
