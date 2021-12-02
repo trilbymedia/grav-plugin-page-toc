@@ -58,36 +58,27 @@ class TocGenerator
      */
     public function getMenu(string $markup, int $topLevel = 1, int $depth = 6): ItemInterface
     {
-        // Setup an empty menu object
         $menu = $this->menuFactory->createItem(static::DEFAULT_NAME);
 
-        // Empty?  Return empty menu item
         if (trim($markup) == '') {
             return $menu;
         }
 
-        // Parse HTML
         $tagsToMatch = $this->determineHeaderTags($topLevel, $depth);
-
-        // Initial settings
         $lastElem = $menu;
 
-        // Do it...
         $domDocument = new \DOMDocument();
         $domDocument->loadHTML(mb_convert_encoding($markup, 'HTML-ENTITIES', 'UTF-8'));
         $domDocument->preserveWhiteSpace = true;
 
         foreach ($this->traverseHeaderTags($domDocument, $topLevel, $depth) as $i => $node) {
-            // Skip items without IDs
             if (! $node->hasAttribute('id')) {
                 continue;
             }
 
-            // Get the TagName and the level
             $tagName = $node->tagName;
             $level   = array_search(strtolower($tagName), $tagsToMatch) + 1;
 
-            // Determine parent item which to add child
             /** @var MenuItem $parent */
             if ($level == 1) {
                 $parent = $menu;
