@@ -13,7 +13,6 @@
     }
   ],
   "require": {
-    "masterminds/html5": "^2.1",
     "cocur/slugify": "^3.0|^4.0",
     "knplabs/knp-menu": "^3.2",
     "php": ">=7.3.6"

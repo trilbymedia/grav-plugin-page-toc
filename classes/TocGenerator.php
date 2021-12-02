@@ -21,7 +21,6 @@ use Knp\Menu\MenuFactory;
 use Knp\Menu\MenuItem;
 use Knp\Menu\Renderer\ListRenderer;
 use Knp\Menu\Renderer\RendererInterface;
-use Masterminds\HTML5;
 
 /**
  * Table Of Contents Generator generates TOCs from HTML Markup
@@ -46,14 +45,11 @@ class TocGenerator
 
     /**
      * Constructor
-     *
-     * @param MenuFactory|null $menuFactory
-     * @param HTML5|null $htmlParser
      */
-    public function __construct(?MenuFactory $menuFactory = null, ?HTML5 $htmlParser = null)
+    public function __construct()
     {
-        $this->domParser   = $htmlParser  ?: new HTML5();
-        $this->menuFactory = $menuFactory ?: new MenuFactory();
+        $this->domParser   = new \DomDocument();
+        $this->menuFactory = new MenuFactory();
     }
 
     /**

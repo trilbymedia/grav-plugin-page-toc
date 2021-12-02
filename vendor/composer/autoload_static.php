@@ -7,10 +7,6 @@ namespace Composer\Autoload;
 class ComposerStaticInit88b09b7fda3e99f2e22346b58205e375
 {
     public static $prefixLengthsPsr4 = array (
-        'M' => 
-        array (
-            'Masterminds\\' => 12,
-        ),
         'K' => 
         array (
             'Knp\\Menu\\' => 9,
@@ -26,10 +22,6 @@ class ComposerStaticInit88b09b7fda3e99f2e22346b58205e375
     );
 
     public static $prefixDirsPsr4 = array (
-        'Masterminds\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/masterminds/html5/src',
-        ),
         'Knp\\Menu\\' => 
         array (
             0 => __DIR__ . '/..' . '/knplabs/knp-menu/src/Knp/Menu',

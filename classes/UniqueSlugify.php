@@ -19,9 +19,7 @@ use Cocur\Slugify\Slugify;
 use Cocur\Slugify\SlugifyInterface;
 
 /**
- * UniqueSluggifier creates slugs from text without repeating the same slug twice per instance
- *
- * @author Casey McLaughlin <caseyamcl@gmail.com>
+ * UniqueSluggify creates slugs from text without repeating the same slug twice per instance
  */
 class UniqueSlugify implements SlugifyInterface
 {
