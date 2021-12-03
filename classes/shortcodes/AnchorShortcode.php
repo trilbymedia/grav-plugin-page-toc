@@ -5,12 +5,11 @@ use Grav\Common\Inflector;
 use Grav\Plugin\PageToc\UniqueSlugify;
 use Thunder\Shortcode\Shortcode\ProcessedShortcode;
 
-class FragShortcode extends Shortcode
+class AnchorShortcode extends Shortcode
 {
   public function init()
   {
-    $this->shortcode->getHandlers()->add('frag', function(ProcessedShortcode $sc) {
-      $anchor_class = $this->grav['config']->get('plugins.page-toc.anchors.class', 'anchor');
+    $this->shortcode->getHandlers()->add('anchor', function(ProcessedShortcode $sc) {
       $id = $sc->getParameter('id', $sc->getBbCode());
       $prefix = $sc->getParameter('prefix');
       $class = $sc->getParameter('class');
@@ -26,7 +25,8 @@ class FragShortcode extends Shortcode
           $id = $prefix . $id;
       }
 
-      return "<a class=\"$anchor_class $class\" href=\"#$id\" id=\"$id\">$content</a>";
+      return "<a id=\"$id\" href=\"#$id\" class=\"$class\" aria-label=\"Anchor\">$content</a>";
     });
+    $this->shortcode->getHandlers()->addAlias('#', 'anchor');
   }
 }

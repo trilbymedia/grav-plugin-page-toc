@@ -92,7 +92,7 @@ class PageTOCPlugin extends Plugin
         if ($active || $shortcode_exists) {
             $this->registerTwigFunctions();
             $markup_fixer = new MarkupFixer();
-            $content = $markup_fixer->fix($content, $this->getSlugifyOptions($page));
+            $content = $markup_fixer->fix($content, $this->getAnchorOptions($page));
             $page->setRawContent($content);
         }
 
@@ -102,23 +102,6 @@ class PageTOCPlugin extends Plugin
             $content = preg_replace($this->toc_regex, $toc, $content);
             $page->setRawContent($content);
         }
-
-    }
-
-    protected function getSlugifyOptions(PageInterface $page = null): array
-    {
-        $page = $page ?? $this->grav['page'];
-        return [
-            'start'     => $this->upstreamConfigVar('anchors.start', $page,1),
-            'depth'     => $this->upstreamConfigVar('anchors.depth', $page,6),
-            'link'      => $this->upstreamConfigVar('anchors.link', $page,true),
-            'position'  => $this->upstreamConfigVar('anchors.position', $page,'before'),
-            'aria'      => $this->upstreamConfigVar('anchors.aria', $page,'Anchor'),
-            'icon'      => $this->upstreamConfigVar('anchors.icon', $page,'#'),
-            'class'     => $this->upstreamConfigVar('anchors.class', $page,null),
-            'maxlen'    => $this->upstreamConfigVar('slugs.maxlen', $page,null),
-            'prefix'    => $this->upstreamConfigVar('slugs.prefix', $page,null),
-        ];
     }
 
     public function onTwigInitialized()
@@ -145,28 +128,26 @@ class PageTOCPlugin extends Plugin
         $this->fixer     = new MarkupFixer();
         $twig = $this->grav['twig']->twig();
 
-        $twig->addFunction(new TwigFunction('toc', function ($markup, $start = 1, $depth = 6) {
-            return $this->generator->getHtmlMenu($markup, $start, $depth);
+        $twig->addFunction(new TwigFunction('toc', function ($markup, $start = null, $depth = null) {
+            $options = $this->getTocOptions(null, $start, $depth);
+            return $this->generator->getHtmlMenu($markup, $options['start'], $options['depth']);
         }, ['is_safe' => ['html']]));
 
-        $twig->addFunction(new TwigFunction('toc_ordered', function ($markup, $start = 1, $depth = 6) {
-            return $this->generator->getHtmlMenu($markup, $start, $depth, null, true);
+        $twig->addFunction(new TwigFunction('toc_ordered', function ($markup, $start = null, $depth = null) {
+            $options = $this->getTocOptions(null, $start, $depth);
+            return $this->generator->getHtmlMenu($markup, $options['start'], $options['depth'], null, true);
         }, ['is_safe' => ['html']]));
 
-        $twig->addFunction(new TwigFunction('toc_items', function ($markup, $start = 1, $depth = 6) {
-            return $this->generator->getMenu($markup, $start, $depth);
+        $twig->addFunction(new TwigFunction('toc_items', function ($markup, $start = null, $depth = null) {
+            $options = $this->getTocOptions(null, $start, $depth);
+            return $this->generator->getMenu($markup, $options['start'], $options['depth']);
         }));
 
         $twig->addFunction(new TwigFunction('add_anchors', function ($markup, $start = null, $depth = null) {
-            $options = $this->getSlugifyOptions();
-            if ($start && is_int($start)) {
-                $options['start'] = $start;
-            }
-            if ($depth && is_int($depth)) {
-                $options['depth'] = $depth;
-            }
+            $options = $this->getAnchorOptions(null, $start, $depth);
             return $this->fixer->fix($markup, $options);
         }, ['is_safe' => ['html']]));
+
         $functions_registered = true;
     }
 
@@ -197,6 +178,30 @@ class PageTOCPlugin extends Plugin
             $blueprint->extend($extends, true);
             $inEvent = false;
         }
+    }
+
+    protected function getTocOptions(PageInterface $page = null, $start = null, $depth = null): array
+    {
+        $page = $page ?? $this->grav['page'];
+        return [
+            'start'     => $start ?? $this->upstreamConfigVar('start', $page,1),
+            'depth'     => $depth ?? $this->upstreamConfigVar('depth', $page,6),
+        ];
+    }
+
+    protected function getAnchorOptions(PageInterface $page = null, $start = null, $depth = null): array{
+        $page = $page ?? $this->grav['page'];
+        return [
+            'start'     => $start ?? $this->upstreamConfigVar('anchors.start', $page,1),
+            'depth'     => $depth ?? $this->upstreamConfigVar('anchors.depth', $page,6),
+            'link'      => $this->upstreamConfigVar('anchors.link', $page,true),
+            'position'  => $this->upstreamConfigVar('anchors.position', $page,'before'),
+            'aria'      => $this->upstreamConfigVar('anchors.aria', $page,'Anchor'),
+            'icon'      => $this->upstreamConfigVar('anchors.icon', $page,'#'),
+            'class'     => $this->upstreamConfigVar('anchors.class', $page,null),
+            'maxlen'    => $this->upstreamConfigVar('anchors.slug_maxlen', $page,null),
+            'prefix'    => $this->upstreamConfigVar('anchors.slug_prefix', $page,null),
+        ];
     }
 
     protected function upstreamConfigVar($var, $page = null, $default = null)

@@ -1,10 +1,15 @@
-# v2.1.0
+# v3.0.0
 ## mm/dd/2021
 
 1. [](#new)
-   * Added a new `[frag]` shortcode for manual fragments
+   * Support built-in 'anchors' with customization
+   * Moved the core functionality in-plugin to provide more flexibility
+   * Added a new `[anchor]` shortcode for creating manual anchors
+   * Ability to limit the length of a fragment link
+   * Ability to set a custom prefix for anchor links
 2. [](#improved)
    * `page-toc:` configuration can be set in parent pages
+   * Removed dependency on HTML5 library and use the faster PHP DomDocument class
 
 # v2.0.0
 ## 11/24/2021

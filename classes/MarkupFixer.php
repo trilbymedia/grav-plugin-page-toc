@@ -46,12 +46,10 @@ class MarkupFixer
             $markup = sprintf("<body id='%s'>%s</body>", $partialID, $markup);
         }
 
-        $start = $options['top_level'] ?? 1;
+        $start = $options['start'] ?? 1;
         $depth = $options['depth'] ?? 6;
 
-        $domDocument = new \DOMDocument();
-        $domDocument->loadHTML(mb_convert_encoding($markup, 'HTML-ENTITIES', 'UTF-8'));
-        $domDocument->preserveWhiteSpace = true; // do not clobber whitespace
+        $domDocument = $this->getHTMLParser($markup);
 
         $slugger = new UniqueSlugify();
 

@@ -67,9 +67,7 @@ class TocGenerator
         $tagsToMatch = $this->determineHeaderTags($topLevel, $depth);
         $lastElem = $menu;
 
-        $domDocument = new \DOMDocument();
-        $domDocument->loadHTML(mb_convert_encoding($markup, 'HTML-ENTITIES', 'UTF-8'));
-        $domDocument->preserveWhiteSpace = true;
+        $domDocument = $this->getHTMLParser($markup);
 
         foreach ($this->traverseHeaderTags($domDocument, $topLevel, $depth) as $i => $node) {
             if (! $node->hasAttribute('id')) {

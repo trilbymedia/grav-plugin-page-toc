@@ -27,6 +27,15 @@ use DOMXPath;
  */
 trait HtmlHelper
 {
+    protected function getHTMLParser($markup)
+    {
+        libxml_use_internal_errors(true);
+        $domDocument = new \DOMDocument();
+        $domDocument->loadHTML(mb_convert_encoding($markup, 'HTML-ENTITIES', 'UTF-8'));
+        $domDocument->preserveWhiteSpace = true;
+        return $domDocument;
+    }
+
     /**
      * Convert a topLevel and depth to H1..H6 tags array
      *

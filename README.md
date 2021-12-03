@@ -68,18 +68,18 @@ This will replace the shortcode syntax with the Table of Contents with the `comp
 
 NOTE: It's not required to set the TOC plugin `active` if you use the shortcode syntax in your content.  That is a good enough indication that you want the plugin to be active.
 
-### Frag Shortcode
+### Anchor Shortcode
 
-Page TOC now includes a `frag` shortcode that allows you to manually add linkable fragments in your content.  
-The shortcode will automatically generate the link if no options are provided. Alternatively you can use the bbode syntax of `frag="some-custom-id"` or you can explicity set it.  You can also set a `prefix` and let the shortcode autogenerate the rest.
+Page TOC now includes a `anchor` shortcode that allows you to manually add linkable fragments in your content.  
+The shortcode will automatically generate the link if no options are provided. Alternatively you can use the bbode syntax of `anchor="some-custom-id"` or you can explicity set it.  You can also set a `prefix` and let the shortcode autogenerate the rest.
 
 For example:
 
 ```markdown
 
-Ut sed nisl suscipit metus sollicitudin [frag]<span>ornare</span>[/frag] nec vitae nulla. In pretium massa ex, in [frag="vulputate"]vulputate tellus[/frag] accumsan vel. 
+Ut sed nisl suscipit metus sollicitudin [anchor]<span>ornare</span>[/anchor] nec vitae nulla. In pretium massa ex, in [anchor="vulputate"]vulputate tellus[/anchor] accumsan vel. 
 
-Nullam [frag id="tempor"]tempor quis lorem[/frag] venenatis finibus. Curabitur dapibus nulla sed tristique pretium. Nullam tempor quis [frag prefix="sec2.2-"]lorem venenatis finibus[/frag].
+Nullam [anchor id="tempor"]tempor quis lorem[/anchor] venenatis finibus. Curabitur dapibus nulla sed tristique pretium. Nullam tempor quis [anchor prefix="sec2.2-"]lorem venenatis finibus[/anchor].
 ```
 
 An example of the resulting HTML link looks like:

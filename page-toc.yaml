@@ -11,8 +11,7 @@ anchors:
   aria: Anchor
   class:
   icon: '#'
-  position: before
+  position: after
   copy_to_clipboard: true
-slugs:
-  maxlen: 20
-  prefix:
+  slug_maxlen: 20
+  slug_prefix:
