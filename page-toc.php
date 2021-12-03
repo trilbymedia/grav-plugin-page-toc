@@ -3,8 +3,10 @@ namespace Grav\Plugin;
 
 use Composer\Autoload\ClassLoader;
 use Grav\Common\Data;
+use Grav\Common\Grav;
 use Grav\Common\Page\Interfaces\PageInterface;
 use Grav\Common\Plugin;
+use Grav\Common\Utils;
 use Grav\Plugin\PageToc\MarkupFixer;
 use Grav\Plugin\PageToc\TocGenerator;
 use RocketTheme\Toolbox\Event\Event;
@@ -189,12 +191,13 @@ class PageTOCPlugin extends Plugin
         ];
     }
 
-    protected function getAnchorOptions(PageInterface $page = null, $start = null, $depth = null): array{
+    protected function getAnchorOptions(PageInterface $page = null, $start = null, $depth = null): array
+    {
         $page = $page ?? $this->grav['page'];
         return [
-            'hclass'    => $this->upstreamConfigVar('hclass', $page,null),
             'start'     => $start ?? $this->upstreamConfigVar('anchors.start', $page,1),
             'depth'     => $depth ?? $this->upstreamConfigVar('anchors.depth', $page,6),
+            'hclass'    => $this->upstreamConfigVar('hclass', $page,null),
             'link'      => $this->upstreamConfigVar('anchors.link', $page,true),
             'position'  => $this->upstreamConfigVar('anchors.position', $page,'before'),
             'aria'      => $this->upstreamConfigVar('anchors.aria', $page,'Anchor'),
@@ -205,9 +208,14 @@ class PageTOCPlugin extends Plugin
         ];
     }
 
-    protected function upstreamConfigVar($var, $page = null, $default = null)
+    public static function upstreamConfigVar($var, $page = null, $default = null)
     {
-        $page = $page ?? $this->grav['page'] ?? null;
+        if (Utils::isAdminPlugin()) {
+            $page = Grav::instance()['admin']->page() ?? null;
+        } else {
+            $page = $page ?? Grav::instance()['page'] ?? null;
+        }
+
 
         // Try to find var in the page headers
         if ($page instanceof PageInterface && $page->exists()) {
@@ -222,8 +230,6 @@ class PageTOCPlugin extends Plugin
             }
         }
 
-        $prefix = "plugins.{$this->name}." ;
-
-        return $this->grav['config']->get($prefix . $var, $default);
+        return Grav::instance()['config']->get("plugins.page-toc." . $var, $default);
     }
 }

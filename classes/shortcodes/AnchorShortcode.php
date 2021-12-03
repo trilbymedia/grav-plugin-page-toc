@@ -3,6 +3,7 @@ namespace Grav\Plugin\Shortcodes;
 
 use Grav\Common\Inflector;
 use Grav\Plugin\PageToc\UniqueSlugify;
+use Grav\Plugin\PageTOCPlugin;
 use Thunder\Shortcode\Shortcode\ProcessedShortcode;
 
 class AnchorShortcode extends Shortcode
@@ -11,9 +12,12 @@ class AnchorShortcode extends Shortcode
   {
     $this->shortcode->getHandlers()->add('anchor', function(ProcessedShortcode $sc) {
       $id = $sc->getParameter('id', $sc->getBbCode());
-      $prefix = $sc->getParameter('prefix');
-      $class = $sc->getParameter('class');
+      $prefix = $sc->getParameter('prefix', PageTOCPlugin::upstreamConfigVar('anchors.slug_prefix'));
+      $class = $sc->getParameter('class', PageTOCPlugin::upstreamConfigVar('anchors.class'));
+      $aria = PageTOCPlugin::upstreamConfigVar('anchors.aria');
       $content = $sc->getContent();
+
+
 
       $slugger = new UniqueSlugify();
 
@@ -25,7 +29,7 @@ class AnchorShortcode extends Shortcode
           $id = $prefix . $id;
       }
 
-      return "<a id=\"$id\" href=\"#$id\" class=\"$class\" aria-label=\"Anchor\">$content</a>";
+      return "<a id=\"$id\" href=\"#$id\" class=\"$class\" aria-label=\"$aria\">$content</a>";
     });
     $this->shortcode->getHandlers()->addAlias('#', 'anchor');
   }
