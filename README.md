@@ -31,17 +31,28 @@ Before configuring this plugin, you should copy the `user/plugins/page-toc/page-
 Here is the default configuration and an explanation of available options:
 
 ```yaml
-enabled: true           # Plugin enabled
-active: false           # Anchor IDs processed and generated for all pages
-start: 1                # Start header tag level (1 = h1)
-depth: 6                # Depth from start (2 = 2 levels deep)
-anchor_class: 'anchor'  # Anchor class for manual or shortcode generated anchors
+enabled: true               # Plugin enabled
+include_css: true           # Include CSS
+active: true                # Anchor IDs processed and generated for all pages
+start: 1                    # Start header tag level (1 = h1) for TOC
+depth: 6                    # Depth from start (2 = 2 levels deep) for TOC
+hclass:                     # Custom Header TOC styling classes
+anchors:                    # Anchor configuration
+  start: 1                  # Start header tag level (1 = h1)
+  depth: 6                  # Depth from start (2 = 2 levels deep)
+  link: true                # Enabled auto-generation of clickable link with fragment
+  aria: Anchor              # Aria label to use
+  class:                    # Custom Header anchor styling classes
+  icon: '#'                 # Icon to use, can be a symbol, emoji, ascii etc.
+  position: after           # Position to put the anchor, `before|after`
+  copy_to_clipboard: true   # Copy to clipboard functionality (coming soon)
+  slug_maxlen: 25           # Max length of slugs used for anchors
+  slug_prefix:              # A prefix used in front of generated slugs
 ```
 
-You can now have `page-toc` automatically add anchors without there being a table of contents being used
+You can now have `page-toc` automatically add anchors without there being a table of contents being used, just ensure  `active` to `true`.
 
-
-By default, The plugin is 'active' and will add header id attributes anchors for each header level found in a page.  You can set `active: false` and then activate on a page basis by adding this to the page frontmatter:
+By default, The plugin is `active` and will add header id attributes anchors for each header level found in a page.  You can set `active: false` and then activate on a page basis by adding this to the page frontmatter:
 
 ```yaml
 page-toc:
@@ -51,8 +62,6 @@ page-toc:
 You can also configure which header tags to start and depth on when building the id attribute anchors by changing the `start` and `depth` values. This can also be done on a per-page basis.
 
 For example if you had a start of `3` and a depth of `3` you would get a TOC for `h3`, `h4`, and `h5`.
-
-The `anchor_class` is used by shortcodes and any manually generated elements to be automatically styled as anchor links.
 
 ## Usage
 
@@ -85,8 +94,10 @@ Nullam [anchor id="tempor"]tempor quis lorem[/anchor] venenatis finibus. Curabit
 An example of the resulting HTML link looks like:
 
 ```html
-<a class="anchor " href="#tempor" id="tempor">tempor quis lorem</a>
+<a id="tempor" href="#tempor" class="inline-anchor" aria-label="Anchor">tempor quis lorem</a>
 ```
+
+The `inline-anchor` CSS class is used by shortcodes and any manually generated elements so it can be styled as independently from other links or anchored headers.
  
 ### Twig Templating
 
@@ -111,6 +122,8 @@ For example:
 </div>
 {% endif %}
 ```
+
+The `toc_ordered()` Twig function does the same things as a the `toc()` function, except it uses an ordered list instead of an unordered one.
 
 or via the `toc_items()` function which rather than returning HTML directly returns objects and you can manipulate the output as needed:
 
@@ -143,9 +156,30 @@ or via the `toc_items()` function which rather than returning HTML directly retu
 {% endif %}
 ```
 
+The `add_anchors()` twig funtion can take a string or a block of content and automatically adds anchors to any headers found per the configuration for the page, but you can override the start and depth. For example here we have a Twig block but we just want to add anchors to the H2 tags:
+
+```markdown
+{% block my_content %}
+# Header 1
+
+## Header 1.1
+
+Nullam tempor quis lorem venenatis finibus. Maecenas ut condimentum nibh. Ut sed nisl suscipit metus sollicitudin ornare nec vitae nulla. Integer sed tortor eu ligula interdum rhoncus. Sed pulvinar ut massa et ullamcorper. Curabitur bibendum ante orci, nec porttitor dolor suscipit quis. Nulla et eros enim. 
+
+### Header 1.1.1
+
+Integer sed tortor eu ligula interdum rhoncus.
+
+## Header 1.2
+{% endblock %}
+
+#### Table O' Contents
+{{ toc(block('my_content'), 2, 1) }}
+```
+
 ### Limiting levels in output
 
-As well as limiting the levels that the page TOC plugin will use in the table of contents, you can also limit the levels that are actually displayed. To do this you can pass an optional `start`, and `depth` value to the `toc()` Twig function:
+As well as limiting the levels that the page TOC plugin will use in the table of contents, you can also limit the levels that are actually displayed. To do this you can pass an optional `start`, and `depth` value to the `toc()`, `toc_ordered()` , `toc_items()` and `add_anchors()` Twig functions:
 
 ```twig
 {% set table_of_contents = toc(page.content, 3, 3) %}
@@ -155,6 +189,6 @@ This will only display `H3` , and **3** levels deeper (up to `H5`) in the TOC ou
 
 ## Credits
 
-The majority of this plugin's functionality is provided by the [PHP TOC Generator](https://github.com/caseyamcl/toc) library by [Casey McLaughlin](https://github.com/caseyamcl). So Thanks for making this a trivial plugin for Grav!
+The majority of this plugin's functionality is provided by the [PHP TOC Generator](https://github.com/caseyamcl/toc) library by [Casey McLaughlin](https://github.com/caseyamcl). So Thanks for making this plugin for Grav possible!
 
 

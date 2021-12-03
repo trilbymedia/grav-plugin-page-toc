@@ -13,7 +13,7 @@ class AnchorShortcode extends Shortcode
     $this->shortcode->getHandlers()->add('anchor', function(ProcessedShortcode $sc) {
       $id = $sc->getParameter('id', $sc->getBbCode());
       $prefix = $sc->getParameter('prefix', PageTOCPlugin::upstreamConfigVar('anchors.slug_prefix'));
-      $class = $sc->getParameter('class', PageTOCPlugin::upstreamConfigVar('anchors.class'));
+      $class = $sc->getParameter('class', 'inline-anchor');
       $aria = PageTOCPlugin::upstreamConfigVar('anchors.aria');
       $content = $sc->getContent();
 
