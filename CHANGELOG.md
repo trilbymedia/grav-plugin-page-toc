@@ -8,10 +8,12 @@
    * Added several more Twig functions for increased flexibility
    * Ability to limit the length of a fragment link
    * Ability to set a custom prefix for anchor links
+   * New `languages.yaml` file for text translations
 2. [](#improved)
    * Independent control over the levels of anchors that should be built, and the TOC displayed
    * `page-toc:` page-level configuration can be set in parent pages and trickles down to child pages
    * Removed dependency on HTML5 library and use the faster PHP `DOMDocument` class
+   * Translated text for the "Table of Contents" in the `page-toc.html.twig` template
 
 # v2.0.0
 ## 11/24/2021

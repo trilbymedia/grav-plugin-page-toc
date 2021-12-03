@@ -75,6 +75,12 @@ You can use the following shortcode-like syntax in your content:
 
 This will replace the shortcode syntax with the Table of Contents with the `components/page-toc.html.twig` Twig template. Either the default one included in the `page-toc` plugin or an overridden version from your theme.
 
+For example in Quark theme, you will need to create a folder called `components/` under `templates/` so the file will be copied to:
+
+```shell
+user/themes/quark/templates/components/page-toc.html.twig
+```
+
 NOTE: It's not required to set the TOC plugin `active` if you use the shortcode syntax in your content.  That is a good enough indication that you want the plugin to be active.
 
 ### Anchor Shortcode
