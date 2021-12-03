@@ -1,5 +1,5 @@
 # v3.0.0
-## mm/dd/2021
+## 12/03/2021
 
 1. [](#new)
    * Support built-in 'anchors' with customization of icon/classes/css etc
