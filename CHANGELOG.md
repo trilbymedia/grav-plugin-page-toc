@@ -2,15 +2,15 @@
 ## 12/03/2021
 
 1. [](#new)
-   * Support built-in 'anchors' with customization of icon/classes/css etc
-   * Moved the core TOC functionality in-plugin to provide more flexibility
-   * Added a new `[anchor]` shortcode for creating manual anchors for easy linking to page content
+   * **NEW** Support built-in `anchors`'` with customization of icon/classes/css etc.
+   * **NEW** `[anchor]` shortcode for creating manual anchors for easy linking to page content
+   * Moved the vendor-based TOC functionality in-plugin to provide more flexibility and additional features
    * Added several more Twig functions for increased flexibility
    * Ability to limit the length of a fragment link
    * Ability to set a custom prefix for anchor links
-   * New `languages.yaml` file for text translations
+   * Added `languages.yaml` file for text translations
 2. [](#improved)
-   * Independent control over the levels of anchors that should be built, and the TOC displayed
+   * Independent control over the levels of anchors that should be built and the TOC displayed
    * `page-toc:` page-level configuration can be set in parent pages and trickles down to child pages
    * Removed dependency on HTML5 library and use the faster PHP `DOMDocument` class
    * Translated text for the "Table of Contents" in the `page-toc.html.twig` template
