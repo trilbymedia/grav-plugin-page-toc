@@ -110,19 +110,22 @@ The `inline-anchor` CSS class is used by shortcodes and any manually generated e
 When the plugin is `active` it will add anchors to the header tags of the page content as configured. You can simply include the provided Twig template:
 
 ```twig
-{% include 'components/page-toc.html.twig' %}
+{% block content %}
+	{% include 'components/page-toc.html.twig' %}
+	{{  content|raw }}
+{% endblock %}
 ```
 
-You can also add your **table of contents** HTML in your Twig template directly with the provided `toc()` Twig function:
+You can also add your **Table of Contents** HTML in your Twig template directly with the provided `toc()` Twig function:
 
 For example:
 
 ```twig
-{% if config.get('plugins.page-toc.active') or attribute(page.header, 'page-toc').active %}
+{% if active or toc_config_var('active') %}
 <div class="page-toc">
     {% set table_of_contents = toc(page.content) %}
     {% if table_of_contents is not empty %}
-    <h4>Table of Contents</h4>
+    <h4>{{ 'PLUGIN_PAGE_TOC.TABLE_OF_CONTENTS'|t }}</h4>
     {{ table_of_contents|raw }}
     {% endif %}
 </div>

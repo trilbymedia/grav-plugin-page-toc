@@ -150,6 +150,10 @@ class PageTOCPlugin extends Plugin
             return $this->fixer->fix($markup, $options);
         }, ['is_safe' => ['html']]));
 
+        $twig->addFunction(new TwigFunction('toc_config_var', function ($var) {
+            return static::upstreamConfigVar($var);
+        }));
+
         $functions_registered = true;
     }
 
