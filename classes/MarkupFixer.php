@@ -62,6 +62,11 @@ class MarkupFixer
 
             $node->setAttribute('id', $slug);
 
+            if ($options['hclass']) {
+                $class = $node->getAttribute('class');
+                $node->setAttribute('class', trim("$class {$options['hclass']}"));
+            }
+
             if ($options['link']) {
                 $link = $domDocument->createElement("a");
                 $class = isset($options['class']) ? " {$options['class']}" : "";

@@ -192,6 +192,7 @@ class PageTOCPlugin extends Plugin
     protected function getAnchorOptions(PageInterface $page = null, $start = null, $depth = null): array{
         $page = $page ?? $this->grav['page'];
         return [
+            'hclass'    => $this->upstreamConfigVar('hclass', $page,null),
             'start'     => $start ?? $this->upstreamConfigVar('anchors.start', $page,1),
             'depth'     => $depth ?? $this->upstreamConfigVar('anchors.depth', $page,6),
             'link'      => $this->upstreamConfigVar('anchors.link', $page,true),
