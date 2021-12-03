@@ -1,23 +1,19 @@
 <?php
 
 /**
- * PHP TableOfContents Library
+ * PageTOC
  *
- * @license http://opensource.org/licenses/MIT
- * @link https://github.com/caseyamcl/toc
- * @version 3
- * @package caseyamcl/toc
- * @author Casey McLaughlin <caseyamcl@gmail.com>
+ * This plugin allows creation of Table of Contents + Link Anchors
  *
- * For the full copyright and license information, please view the LICENSE.md
- * file that was distributed with this source code.
+ * Based on the original version https://github.com/caseyamcl/toc
+ * by Casey McLaughlin <caseyamcl@gmail.com>
  *
- * ------------------------------------------------------------------
+ * Licensed under MIT, see LICENSE.
  */
 
 declare(strict_types=1);
 
-namespace TOC;
+namespace Grav\Plugin\PageToc;
 
 use ArrayIterator;
 use DOMDocument;
@@ -31,6 +27,15 @@ use DOMXPath;
  */
 trait HtmlHelper
 {
+    protected function getHTMLParser($markup)
+    {
+        libxml_use_internal_errors(true);
+        $domDocument = new \DOMDocument();
+        $domDocument->loadHTML(mb_convert_encoding($markup, 'HTML-ENTITIES', 'UTF-8'));
+        $domDocument->preserveWhiteSpace = true;
+        return $domDocument;
+    }
+
     /**
      * Convert a topLevel and depth to H1..H6 tags array
      *

@@ -1,23 +1,19 @@
 <?php
 
 /**
- * PHP TableOfContents Library
+ * PageTOC
  *
- * @license http://opensource.org/licenses/MIT
- * @link https://github.com/caseyamcl/toc
- * @version 3
- * @package caseyamcl/toc
- * @author Casey McLaughlin <caseyamcl@gmail.com>
+ * This plugin allows creation of Table of Contents + Link Anchors
  *
- * For the full copyright and license information, please view the LICENSE.md
- * file that was distributed with this source code.
+ * Based on the original version https://github.com/caseyamcl/toc
+ * by Casey McLaughlin <caseyamcl@gmail.com>
  *
- * ------------------------------------------------------------------
+ * Licensed under MIT, see LICENSE.
  */
 
 declare(strict_types=1);
 
-namespace TOC;
+namespace Grav\Plugin\PageToc;
 
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Matcher;
@@ -25,7 +21,6 @@ use Knp\Menu\MenuFactory;
 use Knp\Menu\MenuItem;
 use Knp\Menu\Renderer\ListRenderer;
 use Knp\Menu\Renderer\RendererInterface;
-use Masterminds\HTML5;
 
 /**
  * Table Of Contents Generator generates TOCs from HTML Markup
@@ -39,25 +34,16 @@ class TocGenerator
     private const DEFAULT_NAME = 'TOC';
 
     /**
-     * @var HTML5
-     */
-    private $domParser;
-
-    /**
      * @var MenuFactory
      */
     private $menuFactory;
 
     /**
      * Constructor
-     *
-     * @param MenuFactory|null $menuFactory
-     * @param HTML5|null $htmlParser
      */
-    public function __construct(?MenuFactory $menuFactory = null, ?HTML5 $htmlParser = null)
+    public function __construct()
     {
-        $this->domParser   = $htmlParser  ?: new HTML5();
-        $this->menuFactory = $menuFactory ?: new MenuFactory();
+        $this->menuFactory = new MenuFactory();
     }
 
     /**
@@ -72,33 +58,25 @@ class TocGenerator
      */
     public function getMenu(string $markup, int $topLevel = 1, int $depth = 6): ItemInterface
     {
-        // Setup an empty menu object
         $menu = $this->menuFactory->createItem(static::DEFAULT_NAME);
 
-        // Empty?  Return empty menu item
         if (trim($markup) == '') {
             return $menu;
         }
 
-        // Parse HTML
         $tagsToMatch = $this->determineHeaderTags($topLevel, $depth);
-
-        // Initial settings
         $lastElem = $menu;
 
-        // Do it...
-        $domDocument = $this->domParser->loadHTML($markup);
+        $domDocument = $this->getHTMLParser($markup);
+
         foreach ($this->traverseHeaderTags($domDocument, $topLevel, $depth) as $i => $node) {
-            // Skip items without IDs
             if (! $node->hasAttribute('id')) {
                 continue;
             }
 
-            // Get the TagName and the level
             $tagName = $node->tagName;
             $level   = array_search(strtolower($tagName), $tagsToMatch) + 1;
 
-            // Determine parent item which to add child
             /** @var MenuItem $parent */
             if ($level == 1) {
                 $parent = $menu;

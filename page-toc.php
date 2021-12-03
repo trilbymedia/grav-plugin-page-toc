@@ -3,10 +3,15 @@ namespace Grav\Plugin;
 
 use Composer\Autoload\ClassLoader;
 use Grav\Common\Data;
+use Grav\Common\Grav;
 use Grav\Common\Page\Interfaces\PageInterface;
 use Grav\Common\Plugin;
+use Grav\Common\Utils;
+use Grav\Plugin\PageToc\MarkupFixer;
+use Grav\Plugin\PageToc\TocGenerator;
 use RocketTheme\Toolbox\Event\Event;
-use TOC\MarkupFixer;
+use Twig\TwigFunction;
+
 
 /**
  * Class PageTOCPlugin
@@ -17,6 +22,9 @@ class PageTOCPlugin extends Plugin
     protected $start;
     protected $end;
     protected $toc_regex = '#\[TOC\s*\/?\]#i';
+
+    protected $fixer;
+    protected $generator;
 
     /**
      * @return array
@@ -60,10 +68,17 @@ class PageTOCPlugin extends Plugin
 
         // Enable the main event we are interested in
         $this->enable([
-            'onTwigExtensions'          => ['onTwigExtensions', 0],
+            'onShortcodeHandlers'       => ['onShortcodeHandlers', 0],
+            'onTwigInitialized'         => ['onTwigInitialized', 0],
             'onTwigTemplatePaths'       => ['onTwigTemplatePaths', 0],
+            'onTwigSiteVariables'       => ['onTwigSiteVariables', 0],
             'onPageContentProcessed'    => ['onPageContentProcessed', 0],
         ]);
+    }
+
+    public function onShortcodeHandlers()
+    {
+        $this->grav['shortcode']->registerAllShortcodes(__DIR__ . '/classes/shortcodes');
     }
 
     public function onPageContentProcessed(Event $event)
@@ -73,30 +88,73 @@ class PageTOCPlugin extends Plugin
 
         $content = $page->getRawContent();
         $shortcode_exists = preg_match($this->toc_regex, $content);
+        $active = $this->upstreamConfigVar('active', $page, false);
 
-        $config = $this->mergeConfig($page);
-        $active = $config->get('active', $config->get('process'));
-        $start = $config->get('start', 1);
-        $depth = $config->get('depth', 6);
-
-        if ($active || $shortcode_exists ) {
-            // set the IDs
-            $markup_fixer  = new MarkupFixer();
-            $content = $markup_fixer->fix($content, $start, $depth);
+        // Set ID anchors if needed
+        if ($active || $shortcode_exists) {
+            $this->registerTwigFunctions();
+            $markup_fixer = new MarkupFixer();
+            $content = $markup_fixer->fix($content, $this->getAnchorOptions($page));
             $page->setRawContent($content);
+        }
 
-            // replace shortcode if necessary
-            if ($shortcode_exists) {
-                $toc = $this->grav['twig']->processTemplate('components/page-toc.html.twig', ['page' => $page, 'active' => true]);
-                $content = preg_replace($this->toc_regex, $toc, $content);
-                $page->setRawContent($content);
-            }
+        // Replace shortcode if found
+        if ($shortcode_exists) {
+            $toc = $this->grav['twig']->processTemplate('components/page-toc.html.twig', ['page' => $page, 'active' => true]);
+            $content = preg_replace($this->toc_regex, $toc, $content);
+            $page->setRawContent($content);
         }
     }
 
-    public function onTwigExtensions()
+    public function onTwigInitialized()
     {
-        $this->grav['twig']->twig->addExtension(new \TOC\TocTwigExtension());
+        $this->registerTwigFunctions();
+    }
+
+    public function onTwigSiteVariables()
+    {
+        if ($this->grav['config']->get('plugins.page-toc.include_css')) {
+            $this->grav['assets']->addCss('plugin://page-toc/assets/page-toc-anchors.css');
+        }
+    }
+
+    public function registerTwigFunctions()
+    {
+        static $functions_registered;
+
+        if ($functions_registered) {
+            return;
+        }
+
+        $this->generator = new TocGenerator();
+        $this->fixer     = new MarkupFixer();
+        $twig = $this->grav['twig']->twig();
+
+        $twig->addFunction(new TwigFunction('toc', function ($markup, $start = null, $depth = null) {
+            $options = $this->getTocOptions(null, $start, $depth);
+            return $this->generator->getHtmlMenu($markup, $options['start'], $options['depth']);
+        }, ['is_safe' => ['html']]));
+
+        $twig->addFunction(new TwigFunction('toc_ordered', function ($markup, $start = null, $depth = null) {
+            $options = $this->getTocOptions(null, $start, $depth);
+            return $this->generator->getHtmlMenu($markup, $options['start'], $options['depth'], null, true);
+        }, ['is_safe' => ['html']]));
+
+        $twig->addFunction(new TwigFunction('toc_items', function ($markup, $start = null, $depth = null) {
+            $options = $this->getTocOptions(null, $start, $depth);
+            return $this->generator->getMenu($markup, $options['start'], $options['depth']);
+        }));
+
+        $twig->addFunction(new TwigFunction('add_anchors', function ($markup, $start = null, $depth = null) {
+            $options = $this->getAnchorOptions(null, $start, $depth);
+            return $this->fixer->fix($markup, $options);
+        }, ['is_safe' => ['html']]));
+
+        $twig->addFunction(new TwigFunction('toc_config_var', function ($var) {
+            return static::upstreamConfigVar($var);
+        }));
+
+        $functions_registered = true;
     }
 
     public function onTwigTemplatePaths()
@@ -126,5 +184,56 @@ class PageTOCPlugin extends Plugin
             $blueprint->extend($extends, true);
             $inEvent = false;
         }
+    }
+
+    protected function getTocOptions(PageInterface $page = null, $start = null, $depth = null): array
+    {
+        $page = $page ?? $this->grav['page'];
+        return [
+            'start'     => $start ?? $this->upstreamConfigVar('start', $page,1),
+            'depth'     => $depth ?? $this->upstreamConfigVar('depth', $page,6),
+        ];
+    }
+
+    protected function getAnchorOptions(PageInterface $page = null, $start = null, $depth = null): array
+    {
+        $page = $page ?? $this->grav['page'];
+        return [
+            'start'     => $start ?? $this->upstreamConfigVar('anchors.start', $page,1),
+            'depth'     => $depth ?? $this->upstreamConfigVar('anchors.depth', $page,6),
+            'hclass'    => $this->upstreamConfigVar('hclass', $page,null),
+            'link'      => $this->upstreamConfigVar('anchors.link', $page,true),
+            'position'  => $this->upstreamConfigVar('anchors.position', $page,'before'),
+            'aria'      => $this->upstreamConfigVar('anchors.aria', $page,'Anchor'),
+            'icon'      => $this->upstreamConfigVar('anchors.icon', $page,'#'),
+            'class'     => $this->upstreamConfigVar('anchors.class', $page,null),
+            'maxlen'    => $this->upstreamConfigVar('anchors.slug_maxlen', $page,null),
+            'prefix'    => $this->upstreamConfigVar('anchors.slug_prefix', $page,null),
+        ];
+    }
+
+    public static function upstreamConfigVar($var, $page = null, $default = null)
+    {
+        if (Utils::isAdminPlugin()) {
+            $page = Grav::instance()['admin']->page() ?? null;
+        } else {
+            $page = $page ?? Grav::instance()['page'] ?? null;
+        }
+
+
+        // Try to find var in the page headers
+        if ($page instanceof PageInterface && $page->exists()) {
+            // Loop over pages and look for header vars
+            while ($page && !$page->root()) {
+                $header = new \Grav\Common\Data\Data((array)$page->header());
+                $value = $header->get("page-toc.".$var);
+                if (isset($value)) {
+                    return $value;
+                }
+                $page = $page->parent();
+            }
+        }
+
+        return Grav::instance()['config']->get("plugins.page-toc." . $var, $default);
     }
 }

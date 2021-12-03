@@ -7,14 +7,6 @@ namespace Composer\Autoload;
 class ComposerStaticInit88b09b7fda3e99f2e22346b58205e375
 {
     public static $prefixLengthsPsr4 = array (
-        'T' => 
-        array (
-            'TOC\\' => 4,
-        ),
-        'M' => 
-        array (
-            'Masterminds\\' => 12,
-        ),
         'K' => 
         array (
             'Knp\\Menu\\' => 9,
@@ -30,15 +22,6 @@ class ComposerStaticInit88b09b7fda3e99f2e22346b58205e375
     );
 
     public static $prefixDirsPsr4 = array (
-        'TOC\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/caseyamcl/toc/src',
-            1 => __DIR__ . '/..' . '/caseyamcl/toc/tests',
-        ),
-        'Masterminds\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/masterminds/html5/src',
-        ),
         'Knp\\Menu\\' => 
         array (
             0 => __DIR__ . '/..' . '/knplabs/knp-menu/src/Knp/Menu',
