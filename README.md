@@ -1,6 +1,6 @@
 # Page Toc Plugin
 
-The **Page Toc** Plugin is for [Grav CMS](http://github.com/getgrav/grav) that generates a table of contents from a page's HTML header tags.
+The **Page Toc** Plugin is for [Grav CMS](http://github.com/getgrav/grav) that generates a table of contents from a page's HTML header tags. With version `3.0` this plugin is also able to automatically generate anchor links with hover-click capability without the need for other plugins or even the table of contents functionality.
 
 ![](assets/page-toc.png)
 
