@@ -2,7 +2,7 @@
 ## 12/03/2021
 
 1. [](#new)
-   * **NEW** Support built-in `anchors`'` with customization of icon/classes/css etc.
+   * **NEW** Support built-in `anchors` with customization of icon/classes/css etc.
    * **NEW** `[anchor]` shortcode for creating manual anchors for easy linking to page content
    * Moved the vendor-based TOC functionality in-plugin to provide more flexibility and additional features
    * Added several more Twig functions for increased flexibility
