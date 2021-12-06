@@ -1,7 +1,7 @@
 name: Page Toc
 type: plugin
 slug: page-toc
-version: 3.0.0
+version: 3.0.1
 description: Generate a table of contents and anchors from a page
 icon: list
 author:
@@ -143,6 +143,17 @@ form:
           options:
             before: PLUGIN_PAGE_TOC.BEFORE_TEXT
             after: PLUGIN_PAGE_TOC.AFTER_TEXT
+        anchors.copy_to_clipboard:
+          type: toggle
+          label: PLUGIN_PAGE_TOC.COPY_TO_CLIPBOARD
+          help: PLUGIN_PAGE_TOC.COPY_TO_CLIPBOARD_HELP
+          highlight: 1
+          default: 1
+          options:
+            1: Enabled
+            0: Disabled
+          validate:
+            type: bool
         anchors.slug_maxlen:
           type: number
           label: PLUGIN_PAGE_TOC.SLUG_MAXLEN
