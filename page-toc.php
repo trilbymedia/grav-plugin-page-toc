@@ -116,6 +116,9 @@ class PageTOCPlugin extends Plugin
         if ($this->grav['config']->get('plugins.page-toc.include_css')) {
             $this->grav['assets']->addCss('plugin://page-toc/assets/page-toc-anchors.css');
         }
+        if ($this->grav['config']->get('plugins.page-toc.anchors.copy_to_clipboard')) {
+            $this->grav['assets']->addJs('plugin://page-toc/assets/page-toc-anchors.js', ['group' => 'bottom', 'defer' => 'defer']);
+        }
     }
 
     public function registerTwigFunctions()

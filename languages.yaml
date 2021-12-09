@@ -23,6 +23,8 @@ en:
     ANCHORS_ICON_HELP: 'Can be any text character, symbol, unicode character or even emjoi.  leave blank if you intend to style with CSS.'
     ANCHORS_POSITION: 'Anchor Position'
     ANCHORS_POSITION_HELP: 'Position to put the anchor, `before|after`'
+    ANCHORS_COPY_TO_CLIPBOARD: 'Copy to Clipboard'
+    ANCHORS_COPY_TO_CLIPBOARD_HELP: 'When clicking an anchor, it will also copy to clipboard the full URL. Convenient for sharing/opening in new tab'
     BEFORE_TEXT: 'Before text'
     AFTER_TEXT: 'After text'
     SLUG_MAXLEN: 'Slug max-length'

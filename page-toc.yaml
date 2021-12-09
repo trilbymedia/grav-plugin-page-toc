@@ -12,6 +12,6 @@ anchors:                    # Anchor configuration
   class:                    # Custom Header anchor styling classes
   icon: '#'                 # Icon to use, can be a symbol, emoji, ascii etc.
   position: after           # Position to put the anchor, `before|after`
-  copy_to_clipboard: true   # Copy to clipboard functionality (coming soon)
+  copy_to_clipboard: false  # Copy to clipboard functionality
   slug_maxlen: 25           # Max length of slugs used for anchors
   slug_prefix:              # A prefix used in front of generated slugs
