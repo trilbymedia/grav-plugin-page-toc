@@ -1,5 +1,5 @@
-# v3.0.1
-## 12/06/2021
+# v3.1.0
+## 12/09/2021
 
 1. [](#new)
    * **NEW** Added option to automatically copying to clipboard an anchor URL when clicking on it
