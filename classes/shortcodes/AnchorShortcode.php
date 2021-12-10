@@ -17,8 +17,6 @@ class AnchorShortcode extends Shortcode
       $aria = PageTOCPlugin::upstreamConfigVar('anchors.aria');
       $content = $sc->getContent();
 
-
-
       $slugger = new UniqueSlugify();
 
       if (is_null($id)) {

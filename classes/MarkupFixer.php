@@ -46,8 +46,8 @@ class MarkupFixer
             $markup = sprintf("<body id='%s'>%s</body>", $partialID, $markup);
         }
 
-        $start = $options['start'] ?? 1;
-        $depth = $options['depth'] ?? 6;
+        $start = (int) $options['start'] ?? 1;
+        $depth = (int) $options['depth'] ?? 6;
 
         $domDocument = $this->getHTMLParser($markup);
 

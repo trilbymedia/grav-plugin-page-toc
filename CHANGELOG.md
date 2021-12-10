@@ -1,3 +1,9 @@
+# v3.1.1
+## mm/dd/2021
+
+1. [](#bugfix)
+   * Force `start` and `depth` to be integers [#17](https://github.com/trilbymedia/grav-plugin-page-toc/issues/17)
+
 # v3.1.0
 ## 12/09/2021
 
