@@ -202,15 +202,15 @@ class PageTOCPlugin extends Plugin
     {
         $page = $page ?? $this->grav['page'];
         return [
-            'start'     => $start ?? $this->upstreamConfigVar('anchors.start', $page,1),
-            'depth'     => $depth ?? $this->upstreamConfigVar('anchors.depth', $page,6),
+            'start'     => (int) ($start ?? $this->upstreamConfigVar('anchors.start', $page,1)),
+            'depth'     => (int) ($depth ?? $this->upstreamConfigVar('anchors.depth', $page,6)),
             'hclass'    => $this->upstreamConfigVar('hclass', $page,null),
             'link'      => $this->upstreamConfigVar('anchors.link', $page,true),
             'position'  => $this->upstreamConfigVar('anchors.position', $page,'before'),
             'aria'      => $this->upstreamConfigVar('anchors.aria', $page,'Anchor'),
             'icon'      => $this->upstreamConfigVar('anchors.icon', $page,'#'),
             'class'     => $this->upstreamConfigVar('anchors.class', $page,null),
-            'maxlen'    => $this->upstreamConfigVar('anchors.slug_maxlen', $page,null),
+            'maxlen'    => (int) ($this->upstreamConfigVar('anchors.slug_maxlen', $page,null)),
             'prefix'    => $this->upstreamConfigVar('anchors.slug_prefix', $page,null),
         ];
     }

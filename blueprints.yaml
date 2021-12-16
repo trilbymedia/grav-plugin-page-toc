@@ -162,7 +162,7 @@ form:
           label: PLUGIN_PAGE_TOC.SLUG_MAXLEN
           help: PLUGIN_PAGE_TOC.SLUG_MAXLEN_HELP
           size: x-small
-          deafult: 25
+          default: 25
           append: 'chars'
         anchors.slug_prefix:
           type: text
