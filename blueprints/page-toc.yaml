@@ -38,7 +38,8 @@ form:
                     4: H4
                     5: H5
                     6: H6
-
+                  validate:
+                    type: number
                 header.page-toc.depth:
                   toggleable: true
                   type: range
@@ -75,11 +76,12 @@ form:
                     4: H4
                     5: H5
                     6: H6
+                  validate:
+                    type: number
                 header.page-toc.anchors.depth:
                   toggleable: true
-                  type: slider
+                  type: range
                   label: PLUGIN_PAGE_TOC.DEPTH_ANCHOR_HEADERS
-                  size: x-small
                   classes: fancy
                   data-default@: ['\Grav\Plugin\PageTOCPlugin::upstreamConfigVar', 'anchors.depth']
                   validate:

@@ -70,11 +70,12 @@ form:
             4: H4
             5: H5
             6: H6
+          validate:
+            type: number
         depth:
           type: range
           label: PLUGIN_PAGE_TOC.DEPTH_TOC_HEADERS
           help: PLUGIN_PAGE_TOC.DEPTH_TOC_HEADERS_HELP
-          size: x-small
           classes: fancy
           validate:
             min: 1
@@ -102,10 +103,12 @@ form:
             4: H4
             5: H5
             6: H6
+          validate:
+            type: number
         anchors.depth:
-          type: slider
+          type: range
           label: PLUGIN_PAGE_TOC.DEPTH_ANCHOR_HEADERS
-          size: x-small
+          help: PLUGIN_PAGE_TOC.DEPTH_ANCHOR_HEADERS_HELP
           classes: fancy
           validate:
             min: 1
