@@ -39,7 +39,7 @@ class MarkupFixer
      * @return string Markup with added IDs
      * @throws RuntimeException
      */
-    public function fix(string $markup, array $options = []): string
+    public function fix(string $markup, array $options = []): ?string
     {
         if (! $this->isFullHtmlDocument($markup)) {
             $partialID = uniqid('toc_generator_');
