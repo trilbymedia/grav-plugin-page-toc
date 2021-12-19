@@ -217,6 +217,6 @@ class PageTOCPlugin extends Plugin
 
     public static function configVar($var, $page = null, $default = null)
     {
-        return Plugin::upstreamConfigVar('page-toc', $var, $page, $default);
+        return Plugin::inheritedConfigOption('page-toc', $var, $page, $default);
     }
 }
