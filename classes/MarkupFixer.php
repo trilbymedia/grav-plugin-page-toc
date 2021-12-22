@@ -41,16 +41,9 @@ class MarkupFixer
      */
     public function fix(string $markup, array $options = []): ?string
     {
-        if (! $this->isFullHtmlDocument($markup)) {
-            $partialID = uniqid('toc_generator_');
-            $markup = sprintf("<body id='%s'>%s</body>", $partialID, $markup);
-        }
-
         $start = (int) $options['start'] ?? 1;
         $depth = (int) $options['depth'] ?? 6;
-
         $domDocument = $this->getHTMLParser($markup);
-
         $slugger = new UniqueSlugify();
 
         /** @var DOMElement $node */

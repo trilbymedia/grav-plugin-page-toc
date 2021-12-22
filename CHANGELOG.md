@@ -2,7 +2,9 @@
 ## mm/dd/2021
 
 1. [](#new)
-   * Require Grav `v1.7.26` to make use of built in `Plugin::inheritedConfigOption()` 
+   * Require Grav `v1.7.26` to make use of built in `Plugin::inheritedConfigOption()`
+2. [](#improved)
+   * Don't force inclusion of `<html>` or `<body>` tags to reduce chance of invalid HTML 
 
 # v3.1.1
 ## 12/16/2021
