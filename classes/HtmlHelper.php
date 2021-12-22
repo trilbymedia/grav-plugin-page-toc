@@ -31,7 +31,7 @@ trait HtmlHelper
     {
         libxml_use_internal_errors(true);
         $domDocument = new \DOMDocument();
-        $domDocument->loadHTML(mb_convert_encoding("<div>$markup</div>", 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $domDocument->loadHTML(mb_convert_encoding("<page-toc>$markup</page-toc>", 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $domDocument->preserveWhiteSpace = true;
         return $domDocument;
     }

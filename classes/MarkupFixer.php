@@ -75,8 +75,7 @@ class MarkupFixer
             }
         }
 
-        return $domDocument->saveHTML(
-            (isset($partialID)) ? $domDocument->getElementById($partialID) : $domDocument
-        );
+        $markup = $domDocument->saveHTML($domDocument->getElementsByTagName('page-toc')->item(0));
+        return str_replace(['<page-toc>', '</page-toc>'], '', $markup);
     }
 }

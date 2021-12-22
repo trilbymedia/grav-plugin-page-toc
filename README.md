@@ -165,7 +165,7 @@ or via the `toc_items()` function which rather than returning HTML directly retu
 {% endif %}
 ```
 
-The `add_anchors()` twig funtion can take a string or a block of content and automatically adds anchors to any headers found per the configuration for the page, but you can override the start and depth. For example here we have a Twig block but we just want to add anchors to the H2 tags:
+To explictly build a table of contents for a block of content:
 
 ```markdown
 {% block my_content %}
@@ -184,6 +184,27 @@ Integer sed tortor eu ligula interdum rhoncus.
 
 #### Table O' Contents
 {{ toc(block('my_content'), 2, 1) }}
+```
+
+The `add_anchors()` twig funtion can take a string or a block of content and automatically adds anchors to any headers found per the configuration for the page, but you can override the start and depth. For example here we have a Twig block but we just want to add anchors to the H2 tags:
+
+```markdown
+{% block my_content %}
+# Header 1
+
+## Header 1.1
+
+Nullam tempor quis lorem venenatis finibus. Maecenas ut condimentum nibh. Ut sed nisl suscipit metus sollicitudin ornare nec vitae nulla. Integer sed tortor eu ligula interdum rhoncus. Sed pulvinar ut massa et ullamcorper. Curabitur bibendum ante orci, nec porttitor dolor suscipit quis. Nulla et eros enim. 
+
+### Header 1.1.1
+
+Integer sed tortor eu ligula interdum rhoncus.
+
+## Header 1.2
+{% endblock %}
+
+#### Anchors Away!
+{{ add_anchors(block('my_content'), 2, 1) }}
 ```
 
 ### Limiting levels in output
