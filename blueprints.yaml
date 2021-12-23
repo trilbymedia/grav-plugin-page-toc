@@ -1,7 +1,7 @@
 name: Page Toc
 type: plugin
 slug: page-toc
-version: 3.1.1
+version: 3.1.2
 description: Generate a table of contents and anchors from a page
 icon: list
 author:
