@@ -1,5 +1,5 @@
 # v3.1.2
-## mm/dd/2021
+## 12/23/2021
 
 1. [](#new)
    * Require Grav `v1.7.26` to make use of built in `Plugin::inheritedConfigOption()`
