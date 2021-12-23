@@ -12,9 +12,9 @@ class AnchorShortcode extends Shortcode
   {
     $this->shortcode->getHandlers()->add('anchor', function(ProcessedShortcode $sc) {
       $id = $sc->getParameter('id', $sc->getBbCode());
-      $prefix = $sc->getParameter('prefix', PageTOCPlugin::upstreamConfigVar('anchors.slug_prefix'));
+      $prefix = $sc->getParameter('prefix', PageTOCPlugin::configVar('anchors.slug_prefix'));
       $class = $sc->getParameter('class', 'inline-anchor');
-      $aria = PageTOCPlugin::upstreamConfigVar('anchors.aria');
+      $aria = PageTOCPlugin::configVar('anchors.aria');
       $content = $sc->getContent();
 
       $slugger = new UniqueSlugify();

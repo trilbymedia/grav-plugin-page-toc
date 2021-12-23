@@ -31,7 +31,7 @@ trait HtmlHelper
     {
         libxml_use_internal_errors(true);
         $domDocument = new \DOMDocument();
-        $domDocument->loadHTML(mb_convert_encoding($markup, 'HTML-ENTITIES', 'UTF-8'));
+        $domDocument->loadHTML(mb_convert_encoding("<page-toc>$markup</page-toc>", 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $domDocument->preserveWhiteSpace = true;
         return $domDocument;
     }
@@ -85,18 +85,5 @@ trait HtmlHelper
         } else {
             return new ArrayIterator([]);
         }
-    }
-
-    /**
-     * Is this a full HTML document
-     *
-     * Guesses, based on presence of <body>...</body> tags
-     *
-     * @param string $markup
-     * @return bool
-     */
-    protected function isFullHtmlDocument(string $markup): bool
-    {
-        return (strpos($markup, "<body") !== false && strpos($markup, "</body>") !== false);
     }
 }

@@ -88,7 +88,7 @@ class PageTOCPlugin extends Plugin
 
         $content = $page->getRawContent();
         $shortcode_exists = preg_match($this->toc_regex, $content);
-        $active = $this->upstreamConfigVar('active', $page, false);
+        $active = $this->configVar('active', $page, false);
 
         // Set ID anchors if needed
         if ($active || $shortcode_exists) {
@@ -154,7 +154,7 @@ class PageTOCPlugin extends Plugin
         }, ['is_safe' => ['html']]));
 
         $twig->addFunction(new TwigFunction('toc_config_var', function ($var) {
-            return static::upstreamConfigVar($var);
+            return static::configVar($var);
         }));
 
         $functions_registered = true;
@@ -193,8 +193,8 @@ class PageTOCPlugin extends Plugin
     {
         $page = $page ?? $this->grav['page'];
         return [
-            'start'     => $start ?? $this->upstreamConfigVar('start', $page,1),
-            'depth'     => $depth ?? $this->upstreamConfigVar('depth', $page,6),
+            'start'     => $start ?? $this->configVar('start', $page,1),
+            'depth'     => $depth ?? $this->configVar('depth', $page,6),
         ];
     }
 
@@ -202,41 +202,21 @@ class PageTOCPlugin extends Plugin
     {
         $page = $page ?? $this->grav['page'];
         return [
-            'start'     => (int) ($start ?? $this->upstreamConfigVar('anchors.start', $page,1)),
-            'depth'     => (int) ($depth ?? $this->upstreamConfigVar('anchors.depth', $page,6)),
-            'hclass'    => $this->upstreamConfigVar('hclass', $page,null),
-            'link'      => $this->upstreamConfigVar('anchors.link', $page,true),
-            'position'  => $this->upstreamConfigVar('anchors.position', $page,'before'),
-            'aria'      => $this->upstreamConfigVar('anchors.aria', $page,'Anchor'),
-            'icon'      => $this->upstreamConfigVar('anchors.icon', $page,'#'),
-            'class'     => $this->upstreamConfigVar('anchors.class', $page,null),
-            'maxlen'    => (int) ($this->upstreamConfigVar('anchors.slug_maxlen', $page,null)),
-            'prefix'    => $this->upstreamConfigVar('anchors.slug_prefix', $page,null),
+            'start'     => (int) ($start ?? $this->configVar('anchors.start', $page,1)),
+            'depth'     => (int) ($depth ?? $this->configVar('anchors.depth', $page,6)),
+            'hclass'    => $this->configVar('hclass', $page,null),
+            'link'      => $this->configVar('anchors.link', $page,true),
+            'position'  => $this->configVar('anchors.position', $page,'before'),
+            'aria'      => $this->configVar('anchors.aria', $page,'Anchor'),
+            'icon'      => $this->configVar('anchors.icon', $page,'#'),
+            'class'     => $this->configVar('anchors.class', $page,null),
+            'maxlen'    => (int) ($this->configVar('anchors.slug_maxlen', $page,null)),
+            'prefix'    => $this->configVar('anchors.slug_prefix', $page,null),
         ];
     }
 
-    public static function upstreamConfigVar($var, $page = null, $default = null)
+    public static function configVar($var, $page = null, $default = null)
     {
-        if (Utils::isAdminPlugin()) {
-            $page = Grav::instance()['admin']->page() ?? null;
-        } else {
-            $page = $page ?? Grav::instance()['page'] ?? null;
-        }
-
-
-        // Try to find var in the page headers
-        if ($page instanceof PageInterface && $page->exists()) {
-            // Loop over pages and look for header vars
-            while ($page && !$page->root()) {
-                $header = new \Grav\Common\Data\Data((array)$page->header());
-                $value = $header->get("page-toc.".$var);
-                if (isset($value)) {
-                    return $value;
-                }
-                $page = $page->parent();
-            }
-        }
-
-        return Grav::instance()['config']->get("plugins.page-toc." . $var, $default);
+        return Plugin::inheritedConfigOption('page-toc', $var, $page, $default);
     }
 }

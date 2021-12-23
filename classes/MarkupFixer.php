@@ -39,18 +39,11 @@ class MarkupFixer
      * @return string Markup with added IDs
      * @throws RuntimeException
      */
-    public function fix(string $markup, array $options = []): string
+    public function fix(string $markup, array $options = []): ?string
     {
-        if (! $this->isFullHtmlDocument($markup)) {
-            $partialID = uniqid('toc_generator_');
-            $markup = sprintf("<body id='%s'>%s</body>", $partialID, $markup);
-        }
-
         $start = (int) $options['start'] ?? 1;
         $depth = (int) $options['depth'] ?? 6;
-
         $domDocument = $this->getHTMLParser($markup);
-
         $slugger = new UniqueSlugify();
 
         /** @var DOMElement $node */
@@ -82,8 +75,7 @@ class MarkupFixer
             }
         }
 
-        return $domDocument->saveHTML(
-            (isset($partialID)) ? $domDocument->getElementById($partialID) : $domDocument
-        );
+        $markup = $domDocument->saveHTML($domDocument->getElementsByTagName('page-toc')->item(0));
+        return str_replace(['<page-toc>', '</page-toc>'], '', $markup);
     }
 }
