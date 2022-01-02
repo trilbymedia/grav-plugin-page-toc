@@ -1,4 +1,4 @@
-# Page Toc Plugin
+# Page Toc Plugin (Anchors + Table of Contents)
 
 The **Page Toc** Plugin is for [Grav CMS](http://github.com/getgrav/grav) that generates anchors based on HTML header tags, and can also create a table of contents from those headers.
 
