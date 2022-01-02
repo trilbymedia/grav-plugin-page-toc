@@ -1,6 +1,8 @@
 # Page Toc Plugin
 
-The **Page Toc** Plugin is for [Grav CMS](http://github.com/getgrav/grav) that generates a table of contents from a page's HTML header tags. With version `3.0` this plugin is also able to automatically generate anchor links with hover-click capability without the need for other plugins or even the table of contents functionality.
+The **Page Toc** Plugin is for [Grav CMS](http://github.com/getgrav/grav) that generates anchors based on HTML header tags, and can also create a table of contents from those headers.
+
+With version `3.0` this plugin is able to automatically generate anchor links with hover-click capability without the need for other plugins (such as the `anchors` plugin).  This functionality operates independently from the now optional "table of contents" functionality.
 
 ![](assets/page-toc.png)
 
@@ -50,7 +52,7 @@ anchors:                    # Anchor configuration
   slug_prefix:              # A prefix used in front of generated slugs
 ```
 
-You can now have `page-toc` automatically add anchors without there being a table of contents being used, just ensure  `active` to `true`.
+> You can now have `page-toc` automatically add anchors without there being a table of contents being used, just ensure  `active` to `true`.
 
 By default, The plugin is `active` and will add header id attributes anchors for each header level found in a page.  You can set `active: false` and then activate on a page basis by adding this to the page frontmatter:
 
