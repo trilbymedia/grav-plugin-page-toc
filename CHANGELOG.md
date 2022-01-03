@@ -1,10 +1,12 @@
-# v3.1.2
-## 12/23/2021
+# v3.1.3
+## 01/03/2022
 
 1. [](#new)
    * Require Grav `v1.7.26` to make use of built in `Plugin::inheritedConfigOption()`
+   * NOTE: `page-toc v3.1.2` was released prior to `Grav v1.7.26` and has been removed
 2. [](#improved)
-   * Don't force inclusion of `<html>` or `<body>` tags to reduce chance of invalid HTML 
+   * Don't force inclusion of `<html>` or `<body>` tags to reduce chance of invalid HTML
+   * Improved `README.md`
 
 # v3.1.1
 ## 12/16/2021
