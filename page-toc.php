@@ -72,7 +72,7 @@ class PageTOCPlugin extends Plugin
             'onTwigInitialized'         => ['onTwigInitialized', 0],
             'onTwigTemplatePaths'       => ['onTwigTemplatePaths', 0],
             'onTwigSiteVariables'       => ['onTwigSiteVariables', 0],
-            'onPageContentProcessed'    => ['onPageContentProcessed', 0],
+            'onPageContentProcessed'    => ['onPageContentProcessed', -20],
         ]);
     }
 
@@ -86,7 +86,7 @@ class PageTOCPlugin extends Plugin
         /** @var PageInterface $page */
         $page = $event['page'];
 
-        $content = $page->getRawContent();
+        $content = $page->content();
         $shortcode_exists = preg_match($this->toc_regex, $content);
         $active = $this->configVar('active', $page, false);
 
