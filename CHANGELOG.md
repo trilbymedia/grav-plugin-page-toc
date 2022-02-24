@@ -1,3 +1,10 @@
+# v3.2.0
+## 02/23/2022
+
+1. [](#new)
+   * Support for HTML or Shortcode based headers with custom `id` attributes to specify an anchor
+   * Added German translation
+
 # v3.1.3
 ## 01/03/2022
 
