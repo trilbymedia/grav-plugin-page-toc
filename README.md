@@ -85,6 +85,22 @@ user/themes/quark/templates/components/page-toc.html.twig
 
 NOTE: It's not required to set the TOC plugin `active` if you use the shortcode syntax in your content.  That is a good enough indication that you want the plugin to be active.
 
+### Customizing specific anchors
+
+There are situations where you want to have absolute control over the exact anchor link rather than letting page-toc create one for you.  The best way to achieve this is to add your own `id` attribute to the header tag.  This can be done either via HTML in your markdown directly:
+
+```html
+<h2 id="my-custom-anchor">H2 Header</h2>
+```
+
+Or via using the header shortcodes.  This approach is particularly useful if you have markdown inside your header tag:
+
+```markdown
+[h2 id="my-custom-anchor"]H2 _header_[/h2]
+```
+
+If an `id` is found in one of the header tags that page-toc is configured to use for anchors, then it will use the provided value for the anchor id.
+
 ### Anchor Shortcode
 
 Page TOC now includes a `anchor` shortcode that allows you to manually add linkable fragments in your content.  
