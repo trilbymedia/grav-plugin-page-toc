@@ -1,3 +1,9 @@
+# v3.2.1
+## 05/08/2023
+
+1. [](#improved)
+   * Fixed a "Deprecated: mb_convert_encoding()" error
+
 # v3.2.0
 ## 02/23/2022
 
