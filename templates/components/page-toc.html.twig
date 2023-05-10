@@ -1,12 +1,13 @@
+{% import _self as self %}
+
 {% macro toc_loop(items) %}
-    {% import _self as self %}
     {% for item in items %}
         {% set class = loop.first ? 'first' : loop.last ? 'last' : null %}
         <li {% if class %}class="{{ class }}"{% endif %}>
             <a href="{{ item.uri }}">{{ item.label }}</a>
             {% if item.children|length > 0 %}
                 <ul>
-                    {{ _self.toc_loop(item.children) }}
+                    {{ self.toc_loop(item.children) }}
                 </ul>
             {% endif %}
         </li>
@@ -19,7 +20,7 @@
     {% if table_of_contents is not empty %}
         <h4>{{ 'PLUGIN_PAGE_TOC.TABLE_OF_CONTENTS'|t }}</h4>
         <ul>
-            {{ _self.toc_loop(table_of_contents.children) }}
+            {{ self.toc_loop(table_of_contents.children) }}
         </ul>
     {% endif %}
 </div>
