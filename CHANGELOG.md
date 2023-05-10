@@ -1,3 +1,10 @@
+# v3.2.2
+## 05/10/2023
+
+1. [](#bugfix)
+   * Use `mb_encode_nuericentity()` instead of `htmlspecialchars` / `iconv` approach to fix breaking UTF-8 characters
+   * Fix a deprecated message in the Twig macro
+
 # v3.2.1
 ## 05/08/2023
 
