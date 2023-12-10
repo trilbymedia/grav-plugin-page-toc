@@ -104,7 +104,7 @@ If an `id` is found in one of the header tags that page-toc is configured to use
 ### Anchor Shortcode
 
 Page TOC now includes a `anchor` shortcode that allows you to manually add linkable fragments in your content.  
-The shortcode will automatically generate the link if no options are provided. Alternatively you can use the bbode syntax of `anchor="some-custom-id"` or you can explicity set it.  You can also set a `prefix` and let the shortcode autogenerate the rest.
+The shortcode will automatically generate the link if no options are provided. Alternatively you can use the BBCode syntax of `anchor="some-custom-id"` or you can explicity set it.  You can also set a `prefix` and let the shortcode autogenerate the rest.
 
 For example:
 
