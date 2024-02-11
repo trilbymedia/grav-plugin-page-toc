@@ -4,7 +4,7 @@
     {% for item in items %}
         {% set class = loop.first ? 'first' : loop.last ? 'last' : null %}
         <li {% if class %}class="{{ class }}"{% endif %}>
-            <a href="{{ item.uri }}">{{ item.label }}</a>
+            <a href="{{ item.uri }}">{{ item.label | raw }}</a>
             {% if item.children|length > 0 %}
                 <ul>
                     {{ self.toc_loop(item.children) }}
