@@ -18,6 +18,7 @@ namespace Grav\Plugin\PageToc;
 use ArrayIterator;
 use DOMDocument;
 use DomElement;
+use DomNode;
 use DOMXPath;
 
 /**
@@ -86,5 +87,17 @@ trait HtmlHelper
         } else {
             return new ArrayIterator([]);
         }
+    }
+
+    protected function filteredInnerHTML(DOMNode $element, array $allowedTags): string
+    {
+        $innerHTML = "";
+        $children  = $element->childNodes;
+
+        foreach ($children as $child) {
+            $innerHTML .= $element->ownerDocument->saveHTML($child);
+        }
+
+        return  strip_tags($innerHTML, $allowedTags);
     }
 }

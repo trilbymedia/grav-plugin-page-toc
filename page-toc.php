@@ -143,9 +143,9 @@ class PageTOCPlugin extends Plugin
             return $this->generator->getHtmlMenu($markup, $options['start'], $options['depth'], null, true);
         }, ['is_safe' => ['html']]));
 
-        $twig->addFunction(new TwigFunction('toc_items', function ($markup, $start = null, $depth = null) {
-            $options = $this->getTocOptions(null, $start, $depth);
-            return $this->generator->getMenu($markup, $options['start'], $options['depth']);
+        $twig->addFunction(new TwigFunction('toc_items', function ($markup, $start = null, $depth = null, $tags = null) {
+            $options = $this->getTocOptions(null, $start, $depth, $tags);
+            return $this->generator->getMenu($markup, $options['start'], $options['depth'], $options['tags']);
         }));
 
         $twig->addFunction(new TwigFunction('add_anchors', function ($markup, $start = null, $depth = null) {
@@ -189,12 +189,13 @@ class PageTOCPlugin extends Plugin
         }
     }
 
-    protected function getTocOptions(PageInterface $page = null, $start = null, $depth = null): array
+    protected function getTocOptions(PageInterface $page = null, $start = null, $depth = null, $tags = null): array
     {
         $page = $page ?? $this->grav['page'];
         return [
             'start'     => $start ?? $this->configVar('start', $page,1),
             'depth'     => $depth ?? $this->configVar('depth', $page,6),
+            'tags'      => $tags ?? $this->configVar('tags', $page,[]),
         ];
     }
 

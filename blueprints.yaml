@@ -84,6 +84,12 @@ form:
           type: text
           label: PLUGIN_PAGE_TOC.HEADER_CSS_CLASSES
           help: PLUGIN_PAGE_TOC.HEADER_CSS_CLASSES_HELP
+        tags:
+          type: selectize
+          label: PLUGIN_PAGE_TOC.ALLOWED_HTML_TAGS
+          help: PLUGIN_PAGE_TOC.ALLOWED_HTML_TAGS_HELP
+          validate:
+            type: commalist
 
     anchors_section:
       type: section
