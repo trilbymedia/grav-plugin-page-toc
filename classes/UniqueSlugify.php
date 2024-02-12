@@ -53,8 +53,8 @@ class UniqueSlugify implements SlugifyInterface
         $maxlen = $options['maxlen'] ?? null;
         $prefix = $options['prefix'] ?? null;
 
-        if (is_int($maxlen) && strlen($slugged) > $maxlen) {
-            $slugged = substr($slugged, 0, $maxlen);
+        if (is_int($maxlen) && mb_strlen($slugged) > $maxlen) {
+            $slugged = mb_substr($slugged, 0, $maxlen);
         }
 
         if (isset($prefix)) {
