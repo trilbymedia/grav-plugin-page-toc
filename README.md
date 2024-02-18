@@ -36,6 +36,7 @@ Here is the default configuration and an explanation of available options:
 enabled: true               # Plugin enabled
 include_css: true           # Include CSS
 active: true                # Anchor IDs processed and generated for all pages
+templates:                  # Templates for which anchors should be generated if default is disabled
 start: 1                    # Start header tag level (1 = h1) for TOC
 depth: 6                    # Depth from start (2 = 2 levels deep) for TOC
 hclass:                     # Custom Header TOC styling classes
@@ -60,6 +61,8 @@ By default, The plugin is `active` and will add header id attributes anchors for
 page-toc:
   active: true
 ```
+
+Alternatively, you can activate anchor generation on all pages using a given set of `templates`.
 
 You can also configure which header tags to start and depth on when building the id attribute anchors by changing the `start` and `depth` values. This can also be done on a per-page basis.
 
