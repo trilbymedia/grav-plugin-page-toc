@@ -89,9 +89,11 @@ class PageTOCPlugin extends Plugin
         $content = $page->content();
         $shortcode_exists = preg_match($this->toc_regex, $content);
         $active = $this->configVar('active', $page, false);
+        $activated_templates = $this->configVar('templates', $page, []);
+        $is_template_activated = in_array($page->template(), $activated_templates);
 
         // Set ID anchors if needed
-        if ($active || $shortcode_exists) {
+        if ($active || $is_template_activated || $shortcode_exists) {
             $this->registerTwigFunctions();
             $markup_fixer = new MarkupFixer();
             $content = $markup_fixer->fix($content, $this->getAnchorOptions($page));
