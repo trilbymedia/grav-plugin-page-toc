@@ -50,6 +50,12 @@ form:
         0: PLUGIN_ADMIN.DISABLED
       validate:
         type: bool
+    templates:
+      type: selectize
+      label: PLUGIN_PAGE_TOC.ACTIVE_FOR_TEMPLATES
+      help: PLUGIN_PAGE_TOC.ACTIVE_FOR_TEMPLATES_HELP
+      validate:
+        type: commalist
 
     toc_section:
       type: section
