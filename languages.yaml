@@ -40,3 +40,6 @@ en:
     SLUG_PREFIX_HELP: 'A prefix used in front of generated slugs'
     PAGE_ANCHORS_SECTION: 'Page Anchors Configuration'
     COPY_TO_CLIPBOARD: 'Copy to Clipboard'
+lt:
+  PLUGIN_PAGE_TOC:
+    TABLE_OF_CONTENTS: Turinys
