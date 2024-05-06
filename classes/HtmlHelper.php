@@ -18,6 +18,7 @@ namespace Grav\Plugin\PageToc;
 use ArrayIterator;
 use DOMDocument;
 use DomElement;
+use DomNode;
 use DOMXPath;
 
 /**
@@ -31,8 +32,8 @@ trait HtmlHelper
     {
         libxml_use_internal_errors(true);
         $domDocument = new \DOMDocument();
-        $html = "<page-toc>$markup</page-toc>";
-        $domDocument->loadHTML(mb_encode_numericentity($html, [0x80, 0x10FFFF, 0, ~0], 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $html = htmlspecialchars_decode(html_entity_decode("<page-toc>$markup</page-toc>", ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES);
+        $domDocument->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $domDocument->preserveWhiteSpace = true;
         return $domDocument;
     }
@@ -86,5 +87,17 @@ trait HtmlHelper
         } else {
             return new ArrayIterator([]);
         }
+    }
+
+    protected function filteredInnerHTML(DOMNode $element, array $allowedTags): string
+    {
+        $innerHTML = "";
+        $children  = $element->childNodes;
+
+        foreach ($children as $child) {
+            $innerHTML .= $element->ownerDocument->saveHTML($child);
+        }
+
+        return  strip_tags($innerHTML, $allowedTags);
     }
 }
