@@ -1,5 +1,5 @@
 # v3.2.3
-## mm/dd/2024
+## 05/06/2024
 
 1. [](#new)
    * Added french translation [#28](https://github.com/trilbymedia/grav-plugin-page-toc/pulls/28) 
