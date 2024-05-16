@@ -1,3 +1,11 @@
+# v3.2.4
+## 05/16/2024
+
+1. [](#improved)
+   * Updated Spanish translation [#40](https://github.com/trilbymedia/grav-plugin-page-toc/pulls/40) 
+1. [](#bugfix)
+   * Reverted to use `mb_encode_nuericentity()` instead of `htmlspecialchars` / `iconv` approach to fix breaking UTF-8 characters
+
 # v3.2.3
 ## 05/06/2024
 
