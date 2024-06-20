@@ -96,7 +96,7 @@ class PageTOCPlugin extends Plugin
         if ($active || $is_template_activated || $shortcode_exists) {
             $this->registerTwigFunctions();
             $markup_fixer = new MarkupFixer();
-            $content = $markup_fixer->fix($content, $this->getAnchorOptions($page));
+            $content = $markup_fixer->fix($content, array_merge($this->getAnchorOptions($page), $this->getSlugifyOptions($page)));
             $page->setRawContent($content);
         }
 
@@ -151,7 +151,7 @@ class PageTOCPlugin extends Plugin
         }));
 
         $twig->addFunction(new TwigFunction('add_anchors', function ($markup, $start = null, $depth = null) {
-            $options = $this->getAnchorOptions(null, $start, $depth);
+            $options = array_merge($this->getAnchorOptions(null, $start, $depth), $this->getSlugifyOptions(null));
             return $this->fixer->fix($markup, $options);
         }, ['is_safe' => ['html']]));
 
@@ -216,6 +216,28 @@ class PageTOCPlugin extends Plugin
             'maxlen'    => (int) ($this->configVar('anchors.slug_maxlen', $page,null)),
             'prefix'    => $this->configVar('anchors.slug_prefix', $page,null),
         ];
+    }
+
+    protected function getSlugifyOptions(PageInterface $page = null): array
+    {
+        $page = $page ?? $this->grav['page'];
+        $slugify_options = [];
+        foreach ([
+            'regexp',
+            'separator',
+            'lowercase',
+            'lowercase_after_regexp',
+            'trim',
+            'strip_tags',
+            'rulesets'
+            ] as $option_name) {
+                $option_value = $this->configVar('slugify.' . $option_name, $page,null);
+                if (!is_null($option_value)) {
+                    $slugify_options[$option_name] = $option_value;
+                }
+            }
+
+        return $slugify_options;
     }
 
     public static function configVar($var, $page = null, $default = null)
