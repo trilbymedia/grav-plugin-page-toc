@@ -1,9 +1,3 @@
-ru:
-  PLUGIN_PAGE_TOC:
-    TABLE_OF_CONTENTS: Содержание
-de:
-  PLUGIN_PAGE_TOC:
-    TABLE_OF_CONTENTS: Inhaltsverzeichnis
 en:
   PLUGIN_PAGE_TOC:
     TABLE_OF_CONTENTS: Table of Contents
@@ -44,6 +38,11 @@ en:
     SLUG_PREFIX_HELP: 'A prefix used in front of generated slugs'
     PAGE_ANCHORS_SECTION: 'Page Anchors Configuration'
     COPY_TO_CLIPBOARD: 'Copy to Clipboard'
+
+de:
+  PLUGIN_PAGE_TOC:
+    TABLE_OF_CONTENTS: Inhaltsverzeichnis
+
 fr:
   PLUGIN_PAGE_TOC:
     TABLE_OF_CONTENTS: Table des matières
@@ -80,6 +79,7 @@ fr:
     SLUG_PREFIX_HELP: 'Un préfixe utilisé devant les slugs générés'
     PAGE_ANCHORS_SECTION: 'Configuration des ancres de pages'
     COPY_TO_CLIPBOARD: 'Copier dans le presse-papiers'
+
 es:
   PLUGIN_PAGE_TOC:
     TABLE_OF_CONTENTS: Tabla de Contenidos
@@ -121,3 +121,6 @@ es:
     PAGE_ANCHORS_SECTION: 'Configuración de enlaces ancla de Página'
     COPY_TO_CLIPBOARD: 'Copiar al Portapapeles'
 
+ru:
+  PLUGIN_PAGE_TOC:
+    TABLE_OF_CONTENTS: Содержание
