@@ -48,6 +48,7 @@ de:
     ACTIVE_BY_DEFAULT_PAGE_HELP: 'Wenn die Standardeinstellung deaktiviert ist, können Sie sie auf dieser Seite aktivieren oder umgekehrt'
     ACTIVE_FOR_TEMPLATES: 'Anker für diese Vorlagen generieren'
     ACTIVE_FOR_TEMPLATES_HELP: 'Nur relevant, wenn die Standard (seitenübergreifende) Ankererzeugung deaktiviert ist'
+    TOC_SECTION: 'Inhaltsverzeichnis Konfiguration'
     START_TOC_HEADERS: 'Starte TOC Überschriften'
     START_TOC_HEADERS_HELP: 'Ab welcher Überschriftebene das Inhaltsverzeichnis beginnen soll'
     DEPTH_TOC_HEADERS: 'Tiefe der TOC Überschriften'
