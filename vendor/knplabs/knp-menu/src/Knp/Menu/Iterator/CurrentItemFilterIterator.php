@@ -10,16 +10,10 @@ use Knp\Menu\Matcher\MatcherInterface;
 class CurrentItemFilterIterator extends \FilterIterator
 {
     /**
-     * @var MatcherInterface
-     */
-    private $matcher;
-
-    /**
      * @param \Iterator<string|int, \Knp\Menu\ItemInterface> $iterator
      */
-    public function __construct(\Iterator $iterator, MatcherInterface $matcher)
+    public function __construct(\Iterator $iterator, private MatcherInterface $matcher)
     {
-        $this->matcher = $matcher;
 
         parent::__construct($iterator);
     }

@@ -1,3 +1,9 @@
+# v8.0.0
+## mm/dd/2024
+
+1. [](#improved)
+    * Updates for PHP 8.2 support, now requires Grav 1.8+
+
 # v3.2.4
 ## 05/16/2024
 
