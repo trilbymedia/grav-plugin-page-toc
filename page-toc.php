@@ -191,7 +191,7 @@ class PageTOCPlugin extends Plugin
         }
     }
 
-    protected function getTocOptions(PageInterface $page = null, $start = null, $depth = null, $tags = null): array
+    protected function getTocOptions(?PageInterface $page = null, $start = null, $depth = null, $tags = null): array
     {
         $page = $page ?? $this->grav['page'];
         return [
@@ -201,7 +201,7 @@ class PageTOCPlugin extends Plugin
         ];
     }
 
-    protected function getAnchorOptions(PageInterface $page = null, $start = null, $depth = null): array
+    protected function getAnchorOptions(?PageInterface $page = null, $start = null, $depth = null): array
     {
         $page = $page ?? $this->grav['page'];
         return [
