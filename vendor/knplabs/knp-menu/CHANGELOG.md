@@ -1,3 +1,16 @@
+## 3.5 (2024-03-23)
+
+* Added CallbackVoter
+* Removed support for unsupported PHP version 8.0
+
+## 3.4 (2023-05-17)
+
+* Removed support for unsupported PHP version 7.4
+
+## 3.3 (2021-10-28)
+
+* Added support for Symfony 6
+
 ## 3.2 (2021-05-28)
 
 * Remove Symfony 6 deprecations
