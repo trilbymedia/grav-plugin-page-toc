@@ -105,6 +105,11 @@ class PageTOCPlugin extends Plugin
         if ($shortcode_exists) {
             $toc = $this->grav['twig']->processTemplate('components/page-toc.html.twig', ['page' => $page, 'active' => true]);
             $content = preg_replace($this->toc_regex, $toc, $content);
+            $content = preg_replace(
+                '#<p>\s*(<div[^>]*class="[^"]*\bpage-toc\b[^"]*"[^>]*>.*?</div>)\s*</p>#si',
+                '$1',
+                $content
+            );
             $page->setRawContent($content);
         }
     }

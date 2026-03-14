@@ -2,22 +2,22 @@
     "packages": [
         {
             "name": "cocur/slugify",
-            "version": "v4.0.0",
-            "version_normalized": "4.0.0.0",
+            "version": "v4.6.0",
+            "version_normalized": "4.6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cocur/slugify.git",
-                "reference": "3f1ffc300f164f23abe8b64ffb3f92d35cec8307"
+                "reference": "1d674022e9cbefa80b4f51aa3e2375b6e3c14fdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cocur/slugify/zipball/3f1ffc300f164f23abe8b64ffb3f92d35cec8307",
-                "reference": "3f1ffc300f164f23abe8b64ffb3f92d35cec8307",
+                "url": "https://api.github.com/repos/cocur/slugify/zipball/1d674022e9cbefa80b4f51aa3e2375b6e3c14fdb",
+                "reference": "1d674022e9cbefa80b4f51aa3e2375b6e3c14fdb",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": ">=7.0"
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
             },
             "conflict": {
                 "symfony/config": "<3.4 || >=4,<4.3",
@@ -26,24 +26,24 @@
                 "twig/twig": "<2.12.1"
             },
             "require-dev": {
-                "laravel/framework": "~5.1",
+                "laravel/framework": "^5.0|^6.0|^7.0|^8.0",
                 "latte/latte": "~2.2",
                 "league/container": "^2.2.0",
                 "mikey179/vfsstream": "~1.6.8",
                 "mockery/mockery": "^1.3",
                 "nette/di": "~2.4",
-                "phpunit/phpunit": "^5.7.27",
                 "pimple/pimple": "~1.1",
                 "plumphp/plum": "~0.1",
-                "symfony/config": "^3.4 || ^4.3 || ^5.0",
-                "symfony/dependency-injection": "^3.4 || ^4.3 || ^5.0",
-                "symfony/http-kernel": "^3.4 || ^4.3 || ^5.0",
+                "symfony/config": "^3.4 || ^4.3 || ^5.0 || ^6.0",
+                "symfony/dependency-injection": "^3.4 || ^4.3 || ^5.0 || ^6.0",
+                "symfony/http-kernel": "^3.4 || ^4.3 || ^5.0 || ^6.0",
+                "symfony/phpunit-bridge": "^5.4 || ^6.0",
                 "twig/twig": "^2.12.1 || ~3.0",
                 "zendframework/zend-modulemanager": "~2.2",
                 "zendframework/zend-servicemanager": "~2.2",
                 "zendframework/zend-view": "~2.2"
             },
-            "time": "2019-12-14T13:04:14+00:00",
+            "time": "2024-09-10T14:09:25+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -73,47 +73,48 @@
             ],
             "support": {
                 "issues": "https://github.com/cocur/slugify/issues",
-                "source": "https://github.com/cocur/slugify/tree/master"
+                "source": "https://github.com/cocur/slugify/tree/v4.6.0"
             },
             "install-path": "../cocur/slugify"
         },
         {
             "name": "knplabs/knp-menu",
-            "version": "v3.3.0",
-            "version_normalized": "3.3.0.0",
+            "version": "v3.5.0",
+            "version_normalized": "3.5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-                "reference": "8bd3dc2afa22c65617c563c5e25e62d6e23e98c7"
+                "reference": "c39403f7c427d1b72cc56f38df0a075b4b9191fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/8bd3dc2afa22c65617c563c5e25e62d6e23e98c7",
-                "reference": "8bd3dc2afa22c65617c563c5e25e62d6e23e98c7",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/c39403f7c427d1b72cc56f38df0a075b4b9191fe",
+                "reference": "c39403f7c427d1b72cc56f38df0a075b4b9191fe",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3 || ^8.0"
+                "php": "^8.1"
             },
             "conflict": {
-                "twig/twig": "<1.40 || >=2,<2.9"
+                "twig/twig": "<1.42.3 || >=2,<2.9"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.5",
-                "psr/container": "^1.0",
-                "symfony/http-foundation": "^4.4 || ^5.0 || ^6.0",
-                "symfony/phpunit-bridge": "^5.3",
-                "symfony/routing": "^4.4 || ^5.0 || ^6.0",
-                "twig/twig": "^1.40 || ^2.9 || ^3.0"
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^9.6",
+                "psr/container": "^1.0 || ^2.0",
+                "symfony/http-foundation": "^5.4 || ^6.0 || ^7.0",
+                "symfony/phpunit-bridge": "^7.0",
+                "symfony/routing": "^5.4 || ^6.0 || ^7.0",
+                "twig/twig": "^2.16 || ^3.0"
             },
             "suggest": {
                 "twig/twig": "for the TwigRenderer and the integration with your templates"
             },
-            "time": "2021-10-23T15:01:04+00:00",
+            "time": "2024-03-23T15:35:09+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.3-dev"
+                    "dev-master": "3.x-dev"
                 }
             },
             "installation-source": "source",
@@ -148,7 +149,7 @@
             ],
             "support": {
                 "issues": "https://github.com/KnpLabs/KnpMenu/issues",
-                "source": "https://github.com/KnpLabs/KnpMenu/tree/v3.3.0"
+                "source": "https://github.com/KnpLabs/KnpMenu/tree/v3.5.0"
             },
             "install-path": "../knplabs/knp-menu"
         }

@@ -1,7 +1,8 @@
 name: Page Toc
 type: plugin
 slug: page-toc
-version: 3.2.4
+version: 4.0.0-beta.1
+testing: true
 description: Generate a table of contents and anchors from a page
 icon: list
 author:
@@ -15,7 +16,7 @@ docs: https://github.com/trilbymedia/grav-plugin-page-toc/blob/develop/README.md
 license: MIT
 
 dependencies:
-    - { name: grav, version: '>=1.7.26' }
+    - { name: grav, version: '>=1.8.0-beta.1' }
 
 form:
   validation: strict
