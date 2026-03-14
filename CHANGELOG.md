@@ -1,3 +1,15 @@
+# v4.0.0-beta.2
+## 03/14/2026
+
+1. [](#improved)
+    * Updates for PHP 8.3+ support
+
+# v3.2.5
+## 03/14/2026
+
+1. [](#bugfix)
+   * Load twig in admin
+
 # v4.0.0-beta.1
 ## 12/10/2024
 
