@@ -5,12 +5,11 @@
 }
 
 .toc-anchor.after {
-    margin-left: 5px;
+    margin-left: .25em;
 }
 
 .toc-anchor.before {
-    margin-left: -22px;
-    padding-right: 8px;
+    margin-left: -.75em;
 }
 
 .toc-anchor:after {
