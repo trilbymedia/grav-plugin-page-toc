@@ -1,3 +1,9 @@
+# v4.0.0-beta.3
+## 05/02/2026
+
+1. [](#improved)
+    * Updated for Grav 2.0
+
 # v4.0.0-beta.2
 ## 03/14/2026
 
