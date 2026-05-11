@@ -219,7 +219,7 @@ class PageTOCPlugin extends Plugin
         ];
     }
 
-    protected function getSlugifyOptions(PageInterface $page = null): array
+    protected function getSlugifyOptions(?PageInterface $page = null): array
     {
         $page = $page ?? $this->grav['page'];
         $slugify_options = [];
@@ -231,13 +231,13 @@ class PageTOCPlugin extends Plugin
             'lowercase',
             'lowercase_after_regexp',
             'trim',
-            'strip_tags'
-            ] as $option_name) {
-                $option_value = $this->configVar('slugify.' . $option_name, $page,null);
-                if (!is_null($option_value)) {
-                    $slugify_options[$option_name] = $option_value;
-                }
+            'strip_tags',
+        ] as $option_name) {
+            $option_value = $this->configVar('slugify.' . $option_name, $page, null);
+            if (!is_null($option_value)) {
+                $slugify_options[$option_name] = $option_value;
             }
+        }
 
         if ($custom_rulesets) {
             $slugify_options['rulesets'] = $this->configVar('slugify.rulesets', $page, []);
