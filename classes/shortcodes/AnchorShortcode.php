@@ -8,6 +8,28 @@ use Thunder\Shortcode\Shortcode\ProcessedShortcode;
 
 class AnchorShortcode extends Shortcode
 {
+  /**
+   * @return array<string,mixed>
+   */
+  protected function getSlugifyOptions(): array
+  {
+    $options = [];
+    $customRulesets = (bool) PageTOCPlugin::configVar('slugify.custom_rulesets', null, false);
+
+    foreach (['regexp', 'separator', 'lowercase', 'lowercase_after_regexp', 'trim', 'strip_tags'] as $key) {
+      $value = PageTOCPlugin::configVar('slugify.' . $key);
+      if ($value !== null) {
+        $options[$key] = $value;
+      }
+    }
+
+    if ($customRulesets) {
+      $options['rulesets'] = PageTOCPlugin::configVar('slugify.rulesets', null, []);
+    }
+
+    return $options;
+  }
+
   public function init()
   {
     $this->shortcode->getRawHandlers()->add('anchor', function(ProcessedShortcode $sc) {
@@ -18,11 +40,12 @@ class AnchorShortcode extends Shortcode
       $class = $this->cleanParam($sc->getParameter('class', 'inline-anchor'));
       $aria = PageTOCPlugin::configVar('anchors.aria');
       $content = $sc->getContent();
+      $slugifyOptions = $this->getSlugifyOptions();
 
-      $slugger = new UniqueSlugify();
+      $slugger = new UniqueSlugify($slugifyOptions);
 
       if (is_null($id)) {
-          $id = $slugger->slugify(strip_tags($content));
+          $id = $slugger->slugify(strip_tags($content), $slugifyOptions);
       }
 
       if (isset($prefix)) {
