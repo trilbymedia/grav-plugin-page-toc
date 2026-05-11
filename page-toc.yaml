@@ -16,3 +16,33 @@ anchors:                    # Anchor configuration
   copy_to_clipboard: false  # Copy to clipboard functionality
   slug_maxlen: 25           # Max length of slugs used for anchors
   slug_prefix:              # A prefix used in front of generated slugs
+slugify:
+  custom_rulesets: false    # Use Slugify defaults unless explicitly overriding rulesets
+  regexp: '/([^A-Za-z0-9]|-)+/'
+  separator: '-'
+  lowercase: true
+  lowercase_after_regexp: false
+  trim: true
+  strip_tags: false
+  rulesets:                 # Used only when custom_rulesets is true
+    - default
+    - yiddish
+    - armenian
+    - azerbaijani
+    - burmese
+    - hindi
+    - georgian
+    - norwegian
+    - vietnamese
+    - ukrainian
+    - latvian
+    - finnish
+    - greek
+    - czech
+    - arabic
+    - slovak
+    - turkish
+    - polish
+    - german
+    - russian
+    - romanian

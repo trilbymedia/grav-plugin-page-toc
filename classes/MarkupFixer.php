@@ -44,7 +44,7 @@ class MarkupFixer
         $start = (int) $options['start'] ?? 1;
         $depth = (int) $options['depth'] ?? 6;
         $domDocument = $this->getHTMLParser($markup);
-        $slugger = new UniqueSlugify();
+        $slugger = new UniqueSlugify($options);
 
         /** @var DOMElement $node */
         foreach ($this->traverseHeaderTags($domDocument, $start, $depth) as $node) {
