@@ -1,8 +1,8 @@
 name: Page Toc
 type: plugin
 slug: page-toc
-version: 4.0.0-beta.4
-testing: true
+version: 4.0.0
+testing: false
 description: Generate a table of contents and anchors from a page
 icon: list
 author:
@@ -15,11 +15,11 @@ bugs: https://github.com/trilbymedia/grav-plugin-page-toc/issues
 docs: https://github.com/trilbymedia/grav-plugin-page-toc/blob/develop/README.md
 license: MIT
 compatibility:
-  grav: ['2.0']
+  grav: ["2.0"]
 
 dependencies:
-    - { name: grav, version: '>=2.0-beta.1' }
-    - { name: php, version: '>=8.0'}
+  - { name: grav, version: ">=2.0-beta.1" }
+  - { name: php, version: ">=8.0" }
 
 form:
   validation: strict
@@ -151,7 +151,7 @@ form:
           type: text
           label: PLUGIN_PAGE_TOC.ANCHORS_ICON
           help: PLUGIN_PAGE_TOC.ANCHORS_ICON_HELP
-          default: '#'
+          default: "#"
           size: x-small
         anchors.position:
           type: select
@@ -179,7 +179,7 @@ form:
           help: PLUGIN_PAGE_TOC.SLUG_MAXLEN_HELP
           size: x-small
           default: 25
-          append: 'chars'
+          append: "chars"
         anchors.slug_prefix:
           type: text
           label: PLUGIN_PAGE_TOC.SLUG_PREFIX
@@ -195,12 +195,12 @@ form:
           type: text
           label: Regexp
           help: Regular expression used by slugify to replace separators.
-          placeholder: '/([^A-Za-z0-9]|-)+/'
+          placeholder: "/([^A-Za-z0-9]|-)+/"
         slugify.separator:
           type: text
           label: Separator
           help: String used to separate words in generated slugs.
-          placeholder: '-'
+          placeholder: "-"
           size: x-small
         slugify.lowercase:
           type: toggle

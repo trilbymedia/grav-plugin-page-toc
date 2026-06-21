@@ -1,3 +1,9 @@
+# v4.0.0
+## 06/20/2026
+
+1. [](#new)
+    * Version 4.0 stable release for Grav 2.x
+
 # v4.0.0-beta.4
 ## 05/11/2026
 
@@ -34,7 +40,7 @@
 ## 05/16/2024
 
 1. [](#improved)
-   * Updated Spanish translation [#40](https://github.com/trilbymedia/grav-plugin-page-toc/pulls/40) 
+   * Updated Spanish translation [#40](https://github.com/trilbymedia/grav-plugin-page-toc/pulls/40)
 1. [](#bugfix)
    * Reverted to use `mb_encode_nuericentity()` instead of `htmlspecialchars` / `iconv` approach to fix breaking UTF-8 characters
 
@@ -42,7 +48,7 @@
 ## 05/06/2024
 
 1. [](#new)
-   * Added french translation [#28](https://github.com/trilbymedia/grav-plugin-page-toc/pulls/28) 
+   * Added french translation [#28](https://github.com/trilbymedia/grav-plugin-page-toc/pulls/28)
    * Added option to whitelist HTML tags in TOC [#36](https://github.com/trilbymedia/grav-plugin-page-toc/pulls/36)
    * Added option to set user templates in which anchors are generated [#37](https://github.com/trilbymedia/grav-plugin-page-toc/pulls/37)
 1. [](#bugfix)
