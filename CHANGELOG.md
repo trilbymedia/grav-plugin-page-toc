@@ -1,14 +1,34 @@
-# v3.2.6
-## 05/01/2026
+# v4.0.0-beta.4
+## 05/11/2026
+
+1. [](#new)
+    * Added admin settings to customize how slugs are generated, including separator, lowercase, and language rulesets [#48](https://github.com/trilbymedia/grav-plugin-page-toc/pull/48)
+1. [](#bugfix)
+    * Slug max-length now counts characters instead of bytes so non-Latin slugs are no longer truncated mid-character
+
+# v4.0.0-beta.3
+## 05/02/2026
 
 1. [](#improved)
-    * Added 1.7|2.0 compatibility flags
+    * Updated for Grav 2.0
+
+# v4.0.0-beta.2
+## 03/14/2026
+
+1. [](#improved)
+    * Updates for PHP 8.3+ support
 
 # v3.2.5
 ## 03/14/2026
 
 1. [](#bugfix)
    * Load twig in admin
+
+# v4.0.0-beta.1
+## 12/10/2024
+
+1. [](#improved)
+    * Updates for PHP 8.2 support, now requires Grav 1.8+
 
 # v3.2.4
 ## 05/16/2024

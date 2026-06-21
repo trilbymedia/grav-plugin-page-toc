@@ -26,17 +26,34 @@ class UniqueSlugify implements SlugifyInterface
     protected $slugify;
     protected $used;
 
-    protected $options;
-
     /**
      * Constructor
      *
-     * @param SlugifyInterface|null $slugify
+     * @param array<string,mixed> $options
      */
-    public function __construct()
+    public function __construct(array $options = [])
     {
         $this->used = array();
-        $this->slugify = new Slugify();
+        $this->slugify = new Slugify($this->getSlugifyConstructorOptions($options));
+    }
+
+    /**
+     * Only pass options recognized by cocur/slugify constructor.
+     *
+     * @param array<string,mixed> $options
+     * @return array<string,mixed>
+     */
+    protected function getSlugifyConstructorOptions(array $options): array
+    {
+        return array_intersect_key($options, array_flip([
+            'regexp',
+            'separator',
+            'lowercase',
+            'lowercase_after_regexp',
+            'trim',
+            'strip_tags',
+            'rulesets',
+        ]));
     }
 
     /**
@@ -53,8 +70,8 @@ class UniqueSlugify implements SlugifyInterface
         $maxlen = $options['maxlen'] ?? null;
         $prefix = $options['prefix'] ?? null;
 
-        if (is_int($maxlen) && strlen($slugged) > $maxlen) {
-            $slugged = substr($slugged, 0, $maxlen);
+        if (is_int($maxlen) && mb_strlen($slugged) > $maxlen) {
+            $slugged = mb_substr($slugged, 0, $maxlen);
         }
 
         if (isset($prefix)) {

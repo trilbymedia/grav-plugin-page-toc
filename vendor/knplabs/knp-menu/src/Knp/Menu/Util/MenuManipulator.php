@@ -207,6 +207,7 @@ class MenuManipulator
      *   * [['label' => 'subItem1', 'url' => '@homepage'], ['label' => 'subItem2']]
      *
      * @param string|ItemInterface|array<int|string, mixed>|\Traversable<mixed> $subItem A string or array to append onto the end of the array
+     *
      * @phpstan-param string|ItemInterface|array<int|string, string|int|float|null|array{label: string, url: string|null, item: ItemInterface|null}|ItemInterface>|\Traversable<string|int|float|null|array{label: string, url: string|null, item: ItemInterface|null}|ItemInterface> $subItem
      *
      * @return array<int, array<string, mixed>>
@@ -244,7 +245,7 @@ class MenuManipulator
 
                 case \is_int($key) && \is_string($value):
                     $value = [
-                        'label' => (string) $value,
+                        'label' => $value,
                         'uri' => null,
                         'item' => null,
                     ];

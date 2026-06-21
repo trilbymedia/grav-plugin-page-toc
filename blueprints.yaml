@@ -1,24 +1,25 @@
 name: Page Toc
 type: plugin
 slug: page-toc
-version: 3.2.6
+version: 4.0.0-beta.4
+testing: true
 description: Generate a table of contents and anchors from a page
 icon: list
 author:
   name: Trilby Media, LLC
   email: hello@trilby.media
   url: http://trilby.media
-homepage: http://trilby.media
+homepage: http://trilb.media
 keywords: grav, plugin, toc, anchors
 bugs: https://github.com/trilbymedia/grav-plugin-page-toc/issues
 docs: https://github.com/trilbymedia/grav-plugin-page-toc/blob/develop/README.md
 license: MIT
-
 compatibility:
-  grav: ['1.7', '2.0']
+  grav: ['2.0']
 
 dependencies:
-    - { name: grav, version: '>=1.7.26' }
+    - { name: grav, version: '>=2.0-beta.1' }
+    - { name: php, version: '>=8.0'}
 
 form:
   validation: strict
@@ -183,3 +184,77 @@ form:
           type: text
           label: PLUGIN_PAGE_TOC.SLUG_PREFIX
           help: PLUGIN_PAGE_TOC.SLUG_PREFIX_HELP
+
+    slugify_section:
+      type: section
+      title: Slugify
+      underline: true
+
+      fields:
+        slugify.regexp:
+          type: text
+          label: Regexp
+          help: Regular expression used by slugify to replace separators.
+          placeholder: '/([^A-Za-z0-9]|-)+/'
+        slugify.separator:
+          type: text
+          label: Separator
+          help: String used to separate words in generated slugs.
+          placeholder: '-'
+          size: x-small
+        slugify.lowercase:
+          type: toggle
+          label: Lowercase
+          highlight: 1
+          default: 1
+          options:
+            1: Enabled
+            0: Disabled
+          validate:
+            type: bool
+        slugify.lowercase_after_regexp:
+          type: toggle
+          label: Lowercase After Regexp
+          highlight: 0
+          default: 0
+          options:
+            1: Enabled
+            0: Disabled
+          validate:
+            type: bool
+        slugify.trim:
+          type: toggle
+          label: Trim Separator
+          highlight: 1
+          default: 1
+          options:
+            1: Enabled
+            0: Disabled
+          validate:
+            type: bool
+        slugify.strip_tags:
+          type: toggle
+          label: Strip Tags
+          highlight: 0
+          default: 0
+          options:
+            1: Enabled
+            0: Disabled
+          validate:
+            type: bool
+        slugify.custom_rulesets:
+          type: toggle
+          label: Custom Rulesets
+          help: Enable to override Slugify default rulesets. Disabled keeps Slugify defaults.
+          highlight: 0
+          default: 0
+          options:
+            1: Enabled
+            0: Disabled
+          validate:
+            type: bool
+        slugify.rulesets:
+          type: array
+          label: Rulesets
+          help: Ordered list of transliteration rulesets (for example default, turkish). Used only when Custom Rulesets is enabled; an empty list disables transliteration rules.
+          value_only: true
