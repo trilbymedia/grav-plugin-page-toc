@@ -1,3 +1,9 @@
+# v4.0.1
+## 07/09/2026
+
+1. [](#bugfix)
+    * Corrected the plugin homepage link, which pointed to a mistyped author URL instead of the project repository ([#49](https://github.com/trilbymedia/grav-plugin-page-toc/issues/49))
+
 # v4.0.0
 ## 06/20/2026
 

@@ -1,7 +1,7 @@
 name: Page Toc
 type: plugin
 slug: page-toc
-version: 4.0.0
+version: 4.0.1
 testing: false
 description: Generate a table of contents and anchors from a page
 icon: list
@@ -9,7 +9,7 @@ author:
   name: Trilby Media, LLC
   email: hello@trilby.media
   url: http://trilby.media
-homepage: http://trilb.media
+homepage: https://github.com/trilbymedia/grav-plugin-page-toc
 keywords: grav, plugin, toc, anchors
 bugs: https://github.com/trilbymedia/grav-plugin-page-toc/issues
 docs: https://github.com/trilbymedia/grav-plugin-page-toc/blob/develop/README.md
