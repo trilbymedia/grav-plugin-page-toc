@@ -8,7 +8,7 @@ form:
           fields:
             header.page-toc-section:
               type: section
-              title: Page Table-of-Contents
+              title: PLUGIN_PAGE_TOC.TOC_SECTION
               underline: true
 
               fields:
