@@ -1,3 +1,10 @@
+# v4.0.2
+## 10/13/2026
+
+1. [](#bugfix)
+    * A `[TOC]` on its own line no longer leaves empty paragraphs around the table of contents ([#47](https://github.com/trilbymedia/grav-plugin-page-toc/pull/47))
+    * Headings containing `$` or `\` followed by a number now show correctly in the table of contents
+
 # v4.0.1
 ## 07/09/2026
 
