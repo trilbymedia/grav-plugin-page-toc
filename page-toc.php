@@ -104,7 +104,14 @@ class PageTOCPlugin extends Plugin
         // Replace shortcode if found
         if ($shortcode_exists) {
             $toc = $this->grav['twig']->processTemplate('components/page-toc.html.twig', ['page' => $page, 'active' => true]);
-            $content = preg_replace($this->toc_regex, $toc, $content);
+            // Markdown wraps a [TOC] on its own line in <p>, so replace that whole
+            // paragraph to keep the TOC <div> out of it. A callback keeps "$" and
+            // "\" in heading labels from being read as regex backreferences.
+            $content = preg_replace_callback(
+                ['#<p>\s*\[TOC\s*/?\]\s*</p>#i', $this->toc_regex],
+                static fn () => $toc,
+                $content
+            );
             $page->setRawContent($content);
         }
     }
