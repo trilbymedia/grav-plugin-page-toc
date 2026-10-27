@@ -139,9 +139,16 @@ class PageTOCPlugin extends Plugin
             return;
         }
 
+        // Page content can be rendered before Twig is set up (API requests, CLI,
+        // precache at shutdown). init() fires onTwigInitialized, which registers
+        // the functions through this same method.
+        $twig = $this->grav['twig']->init()->twig();
+        if ($functions_registered) {
+            return;
+        }
+
         $this->generator = new TocGenerator();
         $this->fixer     = new MarkupFixer();
-        $twig = $this->grav['twig']->twig();
 
         $twig->addFunction(new TwigFunction('toc', function ($markup, $start = null, $depth = null) {
             $options = $this->getTocOptions(null, $start, $depth);
