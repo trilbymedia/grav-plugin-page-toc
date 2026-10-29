@@ -1,5 +1,5 @@
 # v4.0.3
-## 10/27/2026
+## 10/29/2026
 
 1. [](#bugfix)
     * Fixed a critical error logged when page content is rendered before Twig is ready, such as when the precache plugin runs after an API request ([#50](https://github.com/trilbymedia/grav-plugin-page-toc/issues/50))
