@@ -1,3 +1,9 @@
+# v4.0.4
+## 11/03/2026
+
+1. [](#new)
+    * Lithuanian translation ([#25](https://github.com/trilbymedia/grav-plugin-page-toc/pull/25)). Thanks @ViliusS
+
 # v4.0.3
 ## 10/29/2026
 

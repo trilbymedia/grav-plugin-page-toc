@@ -123,4 +123,6 @@ es:
 ca:
   PLUGIN_PAGE_TOC:
     TABLE_OF_CONTENTS: "Taula de Continguts"
-
+lt:
+  PLUGIN_PAGE_TOC:
+    TABLE_OF_CONTENTS: Turinys
