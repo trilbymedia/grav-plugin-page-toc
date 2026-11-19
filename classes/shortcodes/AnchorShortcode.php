@@ -11,20 +11,20 @@ class AnchorShortcode extends Shortcode
   /**
    * @return array<string,mixed>
    */
-  protected function getSlugifyOptions(): array
+  protected function getSlugifyOptions($page): array
   {
     $options = [];
-    $customRulesets = (bool) PageTOCPlugin::configVar('slugify.custom_rulesets', null, false);
+    $customRulesets = (bool) PageTOCPlugin::configVar('slugify.custom_rulesets', $page, false);
 
     foreach (['regexp', 'separator', 'lowercase', 'lowercase_after_regexp', 'trim', 'strip_tags'] as $key) {
-      $value = PageTOCPlugin::configVar('slugify.' . $key);
+      $value = PageTOCPlugin::configVar('slugify.' . $key, $page);
       if ($value !== null) {
         $options[$key] = $value;
       }
     }
 
     if ($customRulesets) {
-      $options['rulesets'] = PageTOCPlugin::configVar('slugify.rulesets', null, []);
+      $options['rulesets'] = PageTOCPlugin::configVar('slugify.rulesets', $page, []);
     }
 
     return $options;
@@ -33,14 +33,16 @@ class AnchorShortcode extends Shortcode
   public function init()
   {
     $this->shortcode->getRawHandlers()->add('anchor', function(ProcessedShortcode $sc) {
+      // The page whose content holds this shortcode, not necessarily the visited page.
+      $page = $this->shortcode->getPage();
 
       $id = $this->cleanParam($sc->getParameter('id', $sc->getBbCode()));
       $tag = $this->cleanParam($sc->getParameter('tag'));
-      $prefix = $this->cleanParam($sc->getParameter('prefix', PageTOCPlugin::configVar('anchors.slug_prefix')));
+      $prefix = $this->cleanParam($sc->getParameter('prefix', PageTOCPlugin::configVar('anchors.slug_prefix', $page)));
       $class = $this->cleanParam($sc->getParameter('class', 'inline-anchor'));
-      $aria = PageTOCPlugin::configVar('anchors.aria');
+      $aria = PageTOCPlugin::configVar('anchors.aria', $page);
       $content = $sc->getContent();
-      $slugifyOptions = $this->getSlugifyOptions();
+      $slugifyOptions = $this->getSlugifyOptions($page);
 
       $slugger = new UniqueSlugify($slugifyOptions);
 

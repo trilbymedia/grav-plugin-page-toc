@@ -27,6 +27,15 @@ class PageTOCPlugin extends Plugin
     protected $generator;
 
     /**
+     * Pages whose content is being processed right now, innermost last. A page's
+     * content can be processed while another page is the one being visited
+     * (page.find(...).content, relatedpages), and its TOC must use its own settings.
+     *
+     * @var PageInterface[]
+     */
+    protected static $pages = [];
+
+    /**
      * @return array
      *
      * The getSubscribedEvents() gives the core a list of events
@@ -87,6 +96,16 @@ class PageTOCPlugin extends Plugin
         /** @var PageInterface $page */
         $page = $event['page'];
 
+        static::$pages[] = $page;
+        try {
+            $this->processPageContent($page);
+        } finally {
+            array_pop(static::$pages);
+        }
+    }
+
+    protected function processPageContent(PageInterface $page): void
+    {
         $content = $page->content();
         $shortcode_exists = preg_match($this->toc_regex, $content);
         $active = $this->configVar('active', $page, false);
@@ -208,7 +227,7 @@ class PageTOCPlugin extends Plugin
 
     protected function getTocOptions(?PageInterface $page = null, $start = null, $depth = null, $tags = null): array
     {
-        $page = $page ?? $this->grav['page'];
+        $page = $page ?? static::currentPage();
         return [
             'start'     => $start ?? $this->configVar('start', $page,1),
             'depth'     => $depth ?? $this->configVar('depth', $page,6),
@@ -218,7 +237,7 @@ class PageTOCPlugin extends Plugin
 
     protected function getAnchorOptions(?PageInterface $page = null, $start = null, $depth = null): array
     {
-        $page = $page ?? $this->grav['page'];
+        $page = $page ?? static::currentPage();
         return [
             'start'     => (int) ($start ?? $this->configVar('anchors.start', $page,1)),
             'depth'     => (int) ($depth ?? $this->configVar('anchors.depth', $page,6)),
@@ -235,7 +254,7 @@ class PageTOCPlugin extends Plugin
 
     protected function getSlugifyOptions(?PageInterface $page = null): array
     {
-        $page = $page ?? $this->grav['page'];
+        $page = $page ?? static::currentPage();
         $slugify_options = [];
         $custom_rulesets = (bool) $this->configVar('slugify.custom_rulesets', $page, false);
 
@@ -260,8 +279,16 @@ class PageTOCPlugin extends Plugin
         return $slugify_options;
     }
 
+    /**
+     * The page whose content is being processed, or the visited page otherwise.
+     */
+    public static function currentPage(): ?PageInterface
+    {
+        return end(static::$pages) ?: (Grav::instance()['page'] ?? null);
+    }
+
     public static function configVar($var, $page = null, $default = null)
     {
-        return Plugin::inheritedConfigOption('page-toc', $var, $page, $default);
+        return Plugin::inheritedConfigOption('page-toc', $var, $page ?? static::currentPage(), $default);
     }
 }

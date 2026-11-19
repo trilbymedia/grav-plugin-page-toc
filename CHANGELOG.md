@@ -1,3 +1,9 @@
+# v4.0.5
+## 11/18/2026
+
+1. [](#bugfix)
+    * A `[toc]` now uses the start, depth and other TOC settings of the page that contains it, even when that page's content is first rendered while a different page is being visited (`page.find(...).content`, related pages). The `[anchor]` shortcode had the same problem ([#51](https://github.com/trilbymedia/grav-plugin-page-toc/issues/51))
+
 # v4.0.4
 ## 11/03/2026
 
